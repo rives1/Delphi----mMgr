@@ -11,17 +11,17 @@ uses
   Data.DB, Vcl.Menus, Data.FMTBcd, FireDAC.Stan.ExprFuncs,
   FireDAC.Phys.SQLiteDef, FireDAC.Stan.Intf, FireDAC.Phys, FireDAC.Phys.SQLite,
   FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf,
-  FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.VCLUI.Wait,
+  FireDAC.Stan.Def, FireDAC.Stan.Async, FireDAC.VCLUI.Wait,
   FireDAC.Comp.Client, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
   FireDAC.DApt, FireDAC.Comp.DataSet, Vcl.BaseImageCollection,
-  Vcl.ImageCollection, Vcl.VirtualImageList;
+  Vcl.ImageCollection, Vcl.VirtualImageList, FireDAC.Stan.Pool, VCLTee.Series;
 
 type
   TMainFRM = class(TForm)
     Panel1: TPanel;
     StatusBar1: TStatusBar;
     Panel2: TPanel;
-    Chart1: TChart;
+    chartBalance: TChart;
     BitBtn1: TBitBtn;
     treeMenu: TTreeView;
     MainMenu1: TMainMenu;
@@ -30,10 +30,12 @@ type
     sqlQry: TFDQuery;
     VirtualImageList1: TVirtualImageList;
     ImageCollection1: TImageCollection;
+    Series1: TBarSeries;
     function _openDB(_pDBFname: string): boolean;
     procedure _closeDB;
     function _SeekNode(pvSkString: string): TTreeNode;
     procedure _treeMenuCreate();
+    procedure _fillBalanceChart();
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
@@ -51,12 +53,12 @@ implementation
 
 procedure TMainFRM.FormCreate(Sender: TObject);
 begin
-  //apro il db
-  _openDB(ExtractFilePath(Application.ExeName)+'dbone.db');
-  //riempio il menu
+  // apro il db
+  _openDB(ExtractFilePath(Application.ExeName) + 'dbone.db');
+  // riempio il menu
   _treeMenuCreate;
-  //riempimento chart saldi
-
+  // riempimento chart saldi
+  _fillBalanceChart;
 end;
 
 procedure TMainFRM._closeDB;
@@ -65,10 +67,43 @@ begin
   sqlite_conn.Close;
 end;
 
+procedure TMainFRM._fillBalanceChart;
+var
+  _lTotal: Double; //totale x
+  I: integer;      //counter x colonne grafioo
+begin
+  //riempimento chart con i totale x account
+   if (sqlite_conn.Connected) then
+  begin
+    //area accounts
+    sqlQry.Close;
+    sqlQry.SQL.Clear;
+    sqlQry.SQL.Add('SELECT DBACCOUNT.ACCNAME, Sum(TRANSACTIONS.TRNAMOUNT) AS Sum_TRNAMOUNT ' +
+        ' FROM DBACCOUNT INNER JOIN TRANSACTIONS ON DBACCOUNT.ACCID = TRANSACTIONS.TRNACCOUNT ' +
+        ' GROUP BY DBACCOUNT.ACCNAME ' +
+        ' ORDER BY DBACCOUNT.ACCNAME ');
+    try
+      sqlQry.Open;
+      I:= 0;
+      if (MainFRM.sqlQry.RecordCount <> 0) then
+      while not MainFRM.sqlQry.EOF do //ciclo recupero dati
+        begin
+          _lTotal:=sqlQry.FieldValues['Sum_TRNAMOUNT']/1000;
+          chartBalance.SeriesList[0].Add(_lTotal, sqlQry.FieldValues['ACCNAME']);
+          sqlQry.Next;
+          I:=I+1;
+        end;
+    except
+
+    end;
+
+  end;
+end;
+
 function TMainFRM._openDB(_pDBFname: string): boolean;
 begin
   // MessageDlg('aa',ExtractFilePath(Application.ExeName),mtconfirmation,[mbOK],0 );
-  sqlite_conn.Params.Database:= _pDBFname;
+  sqlite_conn.Params.Database := _pDBFname;
   try
     sqlite_conn.Connected := True;
 
@@ -78,7 +113,7 @@ begin
     result := false;
   end;
   // sqlite_transaction.Active:=True;
-  result := true
+  result := True
 end;
 
 function TMainFRM._SeekNode(pvSkString: string): TTreeNode;
@@ -113,28 +148,36 @@ begin
   begin
     // area accounts
     vNodeGroup := treeMenu.Items.Add(nil, 'Account');
-    vNodeGroup.ImageIndex := 3;
+    vNodeGroup.ImageIndex := 1;
     sqlQry.Close;
     sqlQry.SQL.Clear;
     sqlQry.SQL.Add('SELECT * FROM DBACCOUNT ORDER BY ACCNAME');
     try
-      sqlQry.Active:=True;
+      sqlQry.Active := True;
       if (sqlQry.RecordCount <> 0) then
         while not sqlQry.EOF do // ciclo recupero dati
         begin
           vNodeText := sqlQry.FieldValues['ACCNAME'];
-          // if _seekNode(vNodeText) = nil then
-          vNode := treeMenu.Items.AddChild(vNodeGroup, vNodeText);
           // aggiungo il nodo
+          vNode := treeMenu.Items.AddChild(vNodeGroup, vNodeText);
           // selezione quale immagine impostare sul nodo
           if (sqlQry.FieldValues['ACCTYPE'] = 'Cash') then
-            vNode.ImageIndex := 0;
-          if (sqlQry.FieldValues['ACCTYPE'] = 'Checking') then
-            vNode.ImageIndex := 1;
-          if (sqlQry.FieldValues['ACCTYPE'] = 'CreditCard') then
+          begin
             vNode.ImageIndex := 2;
+            vNode.SelectedIndex := 9;
+          end;
+          if (sqlQry.FieldValues['ACCTYPE'] = 'Checking') then
+          begin
+            vNode.ImageIndex := 3;
+            vNode.SelectedIndex := 9;
+          end;
+          if (sqlQry.FieldValues['ACCTYPE'] = 'CreditCard') then
+          begin
+            vNode.ImageIndex := 4;
+            vNode.SelectedIndex := 9;
+          end;
           // imposto nella della proprietà stateindex l'id del record dell account
-          //vNode.StateIndex := sqlQry.FieldValues['ACCID'];
+          // vNode.StateIndex := sqlQry.FieldValues['ACCID'];
 
           sqlQry.Next;
         end;
@@ -143,13 +186,13 @@ begin
     end; // try
   end; // if
 
-  // area Config
-  vNodeGroup := treeMenu.Items.Add(nil, 'Config');
-  vNodeGroup.ImageIndex := 12;
-
   // area report
   vNodeGroup := treeMenu.Items.Add(nil, 'Report');
-  vNodeGroup.ImageIndex := 11;
+  vNodeGroup.ImageIndex := 5;
+
+  // area Config
+  vNodeGroup := treeMenu.Items.Add(nil, 'Config');
+  vNodeGroup.ImageIndex := 6;
 
   treeMenu.FullExpand;
 end;
