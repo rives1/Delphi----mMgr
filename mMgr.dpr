@@ -2,7 +2,8 @@ program mMgr;
 
 uses
   Vcl.Forms,
-  frmMain in 'frmMain.pas' {MainFRM};
+  frmMain in 'frmMain.pas' {MainFRM},
+  frmLedger in 'frmLedger.pas' {LedgerFrm};
 
 {$R *.res}
 

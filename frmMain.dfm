@@ -4,7 +4,7 @@ object MainFRM: TMainFRM
   ActiveControl = chartBalance
   Caption = 'mMgr'
   ClientHeight = 632
-  ClientWidth = 965
+  ClientWidth = 1061
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,35 +18,40 @@ object MainFRM: TMainFRM
   PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
-    Left = 8
-    Top = 8
-    Width = 249
-    Height = 609
+    Left = 0
+    Top = 0
+    Width = 201
+    Height = 608
+    Align = alLeft
+    BevelOuter = bvNone
+    Ctl3D = False
+    ParentCtl3D = False
     TabOrder = 0
     object Panel2: TPanel
-      Left = 1
+      Left = 0
       Top = 407
-      Width = 247
+      Width = 201
       Height = 201
       Align = alBottom
+      BevelOuter = bvNone
       Caption = 'Panel2'
+      Ctl3D = False
+      ParentCtl3D = False
       TabOrder = 0
-      ExplicitLeft = 16
-      ExplicitTop = 393
-      ExplicitWidth = 281
       object chartBalance: TChart
-        Left = 1
-        Top = 1
-        Width = 245
-        Height = 199
+        Left = 0
+        Top = 0
+        Width = 201
+        Height = 201
+        Title.Text.Strings = (
+          'TChart')
         Chart3DPercent = 1
+        Panning.MouseWheel = pmwNone
         View3D = False
+        ZoomWheel = pmwNormal
         Align = alClient
+        BevelOuter = bvNone
         TabOrder = 0
-        ExplicitLeft = 16
-        ExplicitTop = 18
-        ExplicitWidth = 257
-        ExplicitHeight = 169
         DefaultCanvas = 'TGDIPlusCanvas'
         PrintMargins = (
           15
@@ -57,7 +62,6 @@ object MainFRM: TMainFRM
         object Series1: TBarSeries
           Legend.Visible = False
           ColorEachPoint = True
-          Marks.Visible = False
           ShowInLegend = False
           BarStyle = bsRoundRectangle
           MultiBar = mbNone
@@ -69,37 +73,36 @@ object MainFRM: TMainFRM
       end
     end
     object treeMenu: TTreeView
-      Left = 1
-      Top = 1
-      Width = 247
-      Height = 406
+      Left = 0
+      Top = 0
+      Width = 201
+      Height = 407
       Align = alClient
+      BorderStyle = bsNone
+      Color = clBtnFace
       Images = VirtualImageList1
       Indent = 27
       TabOrder = 1
+      OnDblClick = treeMenuDblClick
       Items.NodeData = {
         0303000000260000000000000001000000FFFFFFFFFFFFFFFF00000000000000
         0000000000010472006F006F007400240000000100000000000000FFFFFFFFFF
-        FFFFFF0000000000000000010000000103650065006500240000000000000000
+        FFFFFF2100000000000000010000000103650065006500240000000000000000
         000000FFFFFFFFFFFFFFFF00000000000000000000000001037400740074002E
         0000000500000000000000FFFFFFFFFFFFFFFF00000000000000000000000001
         0865007700720074007700650072007400}
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 225
-      ExplicitHeight = 377
     end
   end
   object StatusBar1: TStatusBar
     Left = 0
     Top = 608
-    Width = 965
+    Width = 1061
     Height = 24
     Panels = <>
   end
   object BitBtn1: TBitBtn
-    Left = 336
-    Top = 401
+    Left = 56
+    Top = 329
     Width = 97
     Height = 40
     Caption = 'BitBtn1'
