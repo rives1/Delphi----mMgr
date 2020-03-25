@@ -52,6 +52,7 @@ implementation
 
 {$R *.dfm}
 
+
 uses
   frmLedger;
 
@@ -66,19 +67,17 @@ begin
   // riempimento chart saldi
   _fillBalanceChart;
 end;
-
+//-------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM.treeMenuDblClick(Sender: TObject);
 var
   childFRM: TLedgerFrm;
 begin
   // apro la child form del ledger. se il nodo superiore è account si tratta sicuramente di un ledger da aprire
-  if ((treeMenu.Selected.Level <> 0) and
-      (UpperCase( treeMenu.Selected.Parent.Text)='ACCOUNT')) then
-    begin
+  if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'ACCOUNT')) then
+    if not _chkOpenForm(treeMenu.Selected.Text) then
       childFRM := TLedgerFrm.Create(nil);
-    end;
 end;
-
+//-------------------------------------------------------------------------------------------------------------//
 function TMainFRM._chkOpenForm(_frmCaption: string): boolean;
 var
   i: integer;
@@ -88,20 +87,23 @@ begin
   for i := 0 to MDIChildCount - 1 do
   begin
     if (MDIChildren[i].caption = _frmCaption) then
+      begin
+      MDIChildren[i].Show;
       Result := true;
+      end;
   end;
 end;
-
+//-------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM._closeDB;
 begin
   // chisura del db
   sqlite_conn.Close;
 end;
-
+//-------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM._fillBalanceChart;
 var
   _lTotal: Double; // totale x
-  i: integer; // counter x colonne grafioo
+  i: integer;      // counter x colonne grafioo
 begin
   // riempimento chart con i totale x account
   if (sqlite_conn.Connected) then
@@ -109,10 +111,10 @@ begin
     // area accounts
     sqlQry.Close;
     sqlQry.SQL.Clear;
-    sqlQry.SQL.Add
-      ('SELECT DBACCOUNT.ACCNAME, Sum(TRANSACTIONS.TRNAMOUNT) AS Sum_TRNAMOUNT '
-      + ' FROM DBACCOUNT INNER JOIN TRANSACTIONS ON DBACCOUNT.ACCID = TRANSACTIONS.TRNACCOUNT '
-      + ' GROUP BY DBACCOUNT.ACCNAME ' + ' ORDER BY DBACCOUNT.ACCNAME ');
+    sqlQry.SQL.Add('SELECT DBACCOUNT.ACCNAME, Sum(TRANSACTIONS.TRNAMOUNT) AS Sum_TRNAMOUNT ' +
+      ' FROM DBACCOUNT INNER JOIN TRANSACTIONS ON DBACCOUNT.ACCID = TRANSACTIONS.TRNACCOUNT ' +
+      ' GROUP BY DBACCOUNT.ACCNAME ' +
+      ' ORDER BY DBACCOUNT.ACCNAME ');
     try
       sqlQry.Open;
       i := 0;
@@ -121,34 +123,32 @@ begin
         while not MainFRM.sqlQry.EOF do // ciclo recupero dati
         begin
           _lTotal := sqlQry.FieldValues['Sum_TRNAMOUNT'] / 1000;
-          chartBalance.SeriesList[0].Add(_lTotal,
-            sqlQry.FieldValues['ACCNAME']);
+          chartBalance.SeriesList[0].Add(_lTotal);
+          chartBalance.Axes.Bottom.Items.Add(i, sqlQry.FieldValues['ACCNAME']);
           sqlQry.Next;
           i := i + 1;
         end;
-    except
-
+    finally
+      sqlQry.Close;
+      sqlQry.SQL.Clear;
     end;
-
   end;
 end;
-
+//-------------------------------------------------------------------------------------------------------------//
 function TMainFRM._openDB(_pDBFname: string): boolean;
 begin
-  // MessageDlg('aa',ExtractFilePath(Application.ExeName),mtconfirmation,[mbOK],0 );
+  //apro la connesione al db
   sqlite_conn.Params.Database := _pDBFname;
   try
     sqlite_conn.Connected := true;
-
   except
     MessageDlg('Impossible to open the database' + _pDBFname, mtError,
       [mbOK], 0);
     Result := false;
   end;
-  // sqlite_transaction.Active:=True;
   Result := true
 end;
-
+//-------------------------------------------------------------------------------------------------------------//
 function TMainFRM._SeekNode(pvSkString: string): TTreeNode;
 var
   i: integer;
@@ -165,12 +165,12 @@ begin
     end;
   end;
 end;
-
+//-------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM._treeMenuCreate;
 // creazione di tutto l'albero del menù
 var
   vNode, vNodeGroup: TTreeNode; // nodo riferimento
-  vNodeText: String; // testo da inserire nel nodo
+  vNodeText: String;            // testo da inserire nel nodo
 begin
   // inizializzazione var
   vNode := nil;
@@ -220,7 +220,7 @@ begin
     except
       MessageDlg('Error adding account to tree menu', mtError, [mbOK], 0);
     end; // try
-  end; // if
+  end;   // if
 
   // area report
   vNodeGroup := treeMenu.Items.Add(nil, 'Report');
@@ -232,5 +232,5 @@ begin
 
   treeMenu.FullExpand;
 end;
-
+//-------------------------------------------------------------------------------------------------------------//
 end.

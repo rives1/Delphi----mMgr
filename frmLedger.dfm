@@ -11,6 +11,7 @@ object LedgerFrm: TLedgerFrm
   Font.Name = 'Tahoma'
   Font.Style = []
   FormStyle = fsMDIChild
+  KeyPreview = True
   OldCreateOrder = False
   Visible = True
   OnActivate = FormActivate
@@ -25,8 +26,8 @@ object LedgerFrm: TLedgerFrm
     Height = 517
     BorderWidth = 5
     Orientation = orVertical
-    Position = 308
-    Percent = 60
+    Position = 350
+    Percent = 68
     HotSpotVisible = True
     SplitterStyle = ssGroove
     SplitterWidth = 10
@@ -35,19 +36,19 @@ object LedgerFrm: TLedgerFrm
     VisualStyle = vsClassic
     BarSize = (
       5
-      313
+      355
       782
-      323)
+      365)
     UpperLeftControls = (
       grdLedger)
     LowerRightControls = (
-      Chart1
-      Chart2)
+      chTotals
+      chHistory)
     object grdLedger: TJvgStringGrid
       Left = 0
       Top = 0
       Width = 777
-      Height = 308
+      Height = 350
       Align = alClient
       BorderStyle = bsNone
       Color = clMoneyGreen
@@ -85,6 +86,7 @@ object LedgerFrm: TLedgerFrm
       EditorFont.Height = -11
       EditorFont.Name = 'Tahoma'
       EditorFont.Style = []
+      ExplicitHeight = 308
       ColWidths = (
         80
         80
@@ -96,15 +98,16 @@ object LedgerFrm: TLedgerFrm
         80
         137)
     end
-    object Chart1: TChart
+    object chTotals: TChart
       Left = 0
       Top = 0
-      Width = 313
-      Height = 189
+      Width = 377
+      Height = 147
       Border.Width = 0
-      Legend.Visible = False
+      Legend.Alignment = laBottom
       Title.Text.Strings = (
         'TChart')
+      Title.Visible = False
       View3DOptions.Elevation = 315
       View3DOptions.Orthogonal = False
       View3DOptions.Perspective = 0
@@ -112,9 +115,12 @@ object LedgerFrm: TLedgerFrm
       Align = alLeft
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitHeight = 189
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 13
       object Series1: TPieSeries
+        Marks.Visible = False
+        Title = 'Totals'
         XValues.Order = loAscending
         YValues.Name = 'Pie'
         YValues.Order = loNone
@@ -137,23 +143,44 @@ object LedgerFrm: TLedgerFrm
         OtherSlice.Legend.Visible = False
       end
     end
-    object Chart2: TChart
+    object chHistory: TChart
       Left = 377
       Top = 0
       Width = 400
-      Height = 189
+      Height = 147
       Legend.Visible = False
+      MarginRight = 8
+      MarginTop = 10
       Title.Text.Strings = (
         'TChart')
+      Title.Visible = False
+      BottomAxis.Axis.Color = clDefault
+      BottomAxis.Axis.Width = 0
+      BottomAxis.StartPosition = 1.000000000000000000
+      Chart3DPercent = 1
+      View3D = False
+      View3DOptions.Orthogonal = False
       Align = alRight
       BevelOuter = bvNone
       TabOrder = 1
+      ExplicitHeight = 189
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 13
-      object Series2: TLineSeries
-        Brush.BackColor = clDefault
+      object Series2: TAreaSeries
+        Marks.Frame.Visible = False
+        Marks.Visible = True
+        Marks.Callout.Length = 20
+        Title = 'Historical Value'
+        AreaChartBrush.Color = clGray
+        AreaChartBrush.BackColor = clDefault
+        AreaLinesPen.Visible = False
+        DrawArea = True
+        LinePen.Fill.Gradient.StartColor = clRed
+        LinePen.Fill.Gradient.Visible = True
+        Pointer.HorizSize = 3
         Pointer.InflateMargins = True
-        Pointer.Style = psRectangle
+        Pointer.Style = psDownTriangle
+        Pointer.VertSize = 3
         XValues.Name = 'X'
         XValues.Order = loAscending
         YValues.Name = 'Y'

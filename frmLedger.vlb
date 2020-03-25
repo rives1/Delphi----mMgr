@@ -1,14 +1,5 @@
-﻿[MainFRM.sqlQry]
-Coordinates=156,10,111,58
-
-[RzStatusBar1]
+﻿[RzStatusBar1]
 Coordinates=10,78,94,58
-
-[Series2]
-Coordinates=217,155,58,36
-
-[Chart1]
-Coordinates=114,78,53,58
 
 [RzSplitter1]
 Coordinates=277,10,78,58
@@ -20,9 +11,12 @@ Coordinates=158,174,58,36
 Coordinates=73,10,73,58
 Visible=True
 
-[Chart2]
-Coordinates=10,10,53,58
-
 []
-Coordinates=334,1,91,36
+Coordinates=217,155,58,36
+
+[chTotals]
+Coordinates=114,78,53,58
+
+[chHistory]
+Coordinates=10,10,53,58
 
