@@ -2,7 +2,7 @@ object InsEditFrm: TInsEditFrm
   Left = 0
   Top = 0
   Caption = 'Insert/Edit Record'
-  ClientHeight = 217
+  ClientHeight = 205
   ClientWidth = 459
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -10,11 +10,14 @@ object InsEditFrm: TInsEditFrm
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  FormStyle = fsMDIChild
+  KeyPreview = True
   OldCreateOrder = False
+  Position = poMainFormCenter
   Visible = True
+  OnActivate = FormActivate
   OnClose = FormClose
-  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -40,21 +43,21 @@ object InsEditFrm: TInsEditFrm
   end
   object Label4: TLabel
     Left = 24
-    Top = 99
+    Top = 94
     Width = 45
     Height = 13
     Caption = 'Category'
   end
   object Label5: TLabel
     Left = 24
-    Top = 139
+    Top = 129
     Width = 53
     Height = 13
     Caption = 'Description'
   end
   object Label6: TLabel
     Left = 24
-    Top = 176
+    Top = 166
     Width = 37
     Height = 13
     Caption = 'Amount'
@@ -64,6 +67,7 @@ object InsEditFrm: TInsEditFrm
     Top = 21
     Width = 97
     Height = 21
+    AutoDropDown = True
     TabOrder = 1
     Text = ''
     Items.Strings = (
@@ -73,11 +77,12 @@ object InsEditFrm: TInsEditFrm
   end
   object btnOK: TJvBitBtn
     Left = 368
-    Top = 176
+    Top = 166
     Width = 75
     Height = 25
     Caption = 'OK'
     TabOrder = 8
+    OnClick = btnOKClick
   end
   object _fID: TEdit
     Left = 378
@@ -85,13 +90,16 @@ object InsEditFrm: TInsEditFrm
     Width = 65
     Height = 21
     TabStop = False
+    Alignment = taRightJustify
     BorderStyle = bsNone
+    Color = clBtnFace
+    Enabled = False
     ReadOnly = True
     TabOrder = 0
   end
   object _fDescription: TEdit
     Left = 88
-    Top = 136
+    Top = 126
     Width = 339
     Height = 21
     TabOrder = 6
@@ -101,31 +109,34 @@ object InsEditFrm: TInsEditFrm
     Top = 56
     Width = 193
     Height = 21
+    AutoDropDown = True
     TabOrder = 3
     Text = ''
-    OnChange = _fPayeeChange
+    OnCloseUp = _fPayeeCloseUp
   end
   object _fCategory: TJvComboBox
     Left = 88
-    Top = 96
+    Top = 91
     Width = 169
     Height = 21
+    AutoDropDown = True
     TabOrder = 4
     Text = ''
-    OnChange = _fCategoryChange
+    OnExit = _fCategoryExit
   end
   object _fSubCategory: TJvComboBox
     Left = 263
-    Top = 96
+    Top = 91
     Width = 164
     Height = 21
     TabOrder = 5
     Text = ''
+    OnExit = _fSubCategoryExit
   end
   object _fDate: TJvDateTimePicker
     Left = 247
     Top = 21
-    Width = 111
+    Width = 99
     Height = 21
     Date = 43911.000000000000000000
     Time = 0.726759432873223000
@@ -134,7 +145,7 @@ object InsEditFrm: TInsEditFrm
   end
   object _fAmount: TJvValidateEdit
     Left = 88
-    Top = 173
+    Top = 163
     Width = 81
     Height = 21
     CriticalPoints.MaxValueIncluded = False

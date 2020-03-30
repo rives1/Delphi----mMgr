@@ -9,7 +9,7 @@ uses
   RzTreeVw, JvLookOut, JvExControls, JvOutlookBar, Vcl.Grids, JvgStringGrid,
   VclTee.TeeGDIPlus, VclTee.Series, VclTee.TeEngine, RzPanel, VclTee.TeeProcs,
   VclTee.Chart, Vcl.ExtCtrls, RzSplit, JvExGrids, JvStringGrid, RzGrids,
-  JvListView;
+  JvListView, ovcbase, ovctcmmn, ovctable, Vcl.Menus, JvComponentBase, JvgExportComponents;
 
 type
   TLedgerFrm = class(TForm)
@@ -20,25 +20,38 @@ type
     Series1: TPieSeries;
     grdLedger: TJvgStringGrid;
     Series2: TAreaSeries;
+    PopupMenu1: TPopupMenu;
+    Edit1: TMenuItem;
+    Edit2: TMenuItem;
+    N1: TMenuItem;
+    Delete1: TMenuItem;
+    InsertExpensecontinuous1: TMenuItem;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure grdLedgerDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
+    procedure grdLedgerKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Edit1Click(Sender: TObject);
+    procedure Edit2Click(Sender: TObject);
+    procedure Delete1Click(Sender: TObject);
+    procedure grdLedgerDblClick(Sender: TObject);
+
+  private
+    { Private declarations }
+
+    // variabili
+    _pAccountName: string;
+    // reminder per quale account aprire -- presa dal treemenu all'atto dell'instanza della form
+    _SQLString: string; // var per tutti gli statement sql da comporre
+
+    // local functions
     procedure _fillGrid;
     procedure _clearGrid;
     procedure _autoSizeCol(Grid: TStringGrid; Column: Integer);
     procedure _autoSizeGrid;
-    procedure grdLedgerKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure FormCreate(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
     procedure _ChartTotals;
-    procedure _insRecord;
-    procedure _editRecord;
     procedure _deleteRecord;
-
-  private
-    { Private declarations }
-    _pAccountName: string;
-    // reminder per quale account aprire -- presa dal treemenu all'atto dell'instanza della form
-    _SQLString: string; // var per tutti gli statement sql da comporre
+    procedure _openInsEditForm(_pEditKind: string);
 
   public
     { Public declarations }
@@ -58,19 +71,39 @@ implementation
 uses
   frmMain, frmInsEdit;
 
-procedure TLedgerFrm.FormActivate(Sender: TObject);
+// -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm.Delete1Click(Sender: TObject);
 begin
-  // riempio la grid
-  _fillGrid;
-  _ChartTotals;
+  _deleteRecord
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm.Edit1Click(Sender: TObject);
+begin
+  _openInsEditForm('ins');
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm.Edit2Click(Sender: TObject);
+begin
+  _openInsEditForm('edit');
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
+  { TODO : valutare se vale la pena di chiedere per la chiusura della form del ledger }
+  { if (MessageDlg('Close Ledger?', mtConfirmation, [mbOk, mbCancel], 0) = mrOk) then
+    begin
+    Action := caFree;
+    Release;
+    end
+    else
+    Action := caNone;
+    // Self := nil;
+  }
   Action := caFree;
   Release;
-  Self := nil;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -83,49 +116,70 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm.FormShow(Sender: TObject);
+begin
+  // riempio la grid
+  _fillGrid;
+  _ChartTotals;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm.grdLedgerDblClick(Sender: TObject);
+begin
+  _openInsEditForm('edit');
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.grdLedgerDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
 // impostazione del colore alternato nella grid
 { TODO : verificare se qs funziona fa qualcosa alla grid o se vale la pena di eliminarla }
 begin
-  with (Sender as TStringGrid) do
-  begin
+  {
+    with (Sender as TStringGrid) do
+    begin
     // Don't change color for first Column, first row
     if (ACol = 0) or (ARow = 0) then
-      Canvas.Brush.Color := clBtnFace
+    Canvas.Brush.Color := clBtnFace
     else
     begin
-      case ACol of
-        1:
-          Canvas.Font.Color := clBlack;
-        2:
-          Canvas.Font.Color := clBlue;
-      end;
-      // Draw the Band
-      if ARow mod 2 = 0 then
-        Canvas.Brush.Color := clMoneyGreen
-      else
-        Canvas.Brush.Color := $00FFEBDF;
-      Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, cells[ACol, ARow]);
-      Canvas.FrameRect(Rect);
+    case ACol of
+    1:
+    Canvas.Font.Color := clBlack;
+    2:
+    Canvas.Font.Color := clBlue;
     end;
-  end;
+    // Draw the Band
+    if ARow mod 2 = 0 then
+    Canvas.Brush.Color := clMoneyGreen
+    else
+    Canvas.Brush.Color := $00FFEBDF;
+    Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, cells[ACol, ARow]);
+    Canvas.FrameRect(Rect);
+    end;
+    end;
+  }
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.grdLedgerKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  // gestione pressione tasti
-  // INS - aggiunge nuovo record
-  // ENTER - edita il record corrente
+  /// gestione pressione tasti
+  /// INS   - aggiunge nuovo record
+  /// +     - aggiungo un nuovo record di spesa e continua con l'inserimento in serie
+  /// ENTER - edita il record corrente
+  /// ESC   - chiudo la form
   case Key of
-    13:
-      _editRecord; // apro la form di editing del record
-    45:
-      _insRecord; // apro la form in inserimento
-    46:
-      _deleteRecord; // elimino record direttamente dalla form del registro
+    13:                         // ENTER
+      _openInsEditForm('edit'); // apro la form di editing del record
+    45:                         // INS
+      _openInsEditForm('new');  // apro la form in inserimento
+    46:                         // DEL
+      _deleteRecord;            // elimino record direttamente dalla form del registro
+    27:                         // ESC
+      Self.Close;
+    107:                          // +
+      _openInsEditForm('newExp'); // apro la form in inserimento
   end;
-
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -138,9 +192,9 @@ begin
   begin
     W := Grid.Canvas.TextWidth(Grid.cells[Column, i]);
     if W > WMax then
-      WMax := W + 10; // aggiungo 10 per avere una migliore visibilità
+      WMax := W;
   end;
-  Grid.ColWidths[Column] := WMax + 5;
+  Grid.ColWidths[Column] := WMax + 10; // aggiungo X per avere una migliore visibilità
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -150,6 +204,17 @@ var
 begin
   for i := 0 to grdLedger.ColCount - 1 do
     _autoSizeCol(grdLedger, i);
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm._clearGrid;
+var
+  i: Integer;
+  J: Integer;
+begin
+  for i := 0 to grdLedger.ColCount - 1 do
+    for J := 1 to grdLedger.RowCount - 1 do
+      grdLedger.cells[i, J] := '';
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -177,13 +242,12 @@ begin
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
     MainFRM.sqlQry.Open;
-    if (MainFRM.sqlQry.RecordCount <> 0) then
-      while not MainFRM.sqlQry.EOF do // ciclo recupero dati
-      begin
-        _lTotal := StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] / 1000);
-        chTotals.SeriesList[0].Add(_lTotal, 'Deposit');
-        MainFRM.sqlQry.Next;
-      end;
+    while not MainFRM.sqlQry.EOF do // ciclo recupero dati
+    begin
+      _lTotal := StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']);
+      chTotals.SeriesList[0].Add(_lTotal, 'Deposit');
+      MainFRM.sqlQry.Next;
+    end;
   finally
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
@@ -200,14 +264,13 @@ begin
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
     MainFRM.sqlQry.Open;
-    if (MainFRM.sqlQry.RecordCount <> 0) then
-      while not MainFRM.sqlQry.EOF do // ciclo recupero dati
-      begin
-        _lTotal := StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] / 1000);
-        // FormatFloat('#,##0 K', StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']/1000));
-        chTotals.SeriesList[0].Add(_lTotal, 'Expense');
-        MainFRM.sqlQry.Next;
-      end;
+    while not MainFRM.sqlQry.EOF do // ciclo recupero dati
+    begin
+      _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
+      // FormatFloat('#,##0 K', StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']/1000));
+      chTotals.SeriesList[0].Add(_lTotal, 'Expense');
+      MainFRM.sqlQry.Next;
+    end;
   finally
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
@@ -249,17 +312,6 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TLedgerFrm._clearGrid;
-var
-  i: Integer;
-  J: Integer;
-begin
-  for i := 0 to grdLedger.ColCount - 1 do
-    for J := 1 to grdLedger.RowCount - 1 do
-      grdLedger.cells[i, J] := '';
-end;
-
-// -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm._fillGrid();
 // riempiemnto della grid
 var
@@ -268,7 +320,7 @@ var
 begin
   // pulizia della grid
   _clearGrid;
-  grdLedger.RowCount := 2;
+  grdLedger.RowCount := 1;
 
   // estrazione dati dal db e riempimento della grid
   _SQLString := 'SELECT * FROM LedgerView where ACCNAME = ''' + _pAccountName + ''' ORDER BY TRNDATE, TRNID';
@@ -290,13 +342,14 @@ begin
         grdLedger.cells[2, i] := MainFRM.sqlQry.FieldValues['TRNDATE'];
         grdLedger.cells[3, i] := MainFRM.sqlQry.FieldValues['PAYNAME'];
         if (MainFRM.sqlQry.FieldValues['SUBCDES'] = null) then
+          grdLedger.cells[4, i] := MainFRM.sqlQry.FieldValues['CATDES'] + ' : '
         else
-          grdLedger.cells[4, i] := MainFRM.sqlQry.FieldValues['CATDES'] + ' ' + MainFRM.sqlQry.FieldValues['SUBCDES'];
+          grdLedger.cells[4, i] := MainFRM.sqlQry.FieldValues['CATDES'] + ' : ' + MainFRM.sqlQry.FieldValues['SUBCDES'];
 
         if (MainFRM.sqlQry.FieldValues['TRNAMOUNT'] > 0) then
           grdLedger.cells[5, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT'])
         else
-          grdLedger.cells[6, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
+          grdLedger.cells[6, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT'] * -1);
 
         runSum := runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];
         grdLedger.cells[7, i] := FormatFloat('#,##0.00', runSum);
@@ -304,52 +357,75 @@ begin
         // incremento per record e colonne
         i := i + 1;
         MainFRM.sqlQry.Next;
+
       end;
     _autoSizeGrid;
   finally
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
   end;
+
+  grdLedger.FixedRows := 1;
   // autosize columns
-  _autoSizeGrid;
+  // _autoSizeGrid;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TLedgerFrm._insRecord;
+procedure TLedgerFrm._openInsEditForm(_pEditKind: string);
 var
   frmInsEdit: TInsEditFrm;
+  i: Integer; // var x storage del record attuale per poi recuperarlo
 begin
-  // inserire record
+  i := grdLedger.Row; // imposto la riga della grid attuale
 
+  // creo la form e la nascondo per poter impostare le proprietà
+  frmInsEdit := TInsEditFrm.Create(Self);
+  frmInsEdit.Hide;
+
+  // imposto il tipo di editing nella proprietà della form editing
+  frmInsEdit._pEditType := _pEditKind;
+
+  // passo la tipologia dell'azione da eseguire sulla form editing
+  if _pEditKind = 'edit' then
+    frmInsEdit._pEditID := strToInt(grdLedger.cells[0, i]); // imposto l'ID del record da editare
+
+  if (_pEditKind = 'new') or (_pEditKind = 'newExp') then
+    frmInsEdit._pEditID := 0; // mando un generico valore da cariccare nella form utile x alcuni check
+
+  // passo il nome del ledger di riferimento del record
+  frmInsEdit._pLedgerID := _pAccountName;
+
+  // nostro la form modale
+  frmInsEdit.ShowModal;
+
+  // aggiorno i datidella grid
+  _fillGrid;
+  _ChartTotals;
+
+  grdLedger.Row := i; // reimposto il record della grid su quello precedente
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm._deleteRecord;
 var
   _vIDRecord: string;
+  i: Integer; // posizione della grid
 begin
-  _vIDRecord := grdLedger.cells[0, grdLedger.Row];
-
+  i := grdLedger.Row;
+  _vIDRecord := grdLedger.cells[0, i];
   if (_vIDRecord <> '') and (MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
   begin
     try
-      // MainFRM.sqlQry.ExecSQL('DELETE FROM TRANSACTIONS WHERE TRNID = ' + grdLedger.Cells[0,grdLedger.Row] + ''' ');
-      ShowMessage('DELETE FROM TRANSACTIONS WHERE TRNID = ' + _vIDRecord);
+      MainFRM.sqlQry.ExecSQL('DELETE FROM TRANSACTIONS WHERE TRNID = ' + _vIDRecord);
+      // ShowMessage('DELETE FROM TRANSACTIONS WHERE TRNID = ' + _vIDRecord);
     finally
-      MainFRM.sqlQry.Close;
-      MainFRM.sqlQry.SQL.Clear;
+      grdLedger.Row := i;
     end;
   end;
 
   // refresh della grid
   _fillGrid();
   _ChartTotals();
-end;
-
-// -------------------------------------------------------------------------------------------------------------//
-procedure TLedgerFrm._editRecord;
-begin
-
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

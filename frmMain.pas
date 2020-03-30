@@ -22,7 +22,6 @@ type
     StatusBar1: TStatusBar;
     Panel2: TPanel;
     chartBalance: TChart;
-    BitBtn1: TBitBtn;
     treeMenu: TTreeView;
     MainMenu1: TMainMenu;
     File1: TMenuItem;
@@ -31,16 +30,19 @@ type
     VirtualImageList1: TVirtualImageList;
     ImageCollection1: TImageCollection;
     Series1: TBarSeries;
-    function _openDB(_pDBFname: string): boolean;
-    procedure _closeDB;
-    function _SeekNode(pvSkString: string): TTreeNode;
-    procedure _treeMenuCreate();
-    procedure _fillBalanceChart();
     procedure FormCreate(Sender: TObject);
     procedure treeMenuDblClick(Sender: TObject);
-    function _chkOpenForm(_frmCaption: string): boolean;
   private
     { Private declarations }
+
+    //local function
+    function _openDB(_pDBFname: string): boolean;
+    function _SeekNode(pvSkString: string): TTreeNode;
+    function _chkOpenForm(_frmCaption: string): boolean;
+    procedure _closeDB;
+    procedure _treeMenuCreate();
+    procedure _fillBalanceChart();
+
   public
     { Public declarations }
   end;
@@ -122,7 +124,7 @@ begin
       if (MainFRM.sqlQry.RecordCount <> 0) then
         while not MainFRM.sqlQry.EOF do // ciclo recupero dati
         begin
-          _lTotal := sqlQry.FieldValues['Sum_TRNAMOUNT'] / 1000;
+          _lTotal := Round(strtofloat(sqlQry.FieldValues['Sum_TRNAMOUNT']));
           chartBalance.SeriesList[0].Add(_lTotal);
           chartBalance.Axes.Bottom.Items.Add(i, sqlQry.FieldValues['ACCNAME']);
           sqlQry.Next;
@@ -137,16 +139,15 @@ end;
 //-------------------------------------------------------------------------------------------------------------//
 function TMainFRM._openDB(_pDBFname: string): boolean;
 begin
+  Result := true;
   //apro la connesione al db
   sqlite_conn.Params.Database := _pDBFname;
   try
     sqlite_conn.Connected := true;
   except
-    MessageDlg('Impossible to open the database' + _pDBFname, mtError,
-      [mbOK], 0);
+    MessageDlg('Impossible to open the database' + _pDBFname, mtError,[mbOK], 0);
     Result := false;
   end;
-  Result := true
 end;
 //-------------------------------------------------------------------------------------------------------------//
 function TMainFRM._SeekNode(pvSkString: string): TTreeNode;

@@ -2,8 +2,8 @@ object LedgerFrm: TLedgerFrm
   Left = 0
   Top = 0
   Caption = 'LedgerFrm'
-  ClientHeight = 536
-  ClientWidth = 787
+  ClientHeight = 539
+  ClientWidth = 814
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,17 +14,18 @@ object LedgerFrm: TLedgerFrm
   KeyPreview = True
   OldCreateOrder = False
   Visible = True
-  OnActivate = FormActivate
   OnClose = FormClose
   OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object RzSplitter1: TRzSplitter
     Left = 0
     Top = 0
-    Width = 787
-    Height = 517
-    BorderWidth = 5
+    Width = 814
+    Height = 520
+    BorderWidth = 2
+    FixedPane = fpLowerRight
     Orientation = orVertical
     Position = 350
     Percent = 68
@@ -35,10 +36,10 @@ object LedgerFrm: TLedgerFrm
     TabOrder = 0
     VisualStyle = vsClassic
     BarSize = (
-      5
-      355
-      782
-      365)
+      2
+      352
+      812
+      362)
     UpperLeftControls = (
       grdLedger)
     LowerRightControls = (
@@ -47,20 +48,30 @@ object LedgerFrm: TLedgerFrm
     object grdLedger: TJvgStringGrid
       Left = 0
       Top = 0
-      Width = 777
+      Width = 810
       Height = 350
+      Cursor = crHandPoint
       Align = alClient
       BorderStyle = bsNone
       Color = clMoneyGreen
       ColCount = 9
-      DefaultColWidth = 80
+      Ctl3D = True
+      DefaultColWidth = 70
       DefaultRowHeight = 18
+      DefaultDrawing = False
+      DoubleBuffered = True
       DrawingStyle = gdsGradient
       FixedCols = 0
       RowCount = 2
-      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowSelect, goFixedColClick]
-      ScrollBars = ssVertical
+      GradientEndColor = clBlack
+      GradientStartColor = clMoneyGreen
+      GridLineWidth = 2
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowSelect]
+      ParentCtl3D = False
+      ParentDoubleBuffered = False
+      PopupMenu = PopupMenu1
       TabOrder = 0
+      OnDblClick = grdLedgerDblClick
       OnDrawCell = grdLedgerDrawCell
       OnKeyDown = grdLedgerKeyDown
       TextAlignment = taRightJustify
@@ -79,30 +90,29 @@ object LedgerFrm: TLedgerFrm
         'Out'
         'Balance'
         'Description')
-      ExtOptions = [fsgHottrack, fsgWordWrap, fsgCellHeightAutoSize, fsgTabThroughCells]
-      EditorColor = clTeal
+      ExtOptions = []
+      EditorColor = clBlack
       EditorFont.Charset = DEFAULT_CHARSET
       EditorFont.Color = clWindowText
       EditorFont.Height = -11
       EditorFont.Name = 'Tahoma'
       EditorFont.Style = []
-      ExplicitHeight = 308
       ColWidths = (
-        80
-        80
-        80
-        80
-        80
-        80
-        80
-        80
-        137)
+        70
+        70
+        70
+        70
+        70
+        70
+        70
+        70
+        250)
     end
     object chTotals: TChart
       Left = 0
       Top = 0
       Width = 377
-      Height = 147
+      Height = 156
       Border.Width = 0
       Legend.Alignment = laBottom
       Title.Text.Strings = (
@@ -115,7 +125,6 @@ object LedgerFrm: TLedgerFrm
       Align = alLeft
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitHeight = 189
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 13
       object Series1: TPieSeries
@@ -144,10 +153,10 @@ object LedgerFrm: TLedgerFrm
       end
     end
     object chHistory: TChart
-      Left = 377
+      Left = 410
       Top = 0
       Width = 400
-      Height = 147
+      Height = 156
       Legend.Visible = False
       MarginRight = 8
       MarginTop = 10
@@ -163,7 +172,6 @@ object LedgerFrm: TLedgerFrm
       Align = alRight
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitHeight = 189
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 13
       object Series2: TAreaSeries
@@ -181,6 +189,7 @@ object LedgerFrm: TLedgerFrm
         Pointer.InflateMargins = True
         Pointer.Style = psDownTriangle
         Pointer.VertSize = 3
+        Pointer.Visible = False
         XValues.Name = 'X'
         XValues.Order = loAscending
         YValues.Name = 'Y'
@@ -190,13 +199,35 @@ object LedgerFrm: TLedgerFrm
   end
   object RzStatusBar1: TRzStatusBar
     Left = 0
-    Top = 517
-    Width = 787
+    Top = 520
+    Width = 814
     Height = 19
     BorderInner = fsNone
     BorderOuter = fsNone
     BorderSides = [sdLeft, sdTop, sdRight, sdBottom]
     BorderWidth = 0
     TabOrder = 1
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 540
+    Top = 135
+    object Edit1: TMenuItem
+      Caption = '&Insert (INS)'
+      OnClick = Edit1Click
+    end
+    object InsertExpensecontinuous1: TMenuItem
+      Caption = 'Insert Expense &bulk (+)'
+    end
+    object Edit2: TMenuItem
+      Caption = '&Edit (ENTER)'
+      OnClick = Edit2Click
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object Delete1: TMenuItem
+      Caption = '&Delete (DEL)'
+      OnClick = Delete1Click
+    end
   end
 end

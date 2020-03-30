@@ -106,14 +106,6 @@ object MainFRM: TMainFRM
     Height = 24
     Panels = <>
   end
-  object BitBtn1: TBitBtn
-    Left = 56
-    Top = 329
-    Width = 97
-    Height = 40
-    Caption = 'BitBtn1'
-    TabOrder = 2
-  end
   object MainMenu1: TMainMenu
     Left = 344
     Top = 288
