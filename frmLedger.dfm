@@ -14,6 +14,7 @@ object LedgerFrm: TLedgerFrm
   KeyPreview = True
   OldCreateOrder = False
   Visible = True
+  OnActivate = FormActivate
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
@@ -30,7 +31,7 @@ object LedgerFrm: TLedgerFrm
     Position = 350
     Percent = 68
     HotSpotVisible = True
-    SplitterStyle = ssGroove
+    SplitterStyle = ssBump
     SplitterWidth = 10
     Align = alClient
     TabOrder = 0
@@ -41,17 +42,17 @@ object LedgerFrm: TLedgerFrm
       812
       362)
     UpperLeftControls = (
+      _e_grdLedger
       grdLedger)
     LowerRightControls = (
       chTotals
       chHistory)
-    object grdLedger: TJvgStringGrid
-      Left = 0
-      Top = 0
-      Width = 810
-      Height = 350
+    object _e_grdLedger: TJvgStringGrid
+      Left = 110
+      Top = 200
+      Width = 305
+      Height = 114
       Cursor = crHandPoint
-      Align = alClient
       BorderStyle = bsNone
       Color = clMoneyGreen
       ColCount = 9
@@ -71,10 +72,6 @@ object LedgerFrm: TLedgerFrm
       ParentDoubleBuffered = False
       PopupMenu = PopupMenu1
       TabOrder = 0
-      OnDblClick = grdLedgerDblClick
-      OnDrawCell = grdLedgerDrawCell
-      OnKeyDown = grdLedgerKeyDown
-      TextAlignment = taRightJustify
       CaptionFont.Charset = DEFAULT_CHARSET
       CaptionFont.Color = clWindowText
       CaptionFont.Height = -11
@@ -106,7 +103,33 @@ object LedgerFrm: TLedgerFrm
         70
         70
         70
-        250)
+        -255)
+    end
+    object grdLedger: TStringGrid
+      Left = 0
+      Top = 0
+      Width = 810
+      Height = 350
+      Align = alClient
+      Color = clBtnFace
+      ColCount = 9
+      Ctl3D = False
+      DefaultRowHeight = 17
+      DrawingStyle = gdsClassic
+      FixedCols = 0
+      RowCount = 2
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goRowSelect]
+      ParentCtl3D = False
+      ParentFont = False
+      TabOrder = 1
+      OnDblClick = grdLedgerDblClick
+      OnDrawCell = grdLedgerDrawCell
+      OnKeyDown = grdLedgerKeyDown
     end
     object chTotals: TChart
       Left = 0
@@ -209,14 +232,17 @@ object LedgerFrm: TLedgerFrm
     TabOrder = 1
   end
   object PopupMenu1: TPopupMenu
-    Left = 540
-    Top = 135
+    Left = 35
+    Top = 265
     object Edit1: TMenuItem
       Caption = '&Insert (INS)'
       OnClick = Edit1Click
     end
     object InsertExpensecontinuous1: TMenuItem
       Caption = 'Insert Expense &bulk (+)'
+    end
+    object Transfer1: TMenuItem
+      Caption = '&Transfer (*)'
     end
     object Edit2: TMenuItem
       Caption = '&Edit (ENTER)'

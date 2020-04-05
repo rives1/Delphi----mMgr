@@ -13,9 +13,12 @@
     <Transaction>2020/03/21 17:12:20.000.000,=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\Unit1.pas</Transaction>
     <Transaction>2020/03/21 17:12:37.000.446,C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmIInsEdit.dfm=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\Unit1.dfm</Transaction>
     <Transaction>2020/03/21 17:12:37.000.446,C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmIInsEdit.pas=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\Unit1.pas</Transaction>
-    <Transaction>2020/03/25 22:15:31.000.455,C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmIInsEdit.dfm=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmInsEdit.dfm</Transaction>
     <Transaction>2020/03/25 22:15:31.000.455,C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmIInsEdit.pas=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmInsEdit.pas</Transaction>
-    <Transaction>2020/03/30 04:26:02.610,=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\Unit1.pas</Transaction>
-    <Transaction>2020/03/30 04:27:33.985,C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\pasCommon.pas=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\Unit1.pas</Transaction>
+    <Transaction>2020/03/25 22:15:31.000.455,C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmIInsEdit.dfm=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmInsEdit.dfm</Transaction>
+    <Transaction>2020/03/30 04:26:02.000.610,=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\Unit1.pas</Transaction>
+    <Transaction>2020/03/30 04:27:33.000.985,C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\pasCommon.pas=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\Unit1.pas</Transaction>
+    <Transaction>2020/04/02 19:08:51.000.883,=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\Unit1.pas</Transaction>
+    <Transaction>2020/04/02 19:13:20.000.473,=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmTransfer.pas</Transaction>
+    <Transaction>2020/04/02 23:23:54.000.024,C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmTransfer.pas=</Transaction>
   </Transactions>
 </BorlandProject>

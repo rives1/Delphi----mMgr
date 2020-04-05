@@ -7,10 +7,6 @@ Coordinates=277,10,78,58
 [Series1]
 Coordinates=158,174,58,36
 
-[grdLedger]
-Coordinates=73,10,73,58
-Visible=True
-
 []
 Coordinates=217,155,58,36
 
@@ -19,4 +15,8 @@ Coordinates=114,78,53,58
 
 [chHistory]
 Coordinates=10,10,53,58
+
+[_e_grdLedger]
+Coordinates=73,10,73,58
+Visible=True
 

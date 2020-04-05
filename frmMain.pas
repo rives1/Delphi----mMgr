@@ -3,18 +3,14 @@ unit frmMain;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, System.ImageList,
-  Vcl.ImgList, Vcl.ExtCtrls, VclTee.TeeGDIPlus, Vcl.StdCtrls, Vcl.Buttons,
-  VclTee.TeEngine, VclTee.TeeProcs, VclTee.Chart, Data.SqlExpr, Data.DbxSqlite,
-  Data.DB, Vcl.Menus, Data.FMTBcd, FireDAC.Stan.ExprFuncs,
-  FireDAC.Phys.SQLiteDef, FireDAC.Stan.Intf, FireDAC.Phys, FireDAC.Phys.SQLite,
-  FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf,
-  FireDAC.Stan.Def, FireDAC.Stan.Async, FireDAC.VCLUI.Wait,
-  FireDAC.Comp.Client, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
-  FireDAC.DApt, FireDAC.Comp.DataSet, Vcl.BaseImageCollection,
-  Vcl.ImageCollection, Vcl.VirtualImageList, FireDAC.Stan.Pool, VclTee.Series;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls,
+  Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, System.ImageList, Vcl.ImgList, Vcl.ExtCtrls, VclTee.TeeGDIPlus, Vcl.StdCtrls,
+  Vcl.Buttons, VclTee.TeEngine, VclTee.TeeProcs, VclTee.Chart, Data.SqlExpr, Data.DbxSqlite, Data.DB, Vcl.Menus,
+  Data.FMTBcd, FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteDef, FireDAC.Stan.Intf, FireDAC.Phys, FireDAC.Phys.SQLite,
+  FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Async,
+  FireDAC.VCLUI.Wait, FireDAC.Comp.Client, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
+  FireDAC.Comp.DataSet, Vcl.BaseImageCollection, Vcl.ImageCollection, Vcl.VirtualImageList, FireDAC.Stan.Pool,
+  VclTee.Series;
 
 type
   TMainFRM = class(TForm)
@@ -35,7 +31,7 @@ type
   private
     { Private declarations }
 
-    //local function
+    // local function
     function _openDB(_pDBFname: string): boolean;
     function _SeekNode(pvSkString: string): TTreeNode;
     function _chkOpenForm(_frmCaption: string): boolean;
@@ -69,7 +65,8 @@ begin
   // riempimento chart saldi
   _fillBalanceChart;
 end;
-//-------------------------------------------------------------------------------------------------------------//
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM.treeMenuDblClick(Sender: TObject);
 var
   childFRM: TLedgerFrm;
@@ -77,9 +74,11 @@ begin
   // apro la child form del ledger. se il nodo superiore è account si tratta sicuramente di un ledger da aprire
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'ACCOUNT')) then
     if not _chkOpenForm(treeMenu.Selected.Text) then
-      childFRM := TLedgerFrm.Create(nil);
+childFRM := TLedgerFrm.Create(nil);
+
 end;
-//-------------------------------------------------------------------------------------------------------------//
+
+// -------------------------------------------------------------------------------------------------------------//
 function TMainFRM._chkOpenForm(_frmCaption: string): boolean;
 var
   i: integer;
@@ -89,19 +88,22 @@ begin
   for i := 0 to MDIChildCount - 1 do
   begin
     if (MDIChildren[i].caption = _frmCaption) then
-      begin
+    begin
       MDIChildren[i].Show;
+      MDIChildren[i].SetFocus;
       Result := true;
-      end;
+    end;
   end;
 end;
-//-------------------------------------------------------------------------------------------------------------//
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM._closeDB;
 begin
   // chisura del db
   sqlite_conn.Close;
 end;
-//-------------------------------------------------------------------------------------------------------------//
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM._fillBalanceChart;
 var
   _lTotal: Double; // totale x
@@ -124,32 +126,38 @@ begin
       if (MainFRM.sqlQry.RecordCount <> 0) then
         while not MainFRM.sqlQry.EOF do // ciclo recupero dati
         begin
-          _lTotal := Round(strtofloat(sqlQry.FieldValues['Sum_TRNAMOUNT']));
-          chartBalance.SeriesList[0].Add(_lTotal);
-          chartBalance.Axes.Bottom.Items.Add(i, sqlQry.FieldValues['ACCNAME']);
+          if sqlQry.FieldValues['Sum_TRNAMOUNT'] <> NULL then
+          begin
+            _lTotal := Round(strtofloat(sqlQry.FieldValues['Sum_TRNAMOUNT']));
+            chartBalance.SeriesList[0].Add(_lTotal);
+            chartBalance.Axes.Bottom.Items.Add(i, sqlQry.FieldValues['ACCNAME']);
+            i := i + 1;
+          end;
           sqlQry.Next;
-          i := i + 1;
         end;
+
     finally
       sqlQry.Close;
       sqlQry.SQL.Clear;
     end;
   end;
 end;
-//-------------------------------------------------------------------------------------------------------------//
+
+// -------------------------------------------------------------------------------------------------------------//
 function TMainFRM._openDB(_pDBFname: string): boolean;
 begin
   Result := true;
-  //apro la connesione al db
+  // apro la connesione al db
   sqlite_conn.Params.Database := _pDBFname;
   try
     sqlite_conn.Connected := true;
   except
-    MessageDlg('Impossible to open the database' + _pDBFname, mtError,[mbOK], 0);
+    MessageDlg('Impossible to open the database' + _pDBFname, mtError, [mbOK], 0);
     Result := false;
   end;
 end;
-//-------------------------------------------------------------------------------------------------------------//
+
+// -------------------------------------------------------------------------------------------------------------//
 function TMainFRM._SeekNode(pvSkString: string): TTreeNode;
 var
   i: integer;
@@ -166,7 +174,8 @@ begin
     end;
   end;
 end;
-//-------------------------------------------------------------------------------------------------------------//
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM._treeMenuCreate;
 // creazione di tutto l'albero del menù
 var
@@ -233,5 +242,6 @@ begin
 
   treeMenu.FullExpand;
 end;
-//-------------------------------------------------------------------------------------------------------------//
+
+// -------------------------------------------------------------------------------------------------------------//
 end.

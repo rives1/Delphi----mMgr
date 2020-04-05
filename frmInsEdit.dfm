@@ -2,8 +2,8 @@ object InsEditFrm: TInsEditFrm
   Left = 0
   Top = 0
   Caption = 'Insert/Edit Record'
-  ClientHeight = 205
-  ClientWidth = 459
+  ClientHeight = 260
+  ClientWidth = 462
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -28,39 +28,53 @@ object InsEditFrm: TInsEditFrm
     Caption = 'Date'
   end
   object Label2: TLabel
-    Left = 24
+    Left = 16
     Top = 24
     Width = 24
     Height = 13
     Caption = 'Type'
   end
   object Label3: TLabel
-    Left = 24
-    Top = 59
+    Left = 16
+    Top = 99
     Width = 30
     Height = 13
     Caption = 'Payee'
   end
   object Label4: TLabel
-    Left = 24
-    Top = 94
+    Left = 16
+    Top = 134
     Width = 45
     Height = 13
     Caption = 'Category'
   end
   object Label5: TLabel
-    Left = 24
-    Top = 129
+    Left = 16
+    Top = 169
     Width = 53
     Height = 13
     Caption = 'Description'
   end
   object Label6: TLabel
-    Left = 24
-    Top = 166
+    Left = 16
+    Top = 211
     Width = 37
     Height = 13
     Caption = 'Amount'
+  end
+  object Label7: TLabel
+    Left = 16
+    Top = 62
+    Width = 66
+    Height = 13
+    Caption = 'From Account'
+  end
+  object Label8: TLabel
+    Left = 238
+    Top = 62
+    Width = 12
+    Height = 13
+    Caption = 'To'
   end
   object _fType: TJvComboBox
     Left = 88
@@ -70,18 +84,19 @@ object InsEditFrm: TInsEditFrm
     AutoDropDown = True
     TabOrder = 1
     Text = ''
+    OnExit = _fTypeExit
     Items.Strings = (
       'Pay'
       'Deposit'
       'Transfer')
   end
   object btnOK: TJvBitBtn
-    Left = 368
-    Top = 166
+    Left = 328
+    Top = 211
     Width = 75
     Height = 25
     Caption = 'OK'
-    TabOrder = 8
+    TabOrder = 10
     OnClick = btnOKClick
   end
   object _fID: TEdit
@@ -99,37 +114,37 @@ object InsEditFrm: TInsEditFrm
   end
   object _fDescription: TEdit
     Left = 88
-    Top = 126
+    Top = 166
     Width = 339
     Height = 21
-    TabOrder = 6
+    TabOrder = 8
   end
   object _fPayee: TJvComboBox
     Left = 88
-    Top = 56
-    Width = 193
+    Top = 96
+    Width = 248
     Height = 21
     AutoDropDown = True
-    TabOrder = 3
+    TabOrder = 5
     Text = ''
     OnCloseUp = _fPayeeCloseUp
   end
   object _fCategory: TJvComboBox
     Left = 88
-    Top = 91
+    Top = 131
     Width = 169
     Height = 21
     AutoDropDown = True
-    TabOrder = 4
+    TabOrder = 6
     Text = ''
     OnExit = _fCategoryExit
   end
   object _fSubCategory: TJvComboBox
     Left = 263
-    Top = 91
+    Top = 131
     Width = 164
     Height = 21
-    TabOrder = 5
+    TabOrder = 7
     Text = ''
     OnExit = _fSubCategoryExit
   end
@@ -145,13 +160,33 @@ object InsEditFrm: TInsEditFrm
   end
   object _fAmount: TJvValidateEdit
     Left = 88
-    Top = 163
+    Top = 208
     Width = 81
     Height = 21
     CriticalPoints.MaxValueIncluded = False
     CriticalPoints.MinValueIncluded = False
     DisplayFormat = dfCurrency
     DecimalPlaces = 2
-    TabOrder = 7
+    TabOrder = 9
+  end
+  object _fAccountTo: TJvComboBox
+    Left = 263
+    Top = 59
+    Width = 164
+    Height = 21
+    Enabled = False
+    TabOrder = 4
+    Text = ''
+    OnExit = _fSubCategoryExit
+  end
+  object _fAccountFrom: TJvComboBox
+    Left = 88
+    Top = 59
+    Width = 128
+    Height = 21
+    Enabled = False
+    TabOrder = 3
+    Text = ''
+    OnExit = _fSubCategoryExit
   end
 end

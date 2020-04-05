@@ -88,6 +88,8 @@ object MainFRM: TMainFRM
       Color = clBtnFace
       Images = VirtualImageList1
       Indent = 27
+      ReadOnly = True
+      RowSelect = True
       TabOrder = 1
       OnDblClick = treeMenuDblClick
       Items.NodeData = {
