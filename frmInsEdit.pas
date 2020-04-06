@@ -66,7 +66,7 @@ type
     procedure _cleanFormNewRecord;
     procedure _newCategory;
     procedure _newSubCategory; // var per gli statement sql
-    procedure _fieldsDefault;  // impostazioni dei campi abilitati/disabilitati + valori defaulkt
+    procedure _fieldDefault;
 
   public
     { Public declarations }
@@ -122,7 +122,9 @@ begin
     begin
       _fAccountTo.SetFocus;
     end;
-    _fieldsDefault;
+
+    _fAccountFrom.Text:=_pEditType;
+    _cleanFormNewRecord; //impostazione
   end;
 end;
 
@@ -166,29 +168,8 @@ end;
 procedure TInsEditFrm._cleanFormNewRecord;
 begin
   /// ripulisco la form per inserire il prox recod
-  ///
   _loadCmbCategory; // ricarico la categoria se nel record precedente ne è stato inserito uno
 
-  _fPayee.Text := '';
-  _fCategory.Text := '';
-  _fSubCategory.Text := '';
-  _fCategory.Text := '';
-  _fAmount.Value := 0;
-  _fAccountTo.Text := '';
-  _fAccountFrom.Text := _pLedgerID;
-
-  _fPayee.SetFocus;
-end;
-
-// -------------------------------------------------------------------------------------------------------------//
-procedure TInsEditFrm._fCategoryExit(Sender: TObject);
-begin
-  _newCategory;
-end;
-
-// -------------------------------------------------------------------------------------------------------------//
-procedure TInsEditFrm._fieldsDefault;
-begin
   // abilito/disabilito i campi necessario
   if (UpperCase(_fType.Text) = 'TRANSFER') then
   begin
@@ -196,7 +177,7 @@ begin
     _fPayee.Text := '_Transfer';
     _fCategory.Text := '_Transfer';
     _fSubCategory.Text := '_Transfer';
-
+    _fAccountTo.Text := '';
   end
   else
   begin
@@ -206,6 +187,17 @@ begin
     _fSubCategory.Text := '';
   end;
 
+  //valori indipendenti dal tipo di transazione
+  _fAmount.Value := 0;
+  _fAccountFrom.Text := _pLedgerID;
+
+  _fPayee.SetFocus;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TInsEditFrm._fCategoryExit(Sender: TObject);
+begin
+  _newCategory;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
