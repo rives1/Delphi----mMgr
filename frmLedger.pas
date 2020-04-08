@@ -411,7 +411,6 @@ begin
 
   // inserisco le caption
   grdLedger.cells[0, 0] := 'ID';
-  grdLedger.cells[0, 0] := 'ID';
   grdLedger.cells[1, 0] := 'Type';
   grdLedger.cells[2, 0] := 'Date';
   grdLedger.cells[3, 0] := 'Payee';
@@ -436,12 +435,11 @@ begin
         // inserisco una nuova riga nella grid
         grdLedger.RowCount := grdLedger.RowCount + 1;
         // aggiungo i dati alla grid
-        grdLedger.cells[0, i] := MainFRM.sqlQry.FieldValues['TRNID']; // ID
+        grdLedger.cells[0, i] := MainFRM.sqlQry.FieldValues['TRNID'];   // ID
         grdLedger.cells[1, i] := MainFRM.sqlQry.FieldValues['TRNTYPE']; // Tipo operazione
         grdLedger.cells[2, i] := MainFRM.sqlQry.FieldValues['TRNDATE']; // Data
         grdLedger.cells[3, i] := MainFRM.sqlQry.FieldValues['PAYNAME'];
         grdLedger.cells[4, i] := MainFRM.sqlQry.FieldValues['CATDES'] + ' : ' + MainFRM.sqlQry.FieldValues['SUBCDES'];
-        // categoria
 
         if (MainFRM.sqlQry.FieldValues['TRNAMOUNT'] > 0) then
         begin

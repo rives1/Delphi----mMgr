@@ -10,7 +10,7 @@ uses
   FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Async,
   FireDAC.VCLUI.Wait, FireDAC.Comp.Client, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
   FireDAC.Comp.DataSet, Vcl.BaseImageCollection, Vcl.ImageCollection, Vcl.VirtualImageList, FireDAC.Stan.Pool,
-  VclTee.Series;
+  VclTee.Series, frxClass, frxDBSet, frxExportBaseDialog, frxExportPDF;
 
 type
   TMainFRM = class(TForm)
@@ -26,6 +26,9 @@ type
     VirtualImageList1: TVirtualImageList;
     ImageCollection1: TImageCollection;
     Series1: TBarSeries;
+    rptStandard: TfrxReport;
+    frxPDFExport1: TfrxPDFExport;
+    rptDset: TfrxDBDataset;
     procedure FormCreate(Sender: TObject);
     procedure treeMenuDblClick(Sender: TObject);
   private

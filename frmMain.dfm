@@ -109,8 +109,8 @@ object MainFRM: TMainFRM
     Panels = <>
   end
   object MainMenu1: TMainMenu
-    Left = 344
-    Top = 288
+    Left = 244
+    Top = 13
     object File1: TMenuItem
       Caption = '&File'
     end
@@ -118,13 +118,13 @@ object MainFRM: TMainFRM
   object sqlite_conn: TFDConnection
     Params.Strings = (
       'DriverID=SQLite')
-    Left = 344
-    Top = 528
+    Left = 239
+    Top = 433
   end
   object sqlQry: TFDQuery
     Connection = sqlite_conn
-    Left = 424
-    Top = 528
+    Left = 319
+    Top = 433
   end
   object VirtualImageList1: TVirtualImageList
     DisabledGrayscale = False
@@ -193,8 +193,8 @@ object MainFRM: TMainFRM
     ImageCollection = ImageCollection1
     Width = 24
     Height = 24
-    Left = 360
-    Top = 32
+    Left = 75
+    Top = 137
   end
   object ImageCollection1: TImageCollection
     Images = <
@@ -4710,7 +4710,77 @@ object MainFRM: TMainFRM
               73636170652E6F72679BEE3C1A0000000049454E44AE426082}
           end>
       end>
-    Left = 464
-    Top = 32
+    Left = 79
+    Top = 202
+  end
+  object rptStandard: TfrxReport
+    Version = '6.2.1'
+    DataSet = rptDset
+    DataSetName = 'frxDBDataset1'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick, pbCopy, pbSelection]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Default'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 43929.991899351850000000
+    ReportOptions.LastChange = 43929.991899351850000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    Left = 320
+    Top = 525
+    Datasets = <>
+    Variables = <>
+    Style = <>
+    object Data: TfrxDataPage
+      Height = 1000.000000000000000000
+      Width = 1000.000000000000000000
+    end
+    object Page1: TfrxReportPage
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 297.000000000000000000
+      PaperSize = 9
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+      Frame.Typ = []
+    end
+  end
+  object frxPDFExport1: TfrxPDFExport
+    UseFileCache = True
+    ShowProgress = True
+    OverwritePrompt = False
+    DataOnly = False
+    OpenAfterExport = False
+    PrintOptimized = False
+    Outline = False
+    Background = False
+    HTMLTags = True
+    Quality = 95
+    Transparency = False
+    Author = 'FastReport'
+    Subject = 'FastReport PDF export'
+    ProtectionFlags = [ePrint, eModify, eCopy, eAnnot]
+    HideToolbar = False
+    HideMenubar = False
+    HideWindowUI = False
+    FitWindow = False
+    CenterWindow = False
+    PrintScaling = False
+    PdfA = False
+    Left = 400
+    Top = 525
+  end
+  object rptDset: TfrxDBDataset
+    UserName = 'frxDBDataset1'
+    CloseDataSource = False
+    DataSet = sqlQry
+    BCDToCurrency = False
+    Left = 240
+    Top = 525
   end
 end
