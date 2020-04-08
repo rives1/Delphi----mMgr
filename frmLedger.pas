@@ -147,7 +147,7 @@ begin
     if (ARow = 0) then
     begin
       Canvas.Brush.Color := clBtnFace;
-      Canvas.Font.Style := [fsBold];
+      Canvas.Font.Style  := [fsBold];
     end
     else
     begin
@@ -172,7 +172,7 @@ begin
       // bold per la prima linea delle caption
       FillRect(Rect);
       Text := grdLedger.cells[ACol, ARow];
-      dx := TextWidth(Text) + 2;
+      dx   := TextWidth(Text) + 2;
       TextOut(Rect.Right - dx, Rect.Top, Text);
     end;
 
@@ -254,7 +254,7 @@ procedure TLedgerFrm._autoSizeCol(Grid: TStringGrid; Column: Integer);
 var
   i, W, WMax: Integer;
 begin
-  WMax := 0;
+  WMax  := 0;
   for i := 0 to (Grid.RowCount - 1) do
   begin
     W := Grid.Canvas.TextWidth(Grid.cells[Column, i]);
@@ -279,8 +279,8 @@ var
   i: Integer;
   J: Integer;
 begin
-  for i := 0 to grdLedger.ColCount - 1 do
-    for J := 1 to grdLedger.RowCount - 1 do
+  for i                     := 0 to grdLedger.ColCount - 1 do
+    for J                   := 1 to grdLedger.RowCount - 1 do
       grdLedger.cells[i, J] := '';
 end;
 
@@ -288,6 +288,7 @@ end;
 procedure TLedgerFrm._ChartTotals;
 var
   _lTotal: Double;
+  _YY: string; // riferimento anno per migliroare visualizzazione graph storico
   i: Integer;
 begin
   //
@@ -354,9 +355,11 @@ begin
   //
   chHistory.Series[0].Clear(); // pulisco il grafico
   _lTotal := 0;                // resetto il conteggio
-  i := 0;                      // azzero il counter delle colonne
+  i       := 0;                // azzero il counter delle colonne
   // query totalizzazione spese
   _SQLString := 'SELECT StrfTime(''%Y'', TRNDATE) || ''-'' || StrfTime(''%W'', TRNDATE) AS Period, ' +
+    ' StrfTime(''%Y'', TRNDATE) AS YY,' +
+    ' StrfTime(''%W'', TRNDATE) AS WW, ' +
     ' Sum(TRNAMOUNT) AS Sum_TRNAMOUNT ' +
     ' FROM LedgerView ' +
     ' WHERE ACCNAME = ''' + _pAccountName + ''' ' +
@@ -376,7 +379,13 @@ begin
           _lTotal := _lTotal + (MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']);
           // FormatFloat('#,##0 K', StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']/1000));
           chHistory.Series[0].Add(_lTotal);
-          chHistory.Axes.Bottom.Items.Add(i, MainFRM.sqlQry.FieldValues['Period']);
+          // inserisco l'anno solo nella settimana iniziale
+          if (_YY = MainFRM.sqlQry.FieldValues['YY']) then
+            chHistory.Axes.Bottom.Items.Add(i, MainFRM.sqlQry.FieldValues['WW'])
+          else
+            chHistory.Axes.Bottom.Items.Add(i, MainFRM.sqlQry.FieldValues['YY']);
+
+          _YY:=MainFRM.sqlQry.FieldValues['YY'];
           i := i + 1;
         end;
         MainFRM.sqlQry.Next;
@@ -419,7 +428,7 @@ begin
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
     MainFRM.sqlQry.Open;
-    i := 1;
+    i      := 1;
     runSum := 0;
     if (MainFRM.sqlQry.RecordCount <> 0) then
       while not MainFRM.sqlQry.EOF do // ciclo recupero dati
@@ -437,12 +446,12 @@ begin
         if (MainFRM.sqlQry.FieldValues['TRNAMOUNT'] > 0) then
         begin
           grdLedger.cells[5, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
-          _trxIndicator := '>Transfer';
+          _trxIndicator         := '>Transfer';
         end
         else
         begin
           grdLedger.cells[6, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT'] * -1);
-          _trxIndicator := '<Transfer';
+          _trxIndicator         := '<Transfer';
         end;
 
         runSum := runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];
@@ -480,7 +489,7 @@ var
   _vIDRecord: string;
   i: Integer; // posizione della grid
 begin
-  i := grdLedger.Row;
+  i          := grdLedger.Row;
   _vIDRecord := grdLedger.cells[0, i];
   if (_vIDRecord <> '') and (MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
   begin
