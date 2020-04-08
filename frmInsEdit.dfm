@@ -80,8 +80,9 @@ object InsEditFrm: TInsEditFrm
     Left = 88
     Top = 21
     Width = 97
-    Height = 21
+    Height = 22
     AutoDropDown = True
+    Style = csOwnerDrawFixed
     TabOrder = 1
     Text = ''
     OnExit = _fTypeExit
@@ -173,7 +174,8 @@ object InsEditFrm: TInsEditFrm
     Left = 263
     Top = 59
     Width = 164
-    Height = 21
+    Height = 22
+    Style = csOwnerDrawFixed
     Enabled = False
     TabOrder = 4
     Text = ''

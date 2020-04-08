@@ -9,7 +9,7 @@ uses
   RzTreeVw, JvLookOut, JvExControls, JvOutlookBar, Vcl.Grids, JvgStringGrid,
   VclTee.TeeGDIPlus, VclTee.Series, VclTee.TeEngine, RzPanel, VclTee.TeeProcs,
   VclTee.Chart, Vcl.ExtCtrls, RzSplit, JvExGrids, JvStringGrid, RzGrids,
-  JvListView, ovcbase, ovctcmmn, ovctable, Vcl.Menus, JvComponentBase, JvgExportComponents;
+  JvListView, Vcl.Menus, JvComponentBase, JvgExportComponents;
 
 type
   TLedgerFrm = class(TForm)
@@ -237,7 +237,7 @@ begin
   // if (_pEditKind = 'new') or (_pEditKind = 'newExp') or (_pEditKind = 'trxNew') then
 
   // passo il nome del ledger di riferimento del record
-  frmInsEdit._pLedgerID := _pAccountName;
+  frmInsEdit._pLedgerName := _pAccountName;
 
   // nostro la form modale
   frmInsEdit.ShowModal;

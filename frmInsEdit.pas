@@ -45,12 +45,14 @@ type
     { Private declarations }
 
     // variabili
-    _plEditType: string; // properties to define if the new record
-    _plLedgerID: string; // properties for account ID
-    _plEditID: integer;  // defines which is the ID of the record in case of record editing
-    // _plAccountName : string;  //nome del conto
+    _plEditType: string;   // properties to define if the new record
+    _plLedgerName: string; // properties for account ID
+    _plEditID: integer;    // defines which is the ID of the record in case of record editing
+    _SQLString: string;    // container x query string
 
-    _SQLString: string; // container x query string
+    // costanti
+  const
+    _TrxText: string = '_Transfer';
 
     // local functions
     function _validateField: boolean;
@@ -66,16 +68,15 @@ type
     procedure _cleanFormNewRecord;
     procedure _newCategory;
     procedure _newSubCategory; // var per gli statement sql
-    procedure _fieldDefault;
+    procedure _changeType;     // impostazioni da inserire sulla mask al cambio del tipo di movimento
 
   public
     { Public declarations }
 
   published
-
     property _pEditType: string read _plEditType write _plEditType;
     property _pEditID: integer read _plEditID write _plEditID;
-    property _pLedgerID: string read _plLedgerID write _plLedgerID;
+    property _pLedgerName: string read _plLedgerName write _plLedgerName;
     // property _pAccountName: string read _plAccountName write _plAccountName;
 
   end;
@@ -123,15 +124,21 @@ begin
       _fAccountTo.SetFocus;
     end;
 
-    _fAccountFrom.Text:=_pEditType;
-    _cleanFormNewRecord; //impostazione
+    if (_pEditType = 'new') then // nuova transazione generica
+    begin
+      _fType.SetFocus;
+    end;
+    _fAccountFrom.Text := _pLedgerName;
+    // _cleanFormNewRecord; //impostazione
+
   end;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TInsEditFrm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  if (MessageDlg('Close Form?', mtConfirmation, [mbOk, mbCancel], 0) = mrOk) then
+  if (MessageDlg('Close Form?', mtConfirmation, [mbOk, mbCancel], 0) = mrOk)
+  then
   begin
     Action := caFree;
     Release;
@@ -142,7 +149,8 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TInsEditFrm.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TInsEditFrm.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
 begin
   // gestione pressione tasti
   // ESC - chiudo la form
@@ -161,35 +169,58 @@ begin
   _loadCmbPayee;
   _loadCmbCategory;
   _loadCmbAccounts;
-  _fAccountFrom.Text := _pLedgerID;
+  _fAccountFrom.Text := _pLedgerName;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TInsEditFrm._changeType;
+begin
+  if (UpperCase(_fType.Text) = 'TRANSFER') then
+  begin
+    _fAccountTo.Text := '';
+    _fAccountTo.Enabled := True;
+
+    _fPayee.Text := '_Transfer';
+    _fPayee.Enabled := False;
+
+    _fCategory.Text := '_Transfer';
+    _fCategory.Enabled := False;
+
+    _fSubCategory.Text := '_Transfer';
+    _fSubCategory.Enabled := False;
+  end
+  else
+  begin
+    _fAccountTo.Text := '';
+    _fAccountTo.Enabled := False;
+
+    _fPayee.Text := '';
+    _fPayee.Enabled := True;
+
+    _fCategory.Text := '';
+    _fCategory.Enabled := True;
+
+    _fSubCategory.Text := '';
+    _fSubCategory.Enabled := True;
+
+  end;
+
+  // focus sulla data
+  _fDate.SetFocus;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TInsEditFrm._cleanFormNewRecord;
 begin
   /// ripulisco la form per inserire il prox recod
-  _loadCmbCategory; // ricarico la categoria se nel record precedente ne è stato inserito uno
+  _loadCmbCategory;
+  // ricarico la categoria se nel record precedente ne è stato inserito uno
 
   // abilito/disabilito i campi necessario
-  if (UpperCase(_fType.Text) = 'TRANSFER') then
-  begin
-    _fAccountTo.Enabled := True;
-    _fPayee.Text := '_Transfer';
-    _fCategory.Text := '_Transfer';
-    _fSubCategory.Text := '_Transfer';
-    _fAccountTo.Text := '';
-  end
-  else
-  begin
-    _fAccountTo.Enabled := False;
-    _fPayee.Text := '';
-    _fCategory.Text := '';
-    _fSubCategory.Text := '';
-  end;
 
-  //valori indipendenti dal tipo di transazione
+  // valori indipendenti dal tipo di transazione
   _fAmount.Value := 0;
-  _fAccountFrom.Text := _pLedgerID;
+  _fAccountFrom.Text := _pLedgerName;
 
   _fPayee.SetFocus;
 end;
@@ -204,7 +235,8 @@ end;
 procedure TInsEditFrm._fPayeeCloseUp(Sender: TObject);
 begin
   // verfico che il valore sia selezionato fra quelli presenti e recupero le info dei dati + recenti
-  if (_fPayee.Items.IndexOf(UpperCase(_fPayee.Text)) <> -1) and (_fPayee.Text <> '') then
+  if (_fPayee.Items.IndexOf(UpperCase(_fPayee.Text)) <> -1) and
+    (_fPayee.Text <> '') then
     _getRecentData;
 end;
 
@@ -217,7 +249,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TInsEditFrm._fTypeExit(Sender: TObject);
 begin
-  _fieldsDefault;
+  _changeType;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -230,23 +262,34 @@ begin
     * description
     * amount
   }
-  if (_pEditID = 0) and (_fPayee.Text <> '') then // if it's not editing a previous record
+  if (_pEditID = 0) and (_fPayee.Text <> '') then
+  // if it's not editing a previous record
   begin
-    _SQLString := 'SELECT LedgerView.CATDES, LedgerView.SUBCDES, LedgerView.TRNDESCRIPTION, LedgerView.TRNAMOUNT ' +
-      ' FROM LedgerView ' +
-      ' WHERE LedgerView.PAYNAME = ''' + _fPayee.Text + ''' ' +
-      ' ORDER BY LedgerView.TRNDATE DESC ';
+    _SQLString :=
+      'SELECT LedgerView.CATDES, LedgerView.SUBCDES, LedgerView.TRNDESCRIPTION, LedgerView.TRNAMOUNT '
+      + ' FROM LedgerView ' + ' WHERE LedgerView.PAYNAME = ''' + _fPayee.Text +
+      ''' ' + ' ORDER BY LedgerView.TRNDATE DESC ';
     MainFRM.sqlQry.SQL.Clear;
     MainFRM.sqlQry.SQL.Add(_SQLString);
     try
-      MainFRM.sqlQry.Open;                   // if i find a record the DESC order shows the most recent payee data
+      MainFRM.sqlQry.Open;
+      // if i find a record the DESC order shows the most recent payee data
       if MainFRM.sqlQry.RecordCount > 0 then // recupero il primo record
       begin
         _fCategory.Text := MainFRM.sqlQry.FieldValues['CATDES'];
         _fSubCategory.Text := MainFRM.sqlQry.FieldValues['SUBCDES'];
         _fDescription.Text := MainFRM.sqlQry.FieldValues['TRNDESCRIPTION'];
-        _fAmount.Text := FloatToStr(Abs(MainFRM.sqlQry.FieldValues['TRNAMOUNT']));
+        _fAmount.Text :=
+          FloatToStr(Abs(MainFRM.sqlQry.FieldValues['TRNAMOUNT']));
+      end
+      else // se il payee è nuovo i campi devono essere vuoti/svuotati nel caso di cambio di payees selezionato in precedenza
+      begin
+        _fCategory.Text := '';
+        _fSubCategory.Text := '';
+        _fDescription.Text := '';
+        _fAmount.Value := 0;
       end;
+
     finally
       MainFRM.sqlQry.Close;
       MainFRM.sqlQry.SQL.Clear;
@@ -282,18 +325,21 @@ begin
   // carico i dati nella compo dei payee
   _fAccountFrom.Items.Clear;
   _fAccountTo.Items.Clear;
-  _fPayee.Text := '';
-  _SQLString := 'SELECT * FROM DBPAYEE';
+  _SQLString := 'SELECT * FROM DBACCOUNT';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
     MainFRM.sqlQry.Open;
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
     begin
-      _fPayee.Items.Add(MainFRM.sqlQry.FieldValues['PAYNAME']);
+      // aggiungo solo gli account che non sono quelli del ledger aperto per evitare autotrasferimenti
+      if (MainFRM.sqlQry.FieldValues['ACCNAME'] <> _plLedgerName) then
+        _fAccountTo.Items.Add(MainFRM.sqlQry.FieldValues['ACCNAME']);
+
       MainFRM.sqlQry.Next;
     end;
   finally
+    // _fAccountTo.items.AddStrings(_fAccountFrom.Items); //aggiungo l'elenco in massa prendendolo dal campo riempito
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
   end;
@@ -327,8 +373,10 @@ begin
   // carico i dati nella cubcategory in base alla selezione della categoria
   _fSubCategory.Items.Clear;
   // _fSubCategory.Text := '';
-  _SQLString := 'SELECT DBSUBCATEGORY.* FROM DBCATEGORY INNER JOIN DBSUBCATEGORY ON DBCATEGORY.CATID = ' +
-    ' DBSUBCATEGORY.SUBCATID WHERE DBCATEGORY.CATDES = ''' + _fCategory.Text + ''' ;';
+  _SQLString :=
+    'SELECT DBSUBCATEGORY.* FROM DBCATEGORY INNER JOIN DBSUBCATEGORY ON DBCATEGORY.CATID = '
+    + ' DBSUBCATEGORY.SUBCATID WHERE DBCATEGORY.CATDES = ''' +
+    _fCategory.Text + ''' ;';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
@@ -361,9 +409,10 @@ begin
       _fPayee.Text := VarToStr(MainFRM.sqlQry.FieldValues['PAYNAME']);
       _fCategory.Text := VarToStr(MainFRM.sqlQry.FieldValues['CATDES']);
       _fSubCategory.Text := VarToStr(MainFRM.sqlQry.FieldValues['SUBCDES']);
-      _fDescription.Text := VarToStr(MainFRM.sqlQry.FieldValues['TRNDESCRIPTION']);
+      _fDescription.Text :=
+        VarToStr(MainFRM.sqlQry.FieldValues['TRNDESCRIPTION']);
       _fAmount.Value := Abs(MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
-      _fAccountFrom.Text := _plLedgerID;
+      _fAccountFrom.Text := _plLedgerName;
       _fAccountTo.Text := MainFRM.sqlQry.FieldValues['TRNTRANSFERID'];
 
       MainFRM.sqlQry.Next;
@@ -382,7 +431,8 @@ begin
   // se nuovo payee nella combo, aggiungo il record nella tabella
   if (_fPayee.Items.IndexOf(UpperCase(_fPayee.Text)) = -1) then
   begin
-    _SQLString := 'INSERT INTO DBPAYEE (PAYNAME) VALUES(UCASE(''' + _fPayee.Text + ''' ))';
+    _SQLString := 'INSERT INTO DBPAYEE (PAYNAME) VALUES(UCASE(''' + _fPayee.Text
+      + ''' ))';
     MainFRM.sqlQry.ExecSQL(_SQLString);
     _loadCmbPayee;
   end;
@@ -411,9 +461,11 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TInsEditFrm._writeRecord;
 var
-  _lAmount: string;       // ammontare da inserire nel db. pos o neg in base al tipo di spesa
+  _lAmount: string;
+  // ammontare da inserire nel db. pos o neg in base al tipo di spesa
   _lCategoryType: string; // tipo categoria
-  _lrecID: integer;       // id del record per inserire i riferimenti sui mov trasferimento
+  _lrecID: integer;
+  // id del record per inserire i riferimenti sui mov trasferimento
 begin
   // il valore deve essere ngativo se la il tipo di transazione è pay
   { TODO : blocco da eliminare se non uso la categoria per definire il segno del movimento }
@@ -434,8 +486,9 @@ begin
 
   // salvataggio del record in base alla tipologia di editing
   if (_pEditID = 0) then
-    _SQLString := ' INSERT INTO TRANSACTIONS (TRNTYPE, TRNDATE, TRNPAYEE, TRNCATEGORY, TRNSUBCATEGORY, TRNAMOUNT, ' +
-      ' TRNACCOUNT, TRNDESCRIPTION) ' +
+    _SQLString :=
+      ' INSERT INTO TRANSACTIONS (TRNTYPE, TRNDATE, TRNPAYEE, TRNCATEGORY, TRNSUBCATEGORY, TRNAMOUNT, '
+      + ' TRNACCOUNT, TRNDESCRIPTION) ' +
     // ' VALUES (:pType, :pDate, :pPayee, :pCategory, :pSubcat, :pAmount, :pAccount, :pDes)'
       ' VALUES ( ''' + _fType.Text + ''' '
       + ', ''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''' '
@@ -443,17 +496,16 @@ begin
       + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
       + ', ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
       + ', ''' + _lAmount + ''' '
-      + ', ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _plLedgerID) + ''' '
+      + ', ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _plLedgerName) + ''' '
       + ', ''' + _fDescription.Text + ''') '
   else
-    _SQLString := 'UPDATE TRANSACTIONS SET '
-      + '  TRNTYPE = ''' + _fType.Text + ''' '
+    _SQLString := 'UPDATE TRANSACTIONS SET ' + '  TRNTYPE = ''' + _fType.Text + ''' '
       + ', TRNDATE = datetime(''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''') '
       + ', TRNPAYEE = ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
       + ', TRNCATEGORY =  ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
       + ', TRNSUBCATEGORY = ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
       + ', TRNAMOUNT = ''' + _lAmount + ''' '
-      + ', TRNACCOUNT = ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _plLedgerID) + ''' '
+      + ', TRNACCOUNT = ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _plLedgerName) + ''' '
       + ', TRNDESCRIPTION = ''' + _fDescription.Text + ''' '
       + ' WHERE TRNID = ''' + IntToStr(_pEditID) + ''' ';
   // ShowMessage(_getDBID('DBPAYEE', 'PAYID', 'PAYNAME', UpperCase(_fPayee.Text)));
@@ -469,18 +521,20 @@ begin
   /// il trx inserisce un mov di scarico e quindi uno di carico
   /// dopo il carico eseguo query di recupero dell'ultimo id e lo inserisco nel campo trasferID
   /// della tabella transazioni
-  if (UpperCase(_fType.Text) = 'TRANSFER') and (_pEditID = 0) then // nuovo trasferimento
+  if (UpperCase(_fType.Text) = 'TRANSFER') and (_pEditID = 0) then
+  // nuovo trasferimento
   begin
     // inserisco il movimento con valore inverso su conto definito in mashera
-    _SQLString := ' INSERT INTO TRANSACTIONS (TRNTYPE, TRNDATE, TRNPAYEE, TRNCATEGORY, TRNSUBCATEGORY, TRNAMOUNT, ' +
-      ' TRNACCOUNT, TRNDESCRIPTION) ' +
-      ' VALUES ( ''' + _fType.Text + ''' '
+    _SQLString :=
+      ' INSERT INTO TRANSACTIONS (TRNTYPE, TRNDATE, TRNPAYEE, TRNCATEGORY, TRNSUBCATEGORY, TRNAMOUNT, '
+      + ' TRNACCOUNT, TRNDESCRIPTION) '
+      + ' VALUES ( ''' + _fType.Text + ''' '
       + ', ''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''' '
       + ', ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
       + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
       + ', ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
       + ', ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
-      + ', ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' ' // conto di destinazione
+      + ', ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' '  // conto di destinazione
       + ', ''' + _fDescription.Text + ''') ';
 
     try
@@ -509,13 +563,15 @@ begin
         // _SQLString := 'update TRANSACTIONS set TRNTRANSFERID = (SELECT max(TRNID) FROM Transactions) - 1' +
         // ' where TRNID = ' + _lrecID;
 
-        _SQLString := 'update TRANSACTIONS set TRNTRANSFERID = (SELECT max(TRNID) FROM Transactions) - 1' +
-          ' where TRNID = (SELECT max(TRNID) FROM Transactions)';
+        _SQLString :=
+          'update TRANSACTIONS set TRNTRANSFERID = (SELECT max(TRNID) FROM Transactions) - 1'
+          + ' where TRNID = (SELECT max(TRNID) FROM Transactions)';
         // eseguo l'aggiornamento
         MainFRM.sqlQry.ExecSQL(_SQLString);
 
-        _SQLString := 'update TRANSACTIONS set TRNTRANSFERID = (SELECT max(TRNID) FROM Transactions)' +
-          ' where TRNID = (SELECT max(TRNID) FROM Transactions) - 1';
+        _SQLString :=
+          'update TRANSACTIONS set TRNTRANSFERID = (SELECT max(TRNID) FROM Transactions)'
+          + ' where TRNID = (SELECT max(TRNID) FROM Transactions) - 1';
 
         // _SQLString := 'update TRANSACTIONS set TRNTRANSFERID = ' + _lrecID +
         // ' where TRNID = ' + _lrecID;
@@ -568,20 +624,23 @@ var
 begin
   /// se la categoria digitata non esiste richiesdo se la si voglia creare
   /// dopodichè ricarico la combo della subcategory
-  if (_fCategory.Items.IndexOf(UpperCase(_fCategory.Text)) = -1) and (_fCategory.Text <> '') then
-    if (MessageDlg('Add New Category?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
+  if (_fCategory.Items.IndexOf(UpperCase(_fCategory.Text)) = -1) and
+    (_fCategory.Text <> '') then
+    if (MessageDlg('Add New Category?', mtConfirmation, [mbYes, mbNo], 0)
+      = mrYes) then
     begin
       if _fType.Text = 'Pay' then
         _lCategoryType := 'Expense'
       else
         _lCategoryType := 'Income';
 
-      _SQLString := 'INSERT INTO DBCATEGORY (CATDES, CATTYPE) VALUES(UCASE(''' + _fCategory.Text + '''), ' +
-        ' ''' + _lCategoryType + ''' )';
+      _SQLString := 'INSERT INTO DBCATEGORY (CATDES, CATTYPE) VALUES(UCASE(''' +
+        _fCategory.Text + '''), ' + ' ''' + _lCategoryType + ''' )';
 
       MainFRM.sqlQry.ExecSQL(_SQLString);
 
-      _fSubCategory.Text := ''; // se inserisco nuova cat devo resettare la sub per poterne inserire poi una ex-novo
+      _fSubCategory.Text := '';
+      // se inserisco nuova cat devo resettare la sub per poterne inserire poi una ex-novo
     end;
   _loadCmbSubcategory;
 end;
@@ -590,12 +649,15 @@ end;
 procedure TInsEditFrm._newSubCategory;
 begin
   /// se la sottocategoria digitata non esiste, e la categoria è compilata richiedo se la si voglia creare
-  if (_fSubCategory.Items.IndexOf(UpperCase(_fSubCategory.Text)) = -1) and (_fCategory.Text <> '') and
-    (_fSubCategory.Text <> '') then
-    if (MessageDlg('Add New Subcategory?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
+  if (_fSubCategory.Items.IndexOf(_fSubCategory.Text) = -1) and
+    (_fCategory.Text <> '') and (_fSubCategory.Text <> '') and
+    (_fSubCategory.Text <> '_Transfer') then
+    if (MessageDlg('Add New Subcategory?', mtConfirmation, [mbYes, mbNo], 0)
+      = mrYes) then
     begin
-      _SQLString := 'INSERT INTO DBSUBCATEGORY (SUBCDES, SUBCATID) VALUES(UCASE(''' + _fCategory.Text + '''), ' +
-        _getDBField('DBCATEGORY', 'CATID', 'CATDES', UpperCase(_fCategory.Text)) + ') ';
+      _SQLString := 'INSERT INTO DBSUBCATEGORY (SUBCDES, SUBCATID) VALUES(''' +
+        _fCategory.Text + ''', ' + _getDBField('DBCATEGORY', 'CATID', 'CATDES',
+        _fCategory.Text) + '); ';
       MainFRM.sqlQry.ExecSQL(_SQLString);
     end;
 end;
