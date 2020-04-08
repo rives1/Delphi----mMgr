@@ -177,30 +177,30 @@ procedure TInsEditFrm._changeType;
 begin
   if (UpperCase(_fType.Text) = 'TRANSFER') then
   begin
-    _fAccountTo.Text := '';
+    _fAccountTo.Text    := '';
     _fAccountTo.Enabled := True;
 
-    _fPayee.Text := '_Transfer';
+    _fPayee.Text    := '_Transfer';
     _fPayee.Enabled := False;
 
-    _fCategory.Text := '_Transfer';
+    _fCategory.Text    := '_Transfer';
     _fCategory.Enabled := False;
 
-    _fSubCategory.Text := '_Transfer';
+    _fSubCategory.Text    := '_Transfer';
     _fSubCategory.Enabled := False;
   end
   else
   begin
-    _fAccountTo.Text := '';
+    _fAccountTo.Text    := '';
     _fAccountTo.Enabled := False;
 
-    _fPayee.Text := '';
+    _fPayee.Text    := '';
     _fPayee.Enabled := True;
 
-    _fCategory.Text := '';
+    _fCategory.Text    := '';
     _fCategory.Enabled := True;
 
-    _fSubCategory.Text := '';
+    _fSubCategory.Text    := '';
     _fSubCategory.Enabled := True;
 
   end;
@@ -219,7 +219,7 @@ begin
   // abilito/disabilito i campi necessario
 
   // valori indipendenti dal tipo di transazione
-  _fAmount.Value := 0;
+  _fAmount.Value     := 0;
   _fAccountFrom.Text := _pLedgerName;
 
   _fPayee.SetFocus;
@@ -267,8 +267,8 @@ begin
   begin
     _SQLString :=
       'SELECT LedgerView.CATDES, LedgerView.SUBCDES, LedgerView.TRNDESCRIPTION, LedgerView.TRNAMOUNT '
-      + ' FROM LedgerView ' + ' WHERE LedgerView.PAYNAME = ''' + _fPayee.Text +
-      ''' ' + ' ORDER BY LedgerView.TRNDATE DESC ';
+      + ' FROM LedgerView ' + ' WHERE LedgerView.PAYNAME = ''' + _fPayee.Text + ''' '
+      + ' ORDER BY LedgerView.TRNDATE DESC ';
     MainFRM.sqlQry.SQL.Clear;
     MainFRM.sqlQry.SQL.Add(_SQLString);
     try
@@ -276,18 +276,18 @@ begin
       // if i find a record the DESC order shows the most recent payee data
       if MainFRM.sqlQry.RecordCount > 0 then // recupero il primo record
       begin
-        _fCategory.Text := MainFRM.sqlQry.FieldValues['CATDES'];
+        _fCategory.Text    := MainFRM.sqlQry.FieldValues['CATDES'];
         _fSubCategory.Text := MainFRM.sqlQry.FieldValues['SUBCDES'];
         _fDescription.Text := MainFRM.sqlQry.FieldValues['TRNDESCRIPTION'];
-        _fAmount.Text :=
+        _fAmount.Text      :=
           FloatToStr(Abs(MainFRM.sqlQry.FieldValues['TRNAMOUNT']));
       end
       else // se il payee è nuovo i campi devono essere vuoti/svuotati nel caso di cambio di payees selezionato in precedenza
       begin
-        _fCategory.Text := '';
+        _fCategory.Text    := '';
         _fSubCategory.Text := '';
         _fDescription.Text := '';
-        _fAmount.Value := 0;
+        _fAmount.Value     := 0;
       end;
 
     finally
@@ -303,7 +303,7 @@ begin
   // carico i dati nella compo dei payee
   _fPayee.Items.Clear;
   _fPayee.Text := '';
-  _SQLString := 'SELECT * FROM DBPAYEE';
+  _SQLString   := 'SELECT * FROM DBPAYEE';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
@@ -351,7 +351,7 @@ begin
   // carico i dati nella combo categorie
   _fCategory.Items.Clear;
   _fCategory.Text := '';
-  _SQLString := 'SELECT * FROM DBCATEGORY';
+  _SQLString      := 'SELECT * FROM DBCATEGORY';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
@@ -370,7 +370,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TInsEditFrm._loadCmbSubcategory;
 begin
-  // carico i dati nella cubcategory in base alla selezione della categoria
+  // carico i dati nella subcategory in base alla selezione della categoria
   _fSubCategory.Items.Clear;
   // _fSubCategory.Text := '';
   _SQLString :=
@@ -403,17 +403,16 @@ begin
     MainFRM.sqlQry.Open;
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
     begin
-      _fID.Text := IntToStr(_plEditID);
-      _fType.Text := MainFRM.sqlQry.FieldValues['TRNTYPE'];
-      _fDate.Date := VarToDateTime(MainFRM.sqlQry.FieldValues['TRNDATE']);
-      _fPayee.Text := VarToStr(MainFRM.sqlQry.FieldValues['PAYNAME']);
-      _fCategory.Text := VarToStr(MainFRM.sqlQry.FieldValues['CATDES']);
+      _fID.Text          := IntToStr(_plEditID);
+      _fType.Text        := MainFRM.sqlQry.FieldValues['TRNTYPE'];
+      _fDate.Date        := VarToDateTime(MainFRM.sqlQry.FieldValues['TRNDATE']);
+      _fPayee.Text       := VarToStr(MainFRM.sqlQry.FieldValues['PAYNAME']);
+      _fCategory.Text    := VarToStr(MainFRM.sqlQry.FieldValues['CATDES']);
       _fSubCategory.Text := VarToStr(MainFRM.sqlQry.FieldValues['SUBCDES']);
-      _fDescription.Text :=
-        VarToStr(MainFRM.sqlQry.FieldValues['TRNDESCRIPTION']);
-      _fAmount.Value := Abs(MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
+      _fDescription.Text := VarToStr(MainFRM.sqlQry.FieldValues['TRNDESCRIPTION']);
+      _fAmount.Value     := Abs(MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
       _fAccountFrom.Text := _plLedgerName;
-      _fAccountTo.Text := MainFRM.sqlQry.FieldValues['TRNTRANSFERID'];
+      _fAccountTo.Text   := MainFRM.sqlQry.FieldValues['TRNTRANSFERID'];
 
       MainFRM.sqlQry.Next;
     end;
@@ -534,7 +533,7 @@ begin
       + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
       + ', ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
       + ', ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
-      + ', ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' '  // conto di destinazione
+      + ', ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' ' // conto di destinazione
       + ', ''' + _fDescription.Text + ''') ';
 
     try
@@ -634,8 +633,8 @@ begin
       else
         _lCategoryType := 'Income';
 
-      _SQLString := 'INSERT INTO DBCATEGORY (CATDES, CATTYPE) VALUES(UCASE(''' +
-        _fCategory.Text + '''), ' + ' ''' + _lCategoryType + ''' )';
+      _SQLString := 'INSERT INTO DBCATEGORY (CATDES, CATTYPE) VALUES(''' +
+        _fCategory.Text + ''', ' + ' ''' + _lCategoryType + ''' )';
 
       MainFRM.sqlQry.ExecSQL(_SQLString);
 
@@ -648,7 +647,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TInsEditFrm._newSubCategory;
 begin
-  /// se la sottocategoria digitata non esiste, e la categoria è compilata richiedo se la si voglia creare
+  // se la sottocategoria digitata non esiste, e la categoria è compilata richiedo se la si voglia creare
   if (_fSubCategory.Items.IndexOf(_fSubCategory.Text) = -1) and
     (_fCategory.Text <> '') and (_fSubCategory.Text <> '') and
     (_fSubCategory.Text <> '_Transfer') then
@@ -656,7 +655,7 @@ begin
       = mrYes) then
     begin
       _SQLString := 'INSERT INTO DBSUBCATEGORY (SUBCDES, SUBCATID) VALUES(''' +
-        _fCategory.Text + ''', ' + _getDBField('DBCATEGORY', 'CATID', 'CATDES',
+        _fSubCategory.Text + ''', ' + _getDBField('DBCATEGORY', 'CATID', 'CATDES',
         _fCategory.Text) + '); ';
       MainFRM.sqlQry.ExecSQL(_SQLString);
     end;
