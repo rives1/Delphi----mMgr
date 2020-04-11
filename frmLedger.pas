@@ -53,7 +53,7 @@ type
     procedure _autoSizeCol(Grid: TStringGrid; Column: Integer);
     procedure _autoSizeGrid;
     procedure _ChartTotals;
-    procedure _deleteRecord;
+    procedure _deleteRecord(_pRecID: string; _pRecRow: integer);
     procedure _openRecordForm(_pEditKind: string);
 
   public
@@ -80,7 +80,7 @@ uses
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.Delete1Click(Sender: TObject);
 begin
-  _deleteRecord
+  _deleteRecord(grdLedger.cells[0, grdLedger.Row], grdLedger.Row);
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -111,8 +111,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.FormCreate(Sender: TObject);
 begin
-  { TODO : verificare se tenere le 2 righe seguenti di assegnazione }
-  // imposto la var privata con il nome dell'account da cui reperire i dati
+// imposto la var privata con il nome dell'account da cui reperire i dati
   _pAccountName := MainFRM.treeMenu.Selected.Text;
 
   // impostazione del nome dell'account nella barra del titolo della finestra
@@ -137,7 +136,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.grdLedgerDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
 var
-  dx: Integer;
+  dx:   Integer;
   Text: string;
 begin
 
@@ -200,7 +199,7 @@ begin
     45:                    // INS
       _action := 'new';    // apro la form in inserimento
     46:                    // DEL
-      _deleteRecord;       // elimino record direttamente dalla form del registro
+      _deleteRecord(grdLedger.cells[0, grdLedger.Row], grdLedger.Row); // elimino record direttamente dalla form del registro
     106:                   // *
       _action := 'newTrx'; // trasferimento fra conti
     107:                   // +
@@ -218,7 +217,7 @@ end;
 procedure TLedgerFrm._openRecordForm(_pEditKind: string);
 var
   frmInsEdit: TInsEditFrm;
-  i: Integer; // var x storage del record attuale per poi recuperarlo
+  i:          Integer; // var x storage del record attuale per poi recuperarlo
 begin
   i := grdLedger.Row; // imposto la riga della grid attuale
   // creo la form e la nascondo per poter impostare le proprietà
@@ -288,8 +287,8 @@ end;
 procedure TLedgerFrm._ChartTotals;
 var
   _lTotal: Double;
-  _YY: string; // riferimento anno per migliroare visualizzazione graph storico
-  i: Integer;
+  _YY:     string; // riferimento anno per migliroare visualizzazione graph storico
+  i:       Integer;
 begin
   //
   // Chart totali IN/OUT
@@ -385,8 +384,8 @@ begin
           else
             chHistory.Axes.Bottom.Items.Add(i, MainFRM.sqlQry.FieldValues['YY']);
 
-          _YY:=MainFRM.sqlQry.FieldValues['YY'];
-          i := i + 1;
+          _YY := MainFRM.sqlQry.FieldValues['YY'];
+          i   := i + 1;
         end;
         MainFRM.sqlQry.Next;
       end;
@@ -400,8 +399,8 @@ end;
 procedure TLedgerFrm._fillGrid();
 // riempiemnto della grid
 var
-  i: Integer;
-  runSum: Double;
+  i:             Integer;
+  runSum:        Double;
   _trxIndicator: string; // indica con i segni > o > se il trasferimento è in entrata o uscita
   // oppure lascio vuoto se non si tratta di un trasferimento
 begin
@@ -435,7 +434,7 @@ begin
         // inserisco una nuova riga nella grid
         grdLedger.RowCount := grdLedger.RowCount + 1;
         // aggiungo i dati alla grid
-        grdLedger.cells[0, i] := MainFRM.sqlQry.FieldValues['TRNID'];   // ID
+        grdLedger.cells[0, i] := MainFRM.sqlQry.FieldValues['TRNID']; // ID
         grdLedger.cells[1, i] := MainFRM.sqlQry.FieldValues['TRNTYPE']; // Tipo operazione
         grdLedger.cells[2, i] := MainFRM.sqlQry.FieldValues['TRNDATE']; // Data
         grdLedger.cells[3, i] := MainFRM.sqlQry.FieldValues['PAYNAME'];
@@ -482,21 +481,24 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TLedgerFrm._deleteRecord;
-var
-  _vIDRecord: string;
-  i: Integer; // posizione della grid
+procedure TLedgerFrm._deleteRecord(_pRecID: string; _pRecRow: integer);
+//var
+//  _vIDRecord: string;
+//  i:          Integer; // posizione della grid
 begin
-  i          := grdLedger.Row;
-  _vIDRecord := grdLedger.cells[0, i];
-  if (_vIDRecord <> '') and (MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
-  begin
+//  _pRecRow:= grdLedger.Row;
+//  _vIDRecord := grdLedger.cells[0, i];
+
+//  if (_vIDRecord <> '') and (MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
+    // begin
+  if (_pRecID <> '') and (MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
     try
+      MainFRM.sqlite_conn.StartTransaction;
       // cerco se eventualmente ci sono record collegati per eventuali trasferimenti
       if UpperCase(MainFRM.sqlQry.FieldValues['TRNTYPE']) = 'TRANSFER' then
       begin
         _SQLString := 'DELETE FROM TRANSACTIONS WHERE TRNID = (SELECT TRNTRANSFERID FROM TRANSACTIONS WHERE TRNID = '
-          + _vIDRecord;
+          + _pRecID;
         MainFRM.sqlQry.ExecSQL(_SQLString);
         { TODO : valutare se eliminare qs codice o sostituirlo alla riga precedente }
         {
@@ -510,12 +512,17 @@ begin
       end;
 
       // eliminazione del record selezionato in griglia
-      MainFRM.sqlQry.ExecSQL('DELETE FROM TRANSACTIONS WHERE TRNID = ' + _vIDRecord);
+      MainFRM.sqlQry.ExecSQL('DELETE FROM TRANSACTIONS WHERE TRNID = ' + _pRecID);
+      MainFRM.sqlite_conn.Commit;
 
-    finally
-      grdLedger.Row := i;
+      // finally
+    except
+      raise Exception.Create('Error in Transfer. Operation Aborted');
+      MainFRM.sqlite_conn.Rollback;
     end;
-  end;
+  grdLedger.Row := _pRecRow;
+
+  // end;
 
   // refresh della grid
   _fillGrid();

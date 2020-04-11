@@ -238,6 +238,18 @@ begin
   // area report
   vNodeGroup := treeMenu.Items.Add(nil, 'Report');
   vNodeGroup.ImageIndex := 5;
+  vNode := treeMenu.Items.AddChild(vNodeGroup, 'Balance YTD - monthly');
+  vNode.ImageIndex:=11;
+  vNode := treeMenu.Items.AddChild(vNodeGroup, 'Balance Yearly');
+  vNode.ImageIndex:=11;
+
+  // area chart
+  vNodeGroup := treeMenu.Items.Add(nil, 'Chart');
+  vNodeGroup.ImageIndex := 10;
+  vNode := treeMenu.Items.AddChild(vNodeGroup, 'Exp by Category');
+  vNode.ImageIndex:=8;
+
+
 
   // area Config
   vNodeGroup := treeMenu.Items.Add(nil, 'Config');
