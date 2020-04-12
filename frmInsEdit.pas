@@ -131,20 +131,14 @@ begin
     end;
     _fAccountFrom.Text := _pLedgerName;
     // _cleanFormNewRecord; //impostazione
-
   end;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TInsEditFrm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  if (MessageDlg('Close Form?', mtConfirmation, [mbOk, mbCancel], 0) = mrOk) then
-  begin
-    Action := caFree;
-    Release;
-  end
-  else
-    Action := caNone;
+  Action := caFree;
+  Release;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -155,7 +149,10 @@ begin
   // F12 - salvo il record
   case Key of
     27: // ESC
-      self.Close;
+      begin
+        if (MessageDlg('Close Form?', mtConfirmation, [mbOk, mbCancel], 0) = mrOk) then
+          self.Close;
+      end;
     127: // F12
       _recordSave;
   end;
@@ -175,16 +172,13 @@ procedure TInsEditFrm._changeType;
 begin
   if (UpperCase(_fType.Text) = 'TRANSFER') then
   begin
-    _fAccountTo.Enabled := True;
-
-    _fPayee.Text    := _TrxText;
-    _fPayee.Enabled := False;
-
-    _fCategory.Text    := _TrxText;
-    _fCategory.Enabled := False;
-
-    _fSubCategory.Text    := _TrxText;
+    _fAccountTo.Enabled   := True;
+    _fPayee.Enabled       := False;
+    _fCategory.Enabled    := False;
     _fSubCategory.Enabled := False;
+    _fPayee.Text          := _TrxText;
+    _fCategory.Text       := _TrxText;
+    _fSubCategory.Text    := _TrxText;
   end
   else
   begin
@@ -192,7 +186,7 @@ begin
     _fPayee.Enabled       := True;
     _fCategory.Enabled    := True;
     _fSubCategory.Enabled := True;
-    if _pEditType <> 'edit' then //azzero i campi se non sto moidificando il record
+    if _pEditType <> 'edit' then // azzero i campi se non sto moidificando il record
     begin
       _fAccountTo.Text   := '';
       _fPayee.Text       := '';
@@ -508,46 +502,47 @@ begin
     /// il trx inserisce un mov di scarico e quindi uno di carico
     /// dopo il carico eseguo query di recupero dell'ultimo id e lo inserisco nel campo trasferID
     /// della tabella transazioni
-    if (UpperCase(_fType.Text) = 'TRANSFER') and (_pEditID = 0) then // nuovo trasferimento
-    // try
-    begin
-      // inserisco il movimento con valore inverso su conto definito in mask
-      _SQLString := ' INSERT INTO TRANSACTIONS (TRNTYPE, TRNDATE, TRNPAYEE, TRNCATEGORY, TRNSUBCATEGORY, TRNAMOUNT, '
-        + ' TRNACCOUNT, TRNDESCRIPTION) '
-        + ' VALUES ( ''' + _fType.Text + ''' '
-        + ', ''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''' '
-        + ', ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
-        + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
-        + ', ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
-        + ', ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
-        + ', ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' ' // conto di destinazione
-        + ', ''' + _fDescription.Text + ''') ';
-      MainFRM.sqlQry.ExecSQL(_SQLString);
+    if (UpperCase(_fType.Text) = 'TRANSFER') then
+      if (_pEditID = 0) then // nuovo trasferimento
+      // try
+      begin
+        // inserisco il movimento con valore inverso su conto definito in mask
+        _SQLString := ' INSERT INTO TRANSACTIONS (TRNTYPE, TRNDATE, TRNPAYEE, TRNCATEGORY, TRNSUBCATEGORY, TRNAMOUNT, '
+          + ' TRNACCOUNT, TRNDESCRIPTION) '
+          + ' VALUES ( ''' + _fType.Text + ''' '
+          + ', ''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''' '
+          + ', ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
+          + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
+          + ', ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
+          + ', ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
+          + ', ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' ' // conto di destinazione
+          + ', ''' + _fDescription.Text + ''') ';
+        MainFRM.sqlQry.ExecSQL(_SQLString);
 
-      // aggiorno l'ultimo record con l'ID del penultimo
-      _SQLString := 'update TRANSACTIONS set TRNTRANSFERID = (SELECT max(TRNID) FROM Transactions) - 1'
-        + ' where TRNID = (SELECT max(TRNID) FROM Transactions)';
-      MainFRM.sqlQry.ExecSQL(_SQLString);
-      // aggiorno il penultimo record con l'ID dell'ultimo
-      _SQLString := 'update TRANSACTIONS set TRNTRANSFERID = (SELECT max(TRNID) FROM Transactions)'
-        + ' where TRNID = (SELECT max(TRNID) FROM Transactions) - 1';
-      // eseguo l'aggiornamento
-      MainFRM.sqlQry.ExecSQL(_SQLString);
-    end
-    else
-    begin
-      // aggiorno trasferimento -- modificare solo il movimento correlato
-      _SQLString := 'UPDATE TRANSACTIONS SET ' + '  TRNTYPE = ''' + _fType.Text + ''' '
-        + ', TRNDATE = datetime(''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''') '
-        + ', TRNPAYEE = ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
-        + ', TRNCATEGORY =  ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
-        + ', TRNSUBCATEGORY = ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
-        + ', TRNAMOUNT = ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
-        + ', TRNACCOUNT = ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' '
-        + ', TRNDESCRIPTION = ''' + _fDescription.Text + ''' '
-        + ' WHERE TRNID = ''' + IntToStr(_pEditID) + ''' ';
-      MainFRM.sqlQry.ExecSQL(_SQLString);
-    end;
+        // aggiorno l'ultimo record con l'ID del penultimo
+        _SQLString := 'update TRANSACTIONS set TRNTRANSFERID = (SELECT max(TRNID) FROM Transactions) - 1'
+          + ' where TRNID = (SELECT max(TRNID) FROM Transactions)';
+        MainFRM.sqlQry.ExecSQL(_SQLString);
+        // aggiorno il penultimo record con l'ID dell'ultimo
+        _SQLString := 'update TRANSACTIONS set TRNTRANSFERID = (SELECT max(TRNID) FROM Transactions)'
+          + ' where TRNID = (SELECT max(TRNID) FROM Transactions) - 1';
+        // eseguo l'aggiornamento
+        MainFRM.sqlQry.ExecSQL(_SQLString);
+      end
+      else
+      begin
+        // aggiorno trasferimento -- modificare solo il movimento correlato
+        _SQLString := 'UPDATE TRANSACTIONS SET ' + '  TRNTYPE = ''' + _fType.Text + ''' '
+          + ', TRNDATE = datetime(''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''') '
+          + ', TRNPAYEE = ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
+          + ', TRNCATEGORY =  ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
+          + ', TRNSUBCATEGORY = ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
+          + ', TRNAMOUNT = ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
+          + ', TRNACCOUNT = ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' '
+          + ', TRNDESCRIPTION = ''' + _fDescription.Text + ''' '
+          + ' WHERE TRNID = ''' + IntToStr(_pEditID) + ''' ';
+        MainFRM.sqlQry.ExecSQL(_SQLString);
+      end;
 
     MainFRM.sqlite_conn.Commit;
   except

@@ -118,13 +118,13 @@ object MainFRM: TMainFRM
   object sqlite_conn: TFDConnection
     Params.Strings = (
       'DriverID=SQLite')
-    Left = 239
-    Top = 433
+    Left = 229
+    Top = 443
   end
   object sqlQry: TFDQuery
     Connection = sqlite_conn
-    Left = 319
-    Top = 433
+    Left = 304
+    Top = 443
   end
   object VirtualImageList1: TVirtualImageList
     DisabledGrayscale = False
@@ -5085,24 +5085,27 @@ object MainFRM: TMainFRM
   end
   object rptStandard: TfrxReport
     Version = '6.2.1'
-    DataSet = rptDset
-    DataSetName = 'frxDBDataset1'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
+    PreviewOptions.AllowEdit = False
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick, pbCopy, pbSelection]
     PreviewOptions.Zoom = 1.000000000000000000
     PrintOptions.Printer = 'Default'
     PrintOptions.PrintOnSheet = 0
-    ReportOptions.CreateDate = 43929.991899351850000000
-    ReportOptions.LastChange = 43929.991899351850000000
+    ReportOptions.CreateDate = 43929.991899351900000000
+    ReportOptions.LastChange = 43933.934788125000000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'begin'
       ''
       'end.')
-    Left = 320
+    Left = 370
     Top = 525
-    Datasets = <>
+    Datasets = <
+      item
+        DataSet = rptDset
+        DataSetName = 'dsetBalanceYTD'
+      end>
     Variables = <>
     Style = <>
     object Data: TfrxDataPage
@@ -5110,47 +5113,1779 @@ object MainFRM: TMainFRM
       Width = 1000.000000000000000000
     end
     object Page1: TfrxReportPage
-      PaperWidth = 210.000000000000000000
-      PaperHeight = 297.000000000000000000
+      Orientation = poLandscape
+      PaperWidth = 297.000000000000000000
+      PaperHeight = 210.000000000000000000
       PaperSize = 9
       LeftMargin = 10.000000000000000000
       RightMargin = 10.000000000000000000
       TopMargin = 10.000000000000000000
       BottomMargin = 10.000000000000000000
       Frame.Typ = []
+      object ReportTitle1: TfrxReportTitle
+        FillType = ftBrush
+        Frame.Typ = []
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Height = 18.897650000000000000
+        ParentFont = False
+        Top = 18.897650000000000000
+        Width = 1046.929810000000000000
+        object Memo1: TfrxMemoView
+          AllowVectorExport = True
+          Left = 18.897650000000000000
+          Top = 3.779530000000000000
+          Width = 332.598640000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Balance YTD [dsetBalanceYTD."rptYY"]')
+          ParentFont = False
+        end
+      end
+      object MasterData1: TfrxMasterData
+        FillType = ftBrush
+        Frame.Typ = []
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Height = 15.844952700000000000
+        ParentFont = False
+        Top = 230.551330000000000000
+        Width = 1046.929810000000000000
+        DataSet = rptDset
+        DataSetName = 'dsetBalanceYTD'
+        RowCount = 0
+        object dsetBalanceYTDrptSubcat: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 27.559060000000000000
+          Top = 0.363416350000000000
+          Width = 113.385900000000000000
+          Height = 15.118120000000000000
+          DataField = 'rptSubcat'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGray
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptSubcat"]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object dsetBalanceYTDrptFeb: TfrxMemoView
+          IndexTag = 3
+          AllowVectorExport = True
+          Left = 212.716659890000000000
+          Top = 0.363416350000000000
+          Width = 60.511850110000000000
+          Height = 15.118120000000000000
+          DataField = 'rptFeb'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGray
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptFeb"]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object dsetBalanceYTDrptJan: TfrxMemoView
+          IndexTag = 4
+          AllowVectorExport = True
+          Left = 139.771738000000000000
+          Top = 0.363416350000000000
+          Width = 65.763822000000000000
+          Height = 15.481536350000000000
+          DataField = 'rptJan'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGray
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptJan"]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object dsetBalanceYTDrptMar: TfrxMemoView
+          IndexTag = 2
+          AllowVectorExport = True
+          Left = 276.968669890000000000
+          Top = 0.363416350000000000
+          Width = 60.511850110000000000
+          Height = 15.118120000000000000
+          DataField = 'rptMar'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGray
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptMar"]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object dsetBalanceYTDrptApr: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 343.779747000000000000
+          Width = 65.763822000000000000
+          Height = 15.481536350000000000
+          DataField = 'rptApr'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGray
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptApr"]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object dsetBalanceYTDrptMay: TfrxMemoView
+          IndexTag = 10
+          AllowVectorExport = True
+          Left = 415.338838000000000000
+          Width = 65.763822000000000000
+          Height = 15.481536350000000000
+          DataField = 'rptMay'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGray
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptMay"]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object dsetBalanceYTDrptJun: TfrxMemoView
+          IndexTag = 9
+          AllowVectorExport = True
+          Left = 485.496363620000000000
+          Width = 65.763822000000000000
+          Height = 15.481536350000000000
+          DataField = 'rptJun'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGray
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptJun"]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object dsetBalanceYTDrptJul: TfrxMemoView
+          IndexTag = 8
+          AllowVectorExport = True
+          Left = 555.181448000000000000
+          Width = 65.763822000000000000
+          Height = 15.481536350000000000
+          DataField = 'rptJul'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGray
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptJul"]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object dsetBalanceYTDrptAug: TfrxMemoView
+          IndexTag = 7
+          AllowVectorExport = True
+          Left = 626.992518000000000000
+          Width = 65.763822000000000000
+          Height = 15.481536350000000000
+          DataField = 'rptAug'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGray
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptAug"]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object dsetBalanceYTDrptSep: TfrxMemoView
+          IndexTag = 6
+          AllowVectorExport = True
+          Left = 695.024058000000000000
+          Width = 65.763822000000000000
+          Height = 15.481536350000000000
+          DataField = 'rptSep'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGray
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptSep"]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object dsetBalanceYTDrptOct: TfrxMemoView
+          IndexTag = 5
+          AllowVectorExport = True
+          Left = 766.835128000000000000
+          Width = 65.763822000000000000
+          Height = 15.481536350000000000
+          DataField = 'rptOct'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGray
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptOct"]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object dsetBalanceYTDrptNov: TfrxMemoView
+          IndexTag = 4
+          AllowVectorExport = True
+          Left = 838.646198000000000000
+          Width = 65.763822000000000000
+          Height = 15.481536350000000000
+          DataField = 'rptNov'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGray
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptNov"]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object dsetBalanceYTDrptDec: TfrxMemoView
+          IndexTag = 3
+          AllowVectorExport = True
+          Left = 906.677738000000000000
+          Width = 65.763822000000000000
+          Height = 15.481536350000000000
+          DataField = 'rptDec'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGray
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptDec"]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object dsetBalanceYTDrptTotLine: TfrxMemoView
+          IndexTag = 2
+          AllowVectorExport = True
+          Left = 978.142364000000000000
+          Width = 65.763822000000000000
+          Height = 15.481536350000000000
+          DataField = 'rptTotLine'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGray
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptTotLine"]')
+          ParentFont = False
+          WordWrap = False
+        end
+      end
+      object PageHeader1: TfrxPageHeader
+        FillType = ftBrush
+        Frame.Typ = []
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Height = 18.897650000000000000
+        ParentFont = False
+        Top = 60.472480000000000000
+        Width = 1046.929810000000000000
+        object Memo2: TfrxMemoView
+          AllowVectorExport = True
+          Left = 7.559060000000000000
+          Top = 3.779530000000000000
+          Width = 68.031540000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Category')
+          ParentFont = False
+        end
+        object Memo3: TfrxMemoView
+          AllowVectorExport = True
+          Left = 156.401670000000000000
+          Top = 3.779530000000000000
+          Width = 49.133890000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Jan')
+          ParentFont = False
+        end
+        object Memo6: TfrxMemoView
+          AllowVectorExport = True
+          Left = 227.874150000000000000
+          Top = 3.779530000000000000
+          Width = 45.354360000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Feb')
+          ParentFont = False
+        end
+        object Memo5: TfrxMemoView
+          AllowVectorExport = True
+          Left = 288.346630000000000000
+          Top = 3.779530000000000000
+          Width = 49.133890000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Mar')
+          ParentFont = False
+        end
+        object Memo7: TfrxMemoView
+          AllowVectorExport = True
+          Left = 355.496290000000000000
+          Top = 3.779530000000000000
+          Width = 54.047279000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Apr')
+          ParentFont = False
+        end
+        object Memo16: TfrxMemoView
+          AllowVectorExport = True
+          Left = 427.055381000000000000
+          Top = 3.779530000000000000
+          Width = 54.047279000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            'May')
+          ParentFont = False
+        end
+        object Memo15: TfrxMemoView
+          AllowVectorExport = True
+          Left = 497.212906620000000000
+          Top = 3.779530000000000000
+          Width = 54.047279000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Jun')
+          ParentFont = False
+        end
+        object Memo14: TfrxMemoView
+          AllowVectorExport = True
+          Left = 566.897991000000000000
+          Top = 3.779530000000000000
+          Width = 54.047279000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Jul')
+          ParentFont = False
+        end
+        object Memo13: TfrxMemoView
+          AllowVectorExport = True
+          Left = 638.709061000000000000
+          Top = 3.779530000000000000
+          Width = 54.047279000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Aug')
+          ParentFont = False
+        end
+        object Memo12: TfrxMemoView
+          AllowVectorExport = True
+          Left = 706.740601000000000000
+          Top = 3.779530000000000000
+          Width = 54.047279000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Sep')
+          ParentFont = False
+        end
+        object Memo11: TfrxMemoView
+          AllowVectorExport = True
+          Left = 778.551671000000000000
+          Top = 3.779530000000000000
+          Width = 54.047279000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Oct')
+          ParentFont = False
+        end
+        object Memo10: TfrxMemoView
+          AllowVectorExport = True
+          Left = 850.362741000000000000
+          Top = 3.779530000000000000
+          Width = 54.047279000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Nov')
+          ParentFont = False
+        end
+        object Memo9: TfrxMemoView
+          AllowVectorExport = True
+          Left = 918.394281000000000000
+          Top = 3.779530000000000000
+          Width = 54.047279000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Dec')
+          ParentFont = False
+        end
+        object Memo8: TfrxMemoView
+          AllowVectorExport = True
+          Left = 991.370719000000000000
+          Top = 3.779530000000000000
+          Width = 54.047279000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Total')
+          ParentFont = False
+        end
+        object Line2: TfrxLineView
+          AllowVectorExport = True
+          Left = 26.677180000000000000
+          Top = 18.897650000000000000
+          Width = 994.016390000000000000
+          Color = clBlack
+          Frame.Typ = [ftTop]
+        end
+      end
+      object GroupHeader1: TfrxGroupHeader
+        FillType = ftBrush
+        Frame.Typ = []
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Height = 22.677180000000000000
+        ParentFont = False
+        Top = 185.196970000000000000
+        Width = 1046.929810000000000000
+        Condition = 'dsetBalanceYTD."rptCat"'
+        object dsetBalanceYTDrptCat: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 15.118120000000000000
+          Width = 136.063080000000000000
+          Height = 15.118120000000000000
+          DataField = 'rptCat'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptCat"]')
+          ParentFont = False
+        end
+      end
+      object PageFooter1: TfrxPageFooter
+        FillType = ftBrush
+        Frame.Typ = []
+        Height = 22.677180000000000000
+        Top = 434.645950000000000000
+        Width = 1046.929810000000000000
+        object Page: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 956.221090000000000000
+          Width = 79.370130000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[Page#]')
+          ParentFont = False
+        end
+        object Date: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 11.338590000000000000
+          Width = 79.370130000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[Date]')
+          ParentFont = False
+        end
+      end
+      object GroupHeader2: TfrxGroupHeader
+        FillType = ftBrush
+        Frame.Typ = []
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clGreen
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Height = 22.677180000000000000
+        ParentFont = False
+        Top = 139.842610000000000000
+        Width = 1046.929810000000000000
+        Condition = 'dsetBalanceYTD."rptInOut"'
+        object dsetBalanceYTDrptInOut: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 7.559060000000000000
+          Width = 158.740260000000000000
+          Height = 18.897650000000000000
+          DataField = 'rptInOut'
+          DataSet = rptDset
+          DataSetName = 'dsetBalanceYTD'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clGreen
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[dsetBalanceYTD."rptInOut"]')
+          ParentFont = False
+        end
+      end
+      object GroupFooter1: TfrxGroupFooter
+        FillType = ftBrush
+        Frame.Typ = []
+        Height = 18.897650000000000000
+        Top = 268.346630000000000000
+        Width = 1046.929810000000000000
+        object Memo18: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 141.283550000000000000
+          Width = 64.252010000000000000
+          Height = 18.897650000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptJan">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Line3: TfrxLineView
+          AllowVectorExport = True
+          Left = 27.559060000000000000
+          Width = 994.016390000000000000
+          Color = clBlack
+          Frame.Typ = [ftTop]
+        end
+        object Memo19: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 208.976500000000000000
+          Width = 64.252010000000000000
+          Height = 18.897650000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptFeb">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo20: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 277.008040000000000000
+          Width = 60.472480000000000000
+          Height = 18.897650000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptMar">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo21: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 345.291559000000000000
+          Width = 64.252010000000000000
+          Height = 18.897650000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptApr">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo22: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 416.850650000000000000
+          Width = 64.252010000000000000
+          Height = 18.897650000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptMay">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo23: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 487.008175620000000000
+          Width = 64.252010000000000000
+          Height = 18.897650000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptJun">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo24: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 556.693260000000000000
+          Width = 64.252010000000000000
+          Height = 18.897650000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptJul">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo25: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 628.504330000000000000
+          Top = 0.779530000000000000
+          Width = 64.252010000000000000
+          Height = 18.897650000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptAug">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo26: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 696.535870000000000000
+          Width = 64.252010000000000000
+          Height = 18.897650000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptSep">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo27: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 768.346940000000000000
+          Width = 64.252010000000000000
+          Height = 18.897650000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptOct">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo28: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 840.158010000000000000
+          Width = 64.252010000000000000
+          Height = 18.897650000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptNov">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo29: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 908.189550000000000000
+          Width = 64.252010000000000000
+          Height = 18.897650000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptDec">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo30: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 978.898270000000000000
+          Width = 64.252010000000000000
+          Height = 18.897650000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptTotLine">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+      end
+      object GroupFooter2: TfrxGroupFooter
+        FillType = ftBrush
+        Frame.Typ = []
+        Height = 27.236240000000000000
+        Top = 309.921460000000000000
+        Width = 1046.929810000000000000
+        object Memo31: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 141.283550000000000000
+          Top = 8.000000000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptJan">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo32: TfrxMemoView
+          AllowVectorExport = True
+          Left = 27.559060000000000000
+          Top = 8.000000000000000000
+          Width = 94.488250000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Tot')
+          ParentFont = False
+        end
+        object Memo33: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 208.976500000000000000
+          Top = 8.000000000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptFeb">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo34: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 277.008040000000000000
+          Top = 8.000000000000000000
+          Width = 60.472480000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptMar">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo35: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 345.291559000000000000
+          Top = 8.000000000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptApr">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo36: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 416.850650000000000000
+          Top = 8.000000000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptMay">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo37: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 487.008175620000000000
+          Top = 8.000000000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptJun">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo38: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 556.693260000000000000
+          Top = 8.000000000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptJul">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo39: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 628.504330000000000000
+          Top = 8.779530000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptAug">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo40: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 696.535870000000000000
+          Top = 8.000000000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptSep">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo41: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 768.346940000000000000
+          Top = 8.000000000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptOct">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo42: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 840.158010000000000000
+          Top = 8.000000000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptNov">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo43: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 908.189550000000000000
+          Top = 8.000000000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptDec">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo44: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 978.898270000000000000
+          Top = 8.000000000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptTotLine">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Line4: TfrxLineView
+          AllowVectorExport = True
+          Left = 26.456710000000000000
+          Top = 8.000000000000000000
+          Width = 994.016390000000000000
+          Color = clBlack
+          Frame.Typ = [ftTop]
+        end
+      end
+      object ReportSummary1: TfrxReportSummary
+        FillType = ftBrush
+        Frame.Typ = []
+        Height = 15.897650000000000000
+        Top = 396.850650000000000000
+        Width = 1046.929810000000000000
+        object Memo45: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 141.283550000000000000
+          Top = 0.000000000000000028
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptJan">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo46: TfrxMemoView
+          AllowVectorExport = True
+          Left = 27.559060000000000000
+          Width = 94.488250000000000000
+          Height = 15.118120000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Balance')
+          ParentFont = False
+        end
+        object Memo47: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 208.976500000000000000
+          Top = 0.000000000000000028
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptFeb">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo48: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 277.008040000000000000
+          Top = 0.000000000000000028
+          Width = 60.472480000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptMar">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo49: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 345.291559000000000000
+          Top = 0.000000000000000028
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptApr">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo50: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 416.850650000000000000
+          Top = 0.000000000000000028
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptMay">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo51: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 487.008175620000000000
+          Top = 0.000000000000000028
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptJun">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo52: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 556.693260000000000000
+          Top = 0.000000000000000028
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptJul">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo53: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 628.504330000000000000
+          Top = 0.779530000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptAug">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo54: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 696.535870000000000000
+          Top = 0.000000000000000028
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptSep">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo55: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 768.346940000000000000
+          Top = 0.000000000000000028
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptOct">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo56: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 840.158010000000000000
+          Top = 0.000000000000000028
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptNov">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo57: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 908.189550000000000000
+          Top = 0.000000000000000028
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptDec">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Memo58: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 978.898270000000000000
+          Top = 0.000000000000000028
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          DisplayFormat.FormatStr = '%2.2m'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8W = (
+            '[SUM(<dsetBalanceYTD."rptTotLine">,MasterData1)]')
+          ParentFont = False
+          WordWrap = False
+        end
+        object Line5: TfrxLineView
+          AllowVectorExport = True
+          Left = 26.456710000000000000
+          Width = 994.016390000000000000
+          Color = clBlack
+          Frame.Typ = [ftTop]
+        end
+      end
     end
   end
-  object frxPDFExport1: TfrxPDFExport
-    UseFileCache = True
-    ShowProgress = True
-    OverwritePrompt = False
-    DataOnly = False
-    OpenAfterExport = False
-    PrintOptimized = False
-    Outline = False
-    Background = False
-    HTMLTags = True
-    Quality = 95
-    Transparency = False
-    Author = 'FastReport'
-    Subject = 'FastReport PDF export'
-    ProtectionFlags = [ePrint, eModify, eCopy, eAnnot]
-    HideToolbar = False
-    HideMenubar = False
-    HideWindowUI = False
-    FitWindow = False
-    CenterWindow = False
-    PrintScaling = False
-    PdfA = False
-    Left = 400
+  object rptDset: TfrxDBDataset
+    UserName = 'dsetBalanceYTD'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'rptInOut=rptInOut'
+      'rptYY=rptYY'
+      'rptCat=rptCat'
+      'rptSubcat=rptSubcat'
+      'rptJan=rptJan'
+      'rptFeb=rptFeb'
+      'rptMar=rptMar'
+      'rptApr=rptApr'
+      'rptMay=rptMay'
+      'rptJun=rptJun'
+      'rptJul=rptJul'
+      'rptAug=rptAug'
+      'rptSep=rptSep'
+      'rptOct=rptOct'
+      'rptNov=rptNov'
+      'rptDec=rptDec'
+      'rptTotLine=rptTotLine')
+    DataSet = fdMemBalYTD
+    BCDToCurrency = False
+    Left = 305
     Top = 525
   end
-  object rptDset: TfrxDBDataset
-    UserName = 'frxDBDataset1'
-    CloseDataSource = False
-    DataSet = sqlQry
-    BCDToCurrency = False
-    Left = 240
+  object fdMemBalYTD: TFDMemTable
+    Active = True
+    FieldDefs = <
+      item
+        Name = 'rptInOut'
+        DataType = ftString
+        Size = 20
+      end
+      item
+        Name = 'rptYY'
+        DataType = ftString
+        Size = 6
+      end
+      item
+        Name = 'rptCat'
+        DataType = ftString
+        Size = 20
+      end
+      item
+        Name = 'rptSubcat'
+        DataType = ftString
+        Size = 20
+      end
+      item
+        Name = 'rptJan'
+        DataType = ftCurrency
+        Precision = 19
+      end
+      item
+        Name = 'rptFeb'
+        DataType = ftCurrency
+        Precision = 19
+      end
+      item
+        Name = 'rptMar'
+        DataType = ftCurrency
+        Precision = 19
+      end
+      item
+        Name = 'rptApr'
+        DataType = ftCurrency
+        Precision = 19
+      end
+      item
+        Name = 'rptMay'
+        DataType = ftCurrency
+        Precision = 19
+      end
+      item
+        Name = 'rptJun'
+        DataType = ftCurrency
+        Precision = 19
+      end
+      item
+        Name = 'rptJul'
+        DataType = ftCurrency
+        Precision = 19
+      end
+      item
+        Name = 'rptAug'
+        DataType = ftCurrency
+        Precision = 19
+      end
+      item
+        Name = 'rptSep'
+        DataType = ftCurrency
+        Precision = 19
+      end
+      item
+        Name = 'rptOct'
+        DataType = ftCurrency
+        Precision = 19
+      end
+      item
+        Name = 'rptNov'
+        DataType = ftCurrency
+        Precision = 19
+      end
+      item
+        Name = 'rptDec'
+        DataType = ftCurrency
+        Precision = 19
+      end
+      item
+        Name = 'rptTotLine'
+        DataType = ftCurrency
+        Precision = 19
+      end>
+    IndexDefs = <>
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    StoreDefs = True
+    Left = 230
     Top = 525
   end
 end
