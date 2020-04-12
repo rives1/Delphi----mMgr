@@ -53,7 +53,7 @@ type
     procedure _autoSizeCol(Grid: TStringGrid; Column: Integer);
     procedure _autoSizeGrid;
     procedure _ChartTotals;
-    procedure _deleteRecord(_pRecID: string; _pRecRow: integer);
+    procedure _deleteRecord(_pRecID: string; _pRecRow: Integer; _precType: string);
     procedure _openRecordForm(_pEditKind: string);
 
   public
@@ -80,7 +80,7 @@ uses
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.Delete1Click(Sender: TObject);
 begin
-  _deleteRecord(grdLedger.cells[0, grdLedger.Row], grdLedger.Row);
+  _deleteRecord(grdLedger.cells[0, grdLedger.Row], grdLedger.Row, grdLedger.cells[1, grdLedger.Row]);
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -111,7 +111,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.FormCreate(Sender: TObject);
 begin
-// imposto la var privata con il nome dell'account da cui reperire i dati
+  // imposto la var privata con il nome dell'account da cui reperire i dati
   _pAccountName := MainFRM.treeMenu.Selected.Text;
 
   // impostazione del nome dell'account nella barra del titolo della finestra
@@ -192,14 +192,16 @@ begin
   _action := '';
 
   case Key of
-    13:                    // ENTER
-      _action := 'edit';   // editing del record
-    27:                    // ESC
-      Self.Close;          // chiudo la form
-    45:                    // INS
-      _action := 'new';    // apro la form in inserimento
-    46:                    // DEL
-      _deleteRecord(grdLedger.cells[0, grdLedger.Row], grdLedger.Row); // elimino record direttamente dalla form del registro
+    13:                  // ENTER
+      _action := 'edit'; // editing del record
+    27:                  // ESC
+      Self.Close;        // chiudo la form
+    45:                  // INS
+      _action := 'new';  // apro la form in inserimento
+    46:                  // DEL - elimino record direttamente dalla form del registro
+      _deleteRecord(grdLedger.cells[0, grdLedger.Row],
+        grdLedger.Row,
+        grdLedger.cells[1, grdLedger.Row]);
     106:                   // *
       _action := 'newTrx'; // trasferimento fra conti
     107:                   // +
@@ -481,34 +483,18 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TLedgerFrm._deleteRecord(_pRecID: string; _pRecRow: integer);
-//var
-//  _vIDRecord: string;
-//  i:          Integer; // posizione della grid
+procedure TLedgerFrm._deleteRecord(_pRecID: string; _pRecRow: Integer; _precType: string);
 begin
-//  _pRecRow:= grdLedger.Row;
-//  _vIDRecord := grdLedger.cells[0, i];
-
-//  if (_vIDRecord <> '') and (MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
-    // begin
+  // richiesta conferma cancellazione
   if (_pRecID <> '') and (MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
     try
       MainFRM.sqlite_conn.StartTransaction;
-      // cerco se eventualmente ci sono record collegati per eventuali trasferimenti
-      if UpperCase(MainFRM.sqlQry.FieldValues['TRNTYPE']) = 'TRANSFER' then
+      // se trasferimento elimino prima il correlato
+      if (UpperCase(_precType) = 'TRANSFER') then
       begin
         _SQLString := 'DELETE FROM TRANSACTIONS WHERE TRNID = (SELECT TRNTRANSFERID FROM TRANSACTIONS WHERE TRNID = '
-          + _pRecID;
+          + _pRecID + ')';
         MainFRM.sqlQry.ExecSQL(_SQLString);
-        { TODO : valutare se eliminare qs codice o sostituirlo alla riga precedente }
-        {
-          _SQLString := 'SELECT TRNTRANSFERID FROM TRANSACTIONS WHERE TRNID = ' + _vIDRecord;
-          MainFRM.sqlQry.Open;
-          if (MainFRM.sqlQry.RecordCount <> 0) then // eseguo la cancellazione del record trovato (il reciproco del trx)
-          MainFRM.sqlQry.ExecSQL('DELETE FROM TRANSACTIONS WHERE TRNID = ' +  MainFRM.sqlQry.FieldValues['TRNTRANSFERID']);
-          MainFRM.sqlQry.Close;
-          MainFRM.sqlQry.SQL.Clear;
-        }
       end;
 
       // eliminazione del record selezionato in griglia
@@ -517,12 +503,10 @@ begin
 
       // finally
     except
-      raise Exception.Create('Error in Transfer. Operation Aborted');
+      raise Exception.Create('Error in Deletion. Operation Aborted');
       MainFRM.sqlite_conn.Rollback;
     end;
   grdLedger.Row := _pRecRow;
-
-  // end;
 
   // refresh della grid
   _fillGrid();

@@ -31,6 +31,7 @@ type
     fdMemBalYTD: TFDMemTable;
     procedure FormCreate(Sender: TObject);
     procedure treeMenuDblClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
     // var
@@ -61,6 +62,11 @@ uses
   frmLedger;
 
 { TForm1 }
+
+procedure TMainFRM.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  _closeDB;
+end;
 
 procedure TMainFRM.FormCreate(Sender: TObject);
 begin
