@@ -25,9 +25,10 @@ type
     Edit2: TMenuItem;
     N1: TMenuItem;
     Delete1: TMenuItem;
-    InsertExpensecontinuous1: TMenuItem;
+    InsertDeposit: TMenuItem;
     grdLedger: TStringGrid;
     Transfer1: TMenuItem;
+    InsertExpense1: TMenuItem;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure grdLedgerKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
@@ -38,6 +39,9 @@ type
     procedure grdLedgerDblClick(Sender: TObject);
     procedure grdLedgerDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
     procedure FormActivate(Sender: TObject);
+    procedure InsertDepositClick(Sender: TObject);
+    procedure Transfer1Click(Sender: TObject);
+    procedure InsertExpense1Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -102,6 +106,7 @@ begin
   _ChartTotals;
 end;
 
+// -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := caFree;
@@ -213,6 +218,24 @@ begin
   if _action <> '' then
     _openRecordForm(_action);
 
+end;
+
+
+procedure TLedgerFrm.InsertDepositClick(Sender: TObject);
+begin
+_openRecordForm('newDep');
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm.InsertExpense1Click(Sender: TObject);
+begin
+_openRecordForm('newExp');
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm.Transfer1Click(Sender: TObject);
+begin
+_openRecordForm('newTrx');
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -445,14 +468,14 @@ begin
         if (MainFRM.sqlQry.FieldValues['TRNAMOUNT'] > 0) then
         begin
           grdLedger.cells[5, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
-//          _trxIndicator         := '>Transfer';
-          _trxIndicator         := '>'+MainFRM.sqlQry.FieldValues['ACCNAME'];
+          // _trxIndicator         := '>Transfer';
+          _trxIndicator := '->';
         end
         else
         begin
           grdLedger.cells[6, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT'] * -1);
-//          _trxIndicator         := '<Transfer';
-          _trxIndicator         := '<'+MainFRM.sqlQry.FieldValues['ACCNAME'];
+          // _trxIndicator         := '<Transfer';
+          _trxIndicator := '<-';
         end;
 
         runSum := runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];
@@ -462,6 +485,19 @@ begin
 
         if (MainFRM.sqlQry.FieldValues['TRNTYPE'] = 'Transfer') then // se si tratta si trasferimento
         begin
+          // cerco il mov correlato e recupero il conto
+          _SQLString := 'select ACCNAME'
+            + ' from DBACCOUNT, TRANSACTIONS '
+            + ' where TRNACCOUNT = ACCID '
+            + ' and TRNID = ' + VarToStr(MainFRM.sqlQry.FieldValues['TRNTRANSFERID']);
+
+          MainFRM.sqlQry2.SQL.Clear;
+          MainFRM.sqlQry2.SQL.Add(_SQLString);
+          MainFRM.sqlQry2.Open;
+          if MainFRM.sqlQry2.RecordCount > 0 then
+            _trxIndicator       := _trxIndicator + ' ' + MainFRM.sqlQry2.FieldValues['ACCNAME'];
+
+          MainFRM.sqlQry2.Close;
           grdLedger.cells[3, i] := _trxIndicator; // imposto la scritta standard con indicato se trx in o out
           grdLedger.cells[4, i] := '';            // la categoria anche se compilata la lascio vuota
 

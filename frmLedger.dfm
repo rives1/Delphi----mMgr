@@ -126,6 +126,7 @@ object LedgerFrm: TLedgerFrm
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goRowSelect]
       ParentCtl3D = False
       ParentFont = False
+      PopupMenu = PopupMenu1
       TabOrder = 1
       OnDblClick = grdLedgerDblClick
       OnDrawCell = grdLedgerDrawCell
@@ -238,11 +239,17 @@ object LedgerFrm: TLedgerFrm
       Caption = '&Insert (INS)'
       OnClick = Edit1Click
     end
-    object InsertExpensecontinuous1: TMenuItem
-      Caption = 'Insert Expense &bulk (+)'
+    object InsertDeposit: TMenuItem
+      Caption = 'Insert Deposit (+)'
+      OnClick = InsertDepositClick
+    end
+    object InsertExpense1: TMenuItem
+      Caption = 'Insert Expense (-)'
+      OnClick = InsertExpense1Click
     end
     object Transfer1: TMenuItem
       Caption = '&Transfer (*)'
+      OnClick = Transfer1Click
     end
     object Edit2: TMenuItem
       Caption = '&Edit (ENTER)'

@@ -5353,7 +5353,7 @@ object MainFRM: TMainFRM
     PrintOptions.Printer = 'Default'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 43929.991899351900000000
-    ReportOptions.LastChange = 43934.838077037040000000
+    ReportOptions.LastChange = 43934.894028657410000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'begin'
@@ -6793,7 +6793,7 @@ object MainFRM: TMainFRM
         end
         object Memo46: TfrxMemoView
           AllowVectorExport = True
-          Left = 27.559060000000000000
+          Left = 10.220470000000000000
           Width = 94.488250000000000000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
@@ -7302,5 +7302,10 @@ object MainFRM: TMainFRM
     StoreDefs = True
     Left = 230
     Top = 525
+  end
+  object sqlQry2: TFDQuery
+    Connection = sqlite_conn
+    Left = 364
+    Top = 443
   end
 end

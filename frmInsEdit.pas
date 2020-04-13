@@ -130,6 +130,7 @@ begin
       _fType.SetFocus;
     end;
     _fAccountFrom.Text := _pLedgerName;
+    _fDate.Date        := now;
     // _cleanFormNewRecord; //impostazione
   end;
 end;
@@ -455,14 +456,14 @@ var
   _lrecID:        integer; // id del record per inserire i riferimenti sui mov trasferimento
 begin
   // il valore deve essere ngativo se la il tipo di transazione è pay
-  if UpperCase(_fType.Text) = 'PAY' then
-    _lAmount := VarToStr((_fAmount.Value) * -1)
+  if UpperCase(_fType.Text) = 'DEPOSIT' then
+    _lAmount := VarToStr((_fAmount.Value))
   else
-    _lAmount := VarToStr((_fAmount.Value));
+    _lAmount := VarToStr((_fAmount.Value) * -1);
 
   // salvataggio del record in base alla tipologia di editing
   try
-    MainFRM.sqlite_conn.StartTransaction;
+    // MainFRM.sqlite_conn.StartTransaction;
     if (_pEditID = 0) then
       _SQLString := ' INSERT INTO TRANSACTIONS (TRNTYPE, TRNDATE, TRNPAYEE, TRNCATEGORY, TRNSUBCATEGORY, '
         + ' TRNAMOUNT, TRNACCOUNT, TRNDESCRIPTION) ' +
@@ -541,10 +542,10 @@ begin
         MainFRM.sqlQry.ExecSQL(_SQLString);
       end;
 
-    MainFRM.sqlite_conn.Commit;
+    // MainFRM.sqlite_conn.Commit;
   except
     raise Exception.Create('Error in Transfer. Operation Aborted');
-    MainFRM.sqlite_conn.Rollback;
+    // MainFRM.sqlite_conn.Rollback;
   end;
 
   {

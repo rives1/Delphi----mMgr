@@ -29,6 +29,7 @@ type
     rptStandard: TfrxReport;
     rptDset: TfrxDBDataset;
     fdMemBalYTD: TFDMemTable;
+    sqlQry2: TFDQuery;
     procedure FormCreate(Sender: TObject);
     procedure treeMenuDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -343,13 +344,13 @@ begin
           // selezione quale immagine impostare sul nodo
           if (sqlQry.FieldValues['ACCTYPE'] = 'Cash') then
           begin
-            vNode.ImageIndex         := 5;
+            vNode.ImageIndex         := 6;
             vNode.SelectedIndex      := 0;
             vNode.ExpandedImageIndex := sqlQry.FieldValues['ACCID'];
           end;
           if (sqlQry.FieldValues['ACCTYPE'] = 'Checking') then
           begin
-            vNode.ImageIndex         := 6;
+            vNode.ImageIndex         := 5;
             vNode.SelectedIndex      := 0;
             vNode.ExpandedImageIndex := sqlQry.FieldValues['ACCID'];
           end;
