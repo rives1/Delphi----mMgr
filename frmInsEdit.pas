@@ -463,7 +463,7 @@ begin
 
   // salvataggio del record in base alla tipologia di editing
   try
-    // MainFRM.sqlite_conn.StartTransaction;
+     MainFRM.sqlite_conn.StartTransaction;
     if (_pEditID = 0) then
       _SQLString := ' INSERT INTO TRANSACTIONS (TRNTYPE, TRNDATE, TRNPAYEE, TRNCATEGORY, TRNSUBCATEGORY, '
         + ' TRNAMOUNT, TRNACCOUNT, TRNDESCRIPTION) ' +
@@ -542,10 +542,10 @@ begin
         MainFRM.sqlQry.ExecSQL(_SQLString);
       end;
 
-    // MainFRM.sqlite_conn.Commit;
+     MainFRM.sqlite_conn.Commit;
   except
     raise Exception.Create('Error in Transfer. Operation Aborted');
-    // MainFRM.sqlite_conn.Rollback;
+     MainFRM.sqlite_conn.Rollback;
   end;
 
   {
