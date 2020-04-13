@@ -436,7 +436,6 @@ end;
 procedure TInsEditFrm._recordSave;
 begin
   if _validateField then
-  { TODO : inserire condizione che non faccia resettare i campi sull'uscita dal type  se la validazione non va a buon fine. }
   begin
     _newPayee;
     _writeRecord;
@@ -455,8 +454,6 @@ var
   _lCategoryType: string;  // tipo categoria
   _lrecID:        integer; // id del record per inserire i riferimenti sui mov trasferimento
 begin
-  { TODO : al cambiamento della transazione da transfer verso qlcs altro devo eliminare il record correlato }
-
   // il valore deve essere ngativo se la il tipo di transazione è pay
   if UpperCase(_fType.Text) = 'PAY' then
     _lAmount := VarToStr((_fAmount.Value) * -1)

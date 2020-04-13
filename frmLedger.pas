@@ -445,12 +445,14 @@ begin
         if (MainFRM.sqlQry.FieldValues['TRNAMOUNT'] > 0) then
         begin
           grdLedger.cells[5, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
-          _trxIndicator         := '>Transfer';
+//          _trxIndicator         := '>Transfer';
+          _trxIndicator         := '>'+MainFRM.sqlQry.FieldValues['ACCNAME'];
         end
         else
         begin
           grdLedger.cells[6, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT'] * -1);
-          _trxIndicator         := '<Transfer';
+//          _trxIndicator         := '<Transfer';
+          _trxIndicator         := '<'+MainFRM.sqlQry.FieldValues['ACCNAME'];
         end;
 
         runSum := runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];

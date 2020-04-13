@@ -103,6 +103,10 @@ begin
   end;
   // and (treeMenu.Selected.Text = '') then
 
+  // Config
+  if ((treeMenu.Selected.Level <> 0)
+    and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART')) then
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -187,10 +191,18 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM._reportBalanceYTD;
 var
-  _totCat:      Double; // totale da calcolare per i 12 mesi della cat-subcat
-  _mmField:     string; // campo per l'assegnazione del valore
-  _subcatCiclo: string; // condizione per ciclo
+  _totCat:      Double;  // totale da calcolare per i 12 mesi della cat-subcat
+  _mmField:     string;  // campo per l'assegnazione del valore
+  _subcatCiclo: string;  // condizione per ciclo
+  i:            integer; // x ciclo for
 begin
+  // pulire la tabella prima di procedere
+  for i := 0 to fdMemBalYTD.RecordCount do
+  begin
+    fdMemBalYTD.Edit;
+    fdMemBalYTD.Delete;
+  end;
+
   _SQLString := 'Select CATTYPE, CATDES, SUBCDES, '
     + ' StrfTime(''%Y'', TRANSACTIONS.TRNDATE) As YY, '
     + ' StrfTime(''%m'', TRANSACTIONS.TRNDATE) As MM, '
@@ -266,7 +278,7 @@ begin
         _totCat                         := _totCat + sqlQry.FieldValues['Sum_TRNAMOUNT'];
         FieldByName('rptTotLine').Value := _totCat;
 
-        update;
+        Update;
       end;
       _subcatCiclo := sqlQry.FieldValues['CATDES'] + sqlQry.FieldValues['SUBCDES'];
       sqlQry.Next;
@@ -331,20 +343,26 @@ begin
           // selezione quale immagine impostare sul nodo
           if (sqlQry.FieldValues['ACCTYPE'] = 'Cash') then
           begin
-            vNode.ImageIndex         := 2;
-            vNode.SelectedIndex      := 9;
+            vNode.ImageIndex         := 5;
+            vNode.SelectedIndex      := 0;
             vNode.ExpandedImageIndex := sqlQry.FieldValues['ACCID'];
           end;
           if (sqlQry.FieldValues['ACCTYPE'] = 'Checking') then
           begin
-            vNode.ImageIndex         := 3;
-            vNode.SelectedIndex      := 9;
+            vNode.ImageIndex         := 6;
+            vNode.SelectedIndex      := 0;
             vNode.ExpandedImageIndex := sqlQry.FieldValues['ACCID'];
           end;
           if (sqlQry.FieldValues['ACCTYPE'] = 'CreditCard') then
           begin
-            vNode.ImageIndex         := 4;
-            vNode.SelectedIndex      := 9;
+            vNode.ImageIndex         := 7;
+            vNode.SelectedIndex      := 0;
+            vNode.ExpandedImageIndex := sqlQry.FieldValues['ACCID'];
+          end;
+          if (sqlQry.FieldValues['ACCTYPE'] = 'Online') then
+          begin
+            vNode.ImageIndex         := 8;
+            vNode.SelectedIndex      := 0;
             vNode.ExpandedImageIndex := sqlQry.FieldValues['ACCID'];
           end;
 
@@ -357,21 +375,21 @@ begin
 
   // area report
   vNodeGroup            := treeMenu.Items.Add(nil, 'Report');
-  vNodeGroup.ImageIndex := 5;
+  vNodeGroup.ImageIndex := 2;
   vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Balance YTD-Monthly');
-  vNode.ImageIndex      := 11;
-  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Balance Yearly');
-  vNode.ImageIndex      := 11;
+  vNode.ImageIndex      := 9;
 
   // area chart
   vNodeGroup            := treeMenu.Items.Add(nil, 'Chart');
-  vNodeGroup.ImageIndex := 10;
-  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Exp by Category');
-  vNode.ImageIndex      := 8;
+  vNodeGroup.ImageIndex := 3;
+  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Analisys');
+  vNode.ImageIndex      := 13;
 
   // area Config
   vNodeGroup            := treeMenu.Items.Add(nil, 'Config');
-  vNodeGroup.ImageIndex := 6;
+  vNodeGroup.ImageIndex := 4;
+  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Accounts');
+  vNode.ImageIndex      := 14;
 
   treeMenu.FullExpand;
 end;

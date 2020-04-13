@@ -2,7 +2,7 @@ object InsEditFrm: TInsEditFrm
   Left = 0
   Top = 0
   Caption = 'Insert/Edit Record'
-  ClientHeight = 260
+  ClientHeight = 250
   ClientWidth = 462
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET

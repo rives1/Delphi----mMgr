@@ -6,10 +6,10 @@
     <Transaction>2020/03/17 22:57:13.000.218,C:\Users\rives\Documents\Embarcadero\Studio\Projects\Mmgr\frmMain.pas=C:\Users\rives\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2020/03/17 22:57:21.000.989,C:\Users\rives\Documents\Embarcadero\Studio\Projects\Mmgr\mMgr.dproj=C:\Users\rives\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
     <Transaction>2020/03/18 23:32:44.000.111,=C:\Users\rives\Documents\DelphiLazarus\Delphi----mMgr\Unit1.pas</Transaction>
-    <Transaction>2020/03/18 23:34:34.000.161,C:\Users\rives\Documents\DelphiLazarus\Delphi----mMgr\rfmLedger.dfm=C:\Users\rives\Documents\DelphiLazarus\Delphi----mMgr\Unit1.dfm</Transaction>
     <Transaction>2020/03/18 23:34:34.000.161,C:\Users\rives\Documents\DelphiLazarus\Delphi----mMgr\rfmLedger.pas=C:\Users\rives\Documents\DelphiLazarus\Delphi----mMgr\Unit1.pas</Transaction>
-    <Transaction>2020/03/18 23:42:04.000.524,C:\Users\rives\Documents\DelphiLazarus\Delphi----mMgr\frmLedger.pas=C:\Users\rives\Documents\DelphiLazarus\Delphi----mMgr\rfmLedger.pas</Transaction>
+    <Transaction>2020/03/18 23:34:34.000.161,C:\Users\rives\Documents\DelphiLazarus\Delphi----mMgr\rfmLedger.dfm=C:\Users\rives\Documents\DelphiLazarus\Delphi----mMgr\Unit1.dfm</Transaction>
     <Transaction>2020/03/18 23:42:04.000.524,C:\Users\rives\Documents\DelphiLazarus\Delphi----mMgr\frmLedger.dfm=C:\Users\rives\Documents\DelphiLazarus\Delphi----mMgr\rfmLedger.dfm</Transaction>
+    <Transaction>2020/03/18 23:42:04.000.524,C:\Users\rives\Documents\DelphiLazarus\Delphi----mMgr\frmLedger.pas=C:\Users\rives\Documents\DelphiLazarus\Delphi----mMgr\rfmLedger.pas</Transaction>
     <Transaction>2020/03/21 17:12:20.000.000,=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\Unit1.pas</Transaction>
     <Transaction>2020/03/21 17:12:37.000.446,C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmIInsEdit.dfm=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\Unit1.dfm</Transaction>
     <Transaction>2020/03/21 17:12:37.000.446,C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmIInsEdit.pas=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\Unit1.pas</Transaction>
@@ -20,5 +20,8 @@
     <Transaction>2020/04/02 19:08:51.000.883,=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\Unit1.pas</Transaction>
     <Transaction>2020/04/02 19:13:20.000.473,=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmTransfer.pas</Transaction>
     <Transaction>2020/04/02 23:23:54.000.024,C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmTransfer.pas=</Transaction>
+    <Transaction>2020/04/13 18:17:17.764,=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\Unit1.pas</Transaction>
+    <Transaction>2020/04/13 18:18:45.397,C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmAccount.dfm=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\Unit1.dfm</Transaction>
+    <Transaction>2020/04/13 18:18:45.397,C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\frmAccount.pas=C:\Users\ammin\Documents\LazarusDelphi\Delphi----mMgr\Unit1.pas</Transaction>
   </Transactions>
 </BorlandProject>
