@@ -44,6 +44,7 @@ type
     function _chkOpenForm(_frmCaption: string): boolean;
     procedure _closeDB;
     procedure _treeMenuCreate;
+    procedure _treeSelectOpen;
     procedure _fillBalanceChart;
     procedure _reportBalanceYTD;
 
@@ -60,7 +61,7 @@ implementation
 
 
 uses
-  frmLedger;
+  frmLedger, frmAccount;
 
 { TForm1 }
 
@@ -81,33 +82,8 @@ end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM.treeMenuDblClick(Sender: TObject);
-var
-  childFRM: TLedgerFrm;
 begin
-  // apro la child form del ledger. se il nodo superiore è account si tratta sicuramente di un ledger da aprire
-  if ((treeMenu.Selected.Level <> 0)
-    and (UpperCase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
-    and not _chkOpenForm(treeMenu.Selected.Text) then
-    childFRM := TLedgerFrm.Create(nil);
-  // apro i report
-  if ((treeMenu.Selected.Level <> 0)
-    and (UpperCase(treeMenu.Selected.Parent.Text) = 'REPORT')) then
-    if treeMenu.Selected.Text = 'Balance YTD-Monthly' then
-      _reportBalanceYTD;
-
-  // apro i chart
-  if ((treeMenu.Selected.Level <> 0)
-    and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART')) then
-  begin
-    showmessage('Noniiiiiiiiii...');
-    showmessage('Ti ho scritto che non sono ancora pronti...');
-  end;
-  // and (treeMenu.Selected.Text = '') then
-
-  // Config
-  if ((treeMenu.Selected.Level <> 0)
-    and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART')) then
-
+  _treeSelectOpen; // apro le form in base alla selezione del nodo
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -389,10 +365,45 @@ begin
   // area Config
   vNodeGroup            := treeMenu.Items.Add(nil, 'Config');
   vNodeGroup.ImageIndex := 4;
-  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Accounts');
+  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Account');
   vNode.ImageIndex      := 14;
 
   treeMenu.FullExpand;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TMainFRM._treeSelectOpen;
+var
+  _LedgerChildFRM: TLedgerFrm;
+  _AccountChildFRM: TAccountFrm;
+
+begin
+  // apro la child form del ledger. se il nodo superiore è account si tratta sicuramente di un ledger da aprire
+  if ((treeMenu.Selected.Level <> 0)
+    and (UpperCase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
+    and not _chkOpenForm(treeMenu.Selected.Text) then
+    _LedgerChildFRM := TLedgerFrm.Create(nil);
+  // apro i report
+  if ((treeMenu.Selected.Level <> 0)
+    and (UpperCase(treeMenu.Selected.Parent.Text) = 'REPORT')) then
+    if treeMenu.Selected.Text = 'Balance YTD-Monthly' then
+      _reportBalanceYTD;
+
+  // apro i chart
+  if ((treeMenu.Selected.Level <> 0)
+    and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART')) then
+  begin
+    showmessage('Noniiiiiiiiii...');
+    showmessage('Ti ho scritto che non sono ancora pronti...');
+  end;
+  // and (treeMenu.Selected.Text = '') then
+
+  // Config
+  if ((treeMenu.Selected.Level <> 0)
+    and (UpperCase(treeMenu.Selected.Parent.Text) = 'CONFIG'))
+    and not _chkOpenForm(treeMenu.Selected.Text) then
+    _AccountChildFRM := TAccountFrm.Create(nil);
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

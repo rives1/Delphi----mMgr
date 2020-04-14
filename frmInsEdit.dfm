@@ -95,7 +95,7 @@ object InsEditFrm: TInsEditFrm
     Top = 211
     Width = 75
     Height = 25
-    Caption = 'OK'
+    Caption = '&Save'
     TabOrder = 10
     OnClick = btnOKClick
   end

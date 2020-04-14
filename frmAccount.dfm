@@ -1,20 +1,24 @@
 object AccountFrm: TAccountFrm
   Left = 0
   Top = 0
+  BorderStyle = bsSingle
   Caption = 'Account'
-  ClientHeight = 186
-  ClientWidth = 375
+  ClientHeight = 171
+  ClientWidth = 437
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  FormStyle = fsMDIChild
   OldCreateOrder = False
   Position = poMainFormCenter
+  Visible = True
   OnActivate = FormActivate
   OnClose = FormClose
   OnKeyDown = FormKeyDown
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Label2: TLabel
@@ -48,16 +52,14 @@ object AccountFrm: TAccountFrm
     Left = 78
     Top = 123
     Width = 168
-    Height = 21
+    Height = 22
     AutoDropDown = True
+    Style = csOwnerDrawVariable
     Color = clInactiveCaption
     TabOrder = 3
     TabStop = False
     Text = ''
-    Items.Strings = (
-      'Pay'
-      'Deposit'
-      'Transfer')
+    OnSelect = _fSearchSelect
   end
   object _fType: TJvComboBox
     Left = 78
@@ -70,7 +72,8 @@ object AccountFrm: TAccountFrm
     Items.Strings = (
       'Cash'
       'Cheching'
-      'CreditCard')
+      'CreditCard'
+      'Online')
   end
   object _fName: TEdit
     Left = 78
@@ -93,11 +96,43 @@ object AccountFrm: TAccountFrm
     TabOrder = 0
   end
   object btnOK: TJvBitBtn
-    Left = 276
-    Top = 136
+    Left = 341
+    Top = 126
     Width = 75
     Height = 25
-    Caption = 'OK'
+    Caption = '&Save'
     TabOrder = 4
+    OnClick = btnOKClick
+  end
+  object JvBitBtn1: TJvBitBtn
+    Left = 341
+    Top = 47
+    Width = 75
+    Height = 25
+    Caption = '&New'
+    TabOrder = 5
+    TabStop = False
+    OnClick = JvBitBtn1Click
+  end
+  object JvBitBtn2: TJvBitBtn
+    Left = 341
+    Top = 87
+    Width = 75
+    Height = 25
+    Caption = '&Delete'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clRed
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 6
+    TabStop = False
+    OnClick = JvBitBtn1Click
+    HotTrackFont.Charset = DEFAULT_CHARSET
+    HotTrackFont.Color = clWindowText
+    HotTrackFont.Height = -11
+    HotTrackFont.Name = 'Tahoma'
+    HotTrackFont.Style = []
   end
 end

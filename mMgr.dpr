@@ -14,6 +14,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TMainFRM, MainFRM);
-  Application.CreateForm(TAccountFrm, AccountFrm);
   Application.Run;
 end.
