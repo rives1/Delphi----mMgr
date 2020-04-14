@@ -57,7 +57,7 @@ object InsEditFrm: TInsEditFrm
   end
   object Label6: TLabel
     Left = 16
-    Top = 211
+    Top = 206
     Width = 37
     Height = 13
     Caption = 'Amount'
@@ -160,7 +160,7 @@ object InsEditFrm: TInsEditFrm
   end
   object _fAmount: TJvValidateEdit
     Left = 88
-    Top = 208
+    Top = 203
     Width = 81
     Height = 21
     CriticalPoints.MaxValueIncluded = False

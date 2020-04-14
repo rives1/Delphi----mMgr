@@ -315,9 +315,7 @@ var
   _YY: string; // riferimento anno per migliroare visualizzazione graph storico
   i: Integer;
 begin
-  //
   // Chart totali IN/OUT
-  //
 
   _lTotal := 0; // totale dei singoli record da imputare nel grafico
 

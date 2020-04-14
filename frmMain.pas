@@ -61,7 +61,7 @@ implementation
 
 
 uses
-  frmLedger, frmAccount;
+  frmLedger, frmAccount, frmChartAnalisys;
 
 { TForm1 }
 
@@ -376,6 +376,7 @@ procedure TMainFRM._treeSelectOpen;
 var
   _LedgerChildFRM: TLedgerFrm;
   _AccountChildFRM: TAccountFrm;
+  _AnalisysFRM: TAnalisysFrm;
 
 begin
   // apro la child form del ledger. se il nodo superiore è account si tratta sicuramente di un ledger da aprire
@@ -391,12 +392,9 @@ begin
 
   // apro i chart
   if ((treeMenu.Selected.Level <> 0)
-    and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART')) then
-  begin
-    showmessage('Noniiiiiiiiii...');
-    showmessage('Ti ho scritto che non sono ancora pronti...');
-  end;
-  // and (treeMenu.Selected.Text = '') then
+    and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART'))
+    and not _chkOpenForm(treeMenu.Selected.Text) then
+    _AnalisysFRM := TAnalisysFrm.Create(nil);
 
   // Config
   if ((treeMenu.Selected.Level <> 0)

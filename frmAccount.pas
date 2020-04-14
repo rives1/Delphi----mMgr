@@ -186,8 +186,8 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 function TAccountFrm._validateField: boolean;
 begin
-  Result := True;
   // verifica che i campi della mask siano compilati
+  Result := True;
   if (_fType.Text = '')
     or (_fName.Text = '') then
   begin

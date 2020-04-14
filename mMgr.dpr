@@ -6,7 +6,8 @@ uses
   frmLedger in 'frmLedger.pas' {LedgerFrm},
   frmInsEdit in 'frmInsEdit.pas' {InsEditFrm},
   pasCommon in 'pasCommon.pas',
-  frmAccount in 'frmAccount.pas' {AccountFrm};
+  frmAccount in 'frmAccount.pas' {AccountFrm},
+  frmChartAnalisys in 'frmChartAnalisys.pas' {AnalisysFrm};
 
 {$R *.res}
 
