@@ -139,9 +139,10 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TLedgerFrm.grdLedgerDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
+procedure TLedgerFrm.grdLedgerDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect;
+  State: TGridDrawState);
 var
-  dx:   Integer;
+  dx: Integer;
   Text: string;
 begin
 
@@ -151,7 +152,7 @@ begin
     if (ARow = 0) then
     begin
       Canvas.Brush.Color := clBtnFace;
-      Canvas.Font.Style  := [fsBold];
+      Canvas.Font.Style := [fsBold];
     end
     else
     begin
@@ -176,7 +177,7 @@ begin
       // bold per la prima linea delle caption
       FillRect(Rect);
       Text := grdLedger.cells[ACol, ARow];
-      dx   := TextWidth(Text) + 2;
+      dx := TextWidth(Text) + 2;
       TextOut(Rect.Right - dx, Rect.Top, Text);
     end;
 
@@ -220,29 +221,28 @@ begin
 
 end;
 
-
 procedure TLedgerFrm.InsertDepositClick(Sender: TObject);
 begin
-_openRecordForm('newDep');
+  _openRecordForm('newDep');
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.InsertExpense1Click(Sender: TObject);
 begin
-_openRecordForm('newExp');
+  _openRecordForm('newExp');
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.Transfer1Click(Sender: TObject);
 begin
-_openRecordForm('newTrx');
+  _openRecordForm('newTrx');
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm._openRecordForm(_pEditKind: string);
 var
   frmInsEdit: TInsEditFrm;
-  i:          Integer; // var x storage del record attuale per poi recuperarlo
+  i: Integer; // var x storage del record attuale per poi recuperarlo
 begin
   i := grdLedger.Row; // imposto la riga della grid attuale
   // creo la form e la nascondo per poter impostare le proprietà
@@ -278,7 +278,7 @@ procedure TLedgerFrm._autoSizeCol(Grid: TStringGrid; Column: Integer);
 var
   i, W, WMax: Integer;
 begin
-  WMax  := 0;
+  WMax := 0;
   for i := 0 to (Grid.RowCount - 1) do
   begin
     W := Grid.Canvas.TextWidth(Grid.cells[Column, i]);
@@ -303,8 +303,8 @@ var
   i: Integer;
   J: Integer;
 begin
-  for i                     := 0 to grdLedger.ColCount - 1 do
-    for J                   := 1 to grdLedger.RowCount - 1 do
+  for i := 0 to grdLedger.ColCount - 1 do
+    for J := 1 to grdLedger.RowCount - 1 do
       grdLedger.cells[i, J] := '';
 end;
 
@@ -312,8 +312,8 @@ end;
 procedure TLedgerFrm._ChartTotals;
 var
   _lTotal: Double;
-  _YY:     string; // riferimento anno per migliroare visualizzazione graph storico
-  i:       Integer;
+  _YY: string; // riferimento anno per migliroare visualizzazione graph storico
+  i: Integer;
 begin
   //
   // Chart totali IN/OUT
@@ -340,8 +340,8 @@ begin
       begin
         _lTotal := StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']);
         chTotals.SeriesList[0].Add(_lTotal, 'Deposit');
-        MainFRM.sqlQry.Next;
       end;
+      MainFRM.sqlQry.Next;
     end;
   finally
     MainFRM.sqlQry.Close;
@@ -379,7 +379,7 @@ begin
   //
   chHistory.Series[0].Clear(); // pulisco il grafico
   _lTotal := 0;                // resetto il conteggio
-  i       := 0;                // azzero il counter delle colonne
+  i := 0;                      // azzero il counter delle colonne
   // query totalizzazione spese
   _SQLString := 'SELECT StrfTime(''%Y'', TRNDATE) || ''-'' || StrfTime(''%W'', TRNDATE) AS Period, ' +
     ' StrfTime(''%Y'', TRNDATE) AS YY,' +
@@ -410,7 +410,7 @@ begin
             chHistory.Axes.Bottom.Items.Add(i, MainFRM.sqlQry.FieldValues['YY']);
 
           _YY := MainFRM.sqlQry.FieldValues['YY'];
-          i   := i + 1;
+          i := i + 1;
         end;
         MainFRM.sqlQry.Next;
       end;
@@ -424,8 +424,8 @@ end;
 procedure TLedgerFrm._fillGrid();
 // riempiemnto della grid
 var
-  i:             Integer;
-  runSum:        Double;
+  i: Integer;
+  runSum: Double;
   _trxIndicator: string; // indica con i segni > o > se il trasferimento è in entrata o uscita
   // oppure lascio vuoto se non si tratta di un trasferimento
 begin
@@ -451,7 +451,7 @@ begin
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
     MainFRM.sqlQry.Open;
-    i      := 1;
+    i := 1;
     runSum := 0;
     if (MainFRM.sqlQry.RecordCount <> 0) then
       while not MainFRM.sqlQry.EOF do // ciclo recupero dati
@@ -463,7 +463,8 @@ begin
         grdLedger.cells[1, i] := MainFRM.sqlQry.FieldValues['TRNTYPE']; // Tipo operazione
         grdLedger.cells[2, i] := MainFRM.sqlQry.FieldValues['TRNDATE']; // Data
         grdLedger.cells[3, i] := MainFRM.sqlQry.FieldValues['PAYNAME'];
-        grdLedger.cells[4, i] := MainFRM.sqlQry.FieldValues['CATDES'] + ' : ' + MainFRM.sqlQry.FieldValues['SUBCDES'];
+        grdLedger.cells[4, i] := MainFRM.sqlQry.FieldValues['CATDES'] + ' : ' + MainFRM.sqlQry.FieldValues
+          ['SUBCDES'];
 
         if (MainFRM.sqlQry.FieldValues['TRNAMOUNT'] > 0) then
         begin
@@ -495,19 +496,22 @@ begin
           MainFRM.sqlQry2.SQL.Add(_SQLString);
           MainFRM.sqlQry2.Open;
           if MainFRM.sqlQry2.RecordCount > 0 then
-            _trxIndicator       := _trxIndicator + ' ' + MainFRM.sqlQry2.FieldValues['ACCNAME'];
+            _trxIndicator := _trxIndicator + ' ' + MainFRM.sqlQry2.FieldValues['ACCNAME'];
 
           MainFRM.sqlQry2.Close;
           grdLedger.cells[3, i] := _trxIndicator; // imposto la scritta standard con indicato se trx in o out
           grdLedger.cells[4, i] := '';            // la categoria anche se compilata la lascio vuota
 
         end;
-
         // incremento per record e colonne
         i := i + 1;
         MainFRM.sqlQry.Next;
 
-      end;
+      end
+    else
+      // aggiungo una riga vuota per evitare errori in visualizzazione
+      grdLedger.RowCount := grdLedger.RowCount + 1;
+
     _autoSizeGrid;
   finally
     MainFRM.sqlQry.Close;
