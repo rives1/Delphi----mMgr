@@ -26,6 +26,8 @@ type
     Series4: TBarSeries;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
+    procedure _fdtFromChange(Sender: TObject);
+    procedure _fdtToChange(Sender: TObject);
   private
     { Private declarations }
     _SQLString: string; // container x query string
@@ -63,13 +65,25 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
+procedure TAnalisysFrm._fdtFromChange(Sender: TObject);
+begin
+  _fillChart;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TAnalisysFrm._fdtToChange(Sender: TObject);
+begin
+  _fillChart;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TAnalisysFrm._fillChart;
 var
   _lTotal: Double;
 begin
   _lTotal := 0; // totale dei singoli record da imputare nel grafico
 
-  //chart torta per totale spese categoria
+  // chart torta per totale spese categoria
   Chart1.Series[0].Clear(); // pulisco il grafico
   _SQLString := 'Select CATDES, Sum(TRANSACTIONS.TRNAMOUNT) As Sum_TRNAMOUNT '
     + ' From TRANSACTIONS Inner Join '

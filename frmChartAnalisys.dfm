@@ -59,10 +59,6 @@ object AnalisysFrm: TAnalisysFrm
         Value = 47.893239694308710000
       end>
     TabOrder = 0
-    ExplicitLeft = 18
-    ExplicitTop = 42
-    ExplicitWidth = 718
-    ExplicitHeight = 459
     object Chart1: TChart
       Left = 2
       Top = 2
@@ -78,10 +74,6 @@ object AnalisysFrm: TAnalisysFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitLeft = 0
-      ExplicitTop = -1
-      ExplicitWidth = 282
-      ExplicitHeight = 168
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 19
       object Series1: TPieSeries
@@ -119,10 +111,6 @@ object AnalisysFrm: TAnalisysFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitLeft = 264
-      ExplicitTop = 37
-      ExplicitWidth = 164
-      ExplicitHeight = 109
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 19
       object Series2: TLineSeries
@@ -148,10 +136,6 @@ object AnalisysFrm: TAnalisysFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 2
-      ExplicitLeft = 35
-      ExplicitTop = 188
-      ExplicitWidth = 184
-      ExplicitHeight = 100
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 19
       object Series3: TBarSeries
@@ -178,10 +162,6 @@ object AnalisysFrm: TAnalisysFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 3
-      ExplicitLeft = 242
-      ExplicitTop = 141
-      ExplicitWidth = 174
-      ExplicitHeight = 95
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 20
       object Series4: TBarSeries
@@ -202,9 +182,6 @@ object AnalisysFrm: TAnalisysFrm
     Width = 864
     Height = 19
     Panels = <>
-    ExplicitLeft = 530
-    ExplicitTop = 240
-    ExplicitWidth = 0
   end
   object Panel1: TPanel
     Left = 0
@@ -213,7 +190,6 @@ object AnalisysFrm: TAnalisysFrm
     Height = 38
     Align = alTop
     TabOrder = 2
-    ExplicitWidth = 837
     object Label1: TLabel
       Left = 20
       Top = 12
@@ -236,6 +212,7 @@ object AnalisysFrm: TAnalisysFrm
       Date = 43935.000000000000000000
       Time = 0.919114861113484900
       TabOrder = 0
+      OnChange = _fdtFromChange
     end
     object _fdtTo: TDateTimePicker
       Left = 243
@@ -245,6 +222,7 @@ object AnalisysFrm: TAnalisysFrm
       Date = 43935.000000000000000000
       Time = 0.919157187498058200
       TabOrder = 1
+      OnChange = _fdtToChange
     end
   end
 end

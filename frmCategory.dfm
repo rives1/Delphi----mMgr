@@ -1,10 +1,10 @@
-object AccountFrm: TAccountFrm
+object CategoryFrm: TCategoryFrm
   Left = 0
   Top = 0
   BorderStyle = bsSingle
-  Caption = 'Account'
-  ClientHeight = 295
-  ClientWidth = 485
+  Caption = 'Category'
+  ClientHeight = 512
+  ClientWidth = 642
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,7 +12,6 @@ object AccountFrm: TAccountFrm
   Font.Name = 'Tahoma'
   Font.Style = []
   FormStyle = fsMDIChild
-  KeyPreview = True
   OldCreateOrder = False
   Position = poMainFormCenter
   Visible = True
@@ -22,114 +21,94 @@ object AccountFrm: TAccountFrm
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object Splitter1: TSplitter
-    Left = 211
-    Top = 0
-    Width = 5
-    Height = 276
-    ExplicitHeight = 493
+  object _fSearch: TJvComboBox
+    Left = 324
+    Top = 441
+    Width = 168
+    Height = 22
+    AutoDropDown = True
+    Style = csOwnerDrawVariable
+    Color = clInactiveCaption
+    TabOrder = 0
+    TabStop = False
+    Text = ''
+    OnSelect = _fSearchSelect
   end
-  object _fLvAccount: TListView
-    Left = 0
-    Top = 0
+  object ListView1: TListView
+    Left = 8
+    Top = 8
     Width = 211
-    Height = 276
-    Align = alLeft
-    BorderStyle = bsNone
+    Height = 376
+    Checkboxes = True
     Columns = <
       item
         AutoSize = True
-        Caption = 'Account Name'
+        Caption = 'nome'
+      end
+      item
+        AutoSize = True
+        Caption = 'subc'
       end>
-    Ctl3D = False
-    FlatScrollBars = True
     GridLines = True
     Groups = <
       item
-        Header = 'Checking'
+        Header = 'gruppo'
         GroupID = 0
-        State = [lgsNormal]
-        HeaderAlign = taLeftJustify
-        FooterAlign = taLeftJustify
-        TitleImage = -1
-      end
-      item
-        Header = 'Cash'
-        GroupID = 1
-        State = [lgsNormal]
-        HeaderAlign = taLeftJustify
-        FooterAlign = taLeftJustify
-        TitleImage = -1
-      end
-      item
-        Header = 'Credit Card'
-        GroupID = 2
-        State = [lgsNormal]
-        HeaderAlign = taLeftJustify
-        FooterAlign = taLeftJustify
-        TitleImage = -1
-      end
-      item
-        Header = 'Online'
-        GroupID = 3
         State = [lgsNormal]
         HeaderAlign = taLeftJustify
         FooterAlign = taLeftJustify
         TitleImage = -1
       end>
     Items.ItemData = {
-      05500000000200000000000000FFFFFFFFFFFFFFFF00000000FFFFFFFF000000
-      0004630061007400330000000000FFFFFFFFFFFFFFFF00000000FFFFFFFF0000
-      00000A630061007400650067006F007200690061003100}
+      05C80000000400000000000000FFFFFFFFFFFFFFFF0000000000000000000000
+      0004630061007400330000000000FFFFFFFFFFFFFFFF01000000000000000000
+      0000046300610074003300057300750062003400340010F7331C00000000FFFF
+      FFFFFFFFFFFF00000000FFFFFFFF000000000A630061007400650067006F0072
+      0069006100310000000000FFFFFFFFFFFFFFFF01000000FFFFFFFF000000000A
+      630061007400650067006F0072006900610031000873006F00740074006F0063
+      002000310080F0331CFFFFFFFF}
     GroupView = True
-    ReadOnly = True
     RowSelect = True
     SortType = stText
-    TabOrder = 0
+    TabOrder = 1
     ViewStyle = vsReport
-    OnDblClick = _fLvAccountDblClick
-    ExplicitTop = -6
-    ExplicitHeight = 493
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 276
-    Width = 485
+    Top = 493
+    Width = 642
     Height = 19
     Panels = <>
   end
   object Panel3: TPanel
-    Left = 216
-    Top = 0
-    Width = 269
-    Height = 276
-    Align = alClient
-    BevelOuter = bvNone
-    TabOrder = 2
+    Left = 300
+    Top = 22
+    Width = 311
+    Height = 284
+    TabOrder = 3
     object Name: TLabel
-      Left = 10
+      Left = 24
       Top = 48
       Width = 27
       Height = 13
       Caption = 'Name'
     end
     object Label2: TLabel
-      Left = 6
-      Top = 103
+      Left = 24
+      Top = 86
       Width = 24
       Height = 13
       Caption = 'Type'
     end
     object _fName: TEdit
-      Left = 18
-      Top = 67
-      Width = 228
+      Left = 93
+      Top = 45
+      Width = 198
       Height = 21
-      BorderStyle = bsNone
       TabOrder = 0
     end
     object _fID: TEdit
-      Left = 176
+      Left = 226
       Top = 8
       Width = 65
       Height = 21
@@ -143,9 +122,9 @@ object AccountFrm: TAccountFrm
       TabOrder = 1
     end
     object _fType: TJvComboBox
-      Left = 18
-      Top = 122
-      Width = 178
+      Left = 93
+      Top = 83
+      Width = 138
       Height = 21
       AutoDropDown = True
       TabOrder = 2
@@ -157,8 +136,8 @@ object AccountFrm: TAccountFrm
         'Online')
     end
     object btnOK: TJvBitBtn
-      Left = 168
-      Top = 211
+      Left = 217
+      Top = 206
       Width = 75
       Height = 25
       Caption = '&Save'
@@ -166,8 +145,8 @@ object AccountFrm: TAccountFrm
       OnClick = btnOKClick
     end
     object JvBitBtn1: TJvBitBtn
-      Left = 18
-      Top = 165
+      Left = 217
+      Top = 127
       Width = 75
       Height = 25
       Caption = '&New'
@@ -176,8 +155,8 @@ object AccountFrm: TAccountFrm
       OnClick = JvBitBtn1Click
     end
     object JvBitBtn2: TJvBitBtn
-      Left = 18
-      Top = 196
+      Left = 217
+      Top = 167
       Width = 75
       Height = 25
       Caption = '&Delete'

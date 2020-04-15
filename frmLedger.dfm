@@ -128,9 +128,7 @@ object LedgerFrm: TLedgerFrm
       ParentFont = False
       PopupMenu = PopupMenu1
       TabOrder = 1
-      OnDblClick = grdLedgerDblClick
       OnDrawCell = grdLedgerDrawCell
-      OnKeyDown = grdLedgerKeyDown
     end
     object chTotals: TChart
       Left = 0

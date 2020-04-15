@@ -61,7 +61,7 @@ implementation
 
 
 uses
-  frmLedger, frmAccount, frmChartAnalisys;
+  frmLedger, frmAccount, frmChartAnalisys, frmPayee;
 
 { TForm1 }
 
@@ -367,6 +367,8 @@ begin
   vNodeGroup.ImageIndex := 4;
   vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Account');
   vNode.ImageIndex      := 14;
+  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Payee');
+  vNode.ImageIndex      := 15;
 
   treeMenu.FullExpand;
 end;
@@ -374,33 +376,34 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM._treeSelectOpen;
 var
-  _LedgerChildFRM: TLedgerFrm;
+  _LedgerChildFRM:  TLedgerFrm;
   _AccountChildFRM: TAccountFrm;
-  _AnalisysFRM: TAnalisysFrm;
-
+  _AnalisysFRM:     TAnalisysFrm;
+  _PayeeFRM:        TPayeeFRM;
 begin
   // apro la child form del ledger. se il nodo superiore è account si tratta sicuramente di un ledger da aprire
-  if ((treeMenu.Selected.Level <> 0)
-    and (UpperCase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
+  if ((treeMenu.Selected.Level <> 0)and (UpperCase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
     and not _chkOpenForm(treeMenu.Selected.Text) then
     _LedgerChildFRM := TLedgerFrm.Create(nil);
+
   // apro i report
-  if ((treeMenu.Selected.Level <> 0)
-    and (UpperCase(treeMenu.Selected.Parent.Text) = 'REPORT')) then
+  if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'REPORT')) then
     if treeMenu.Selected.Text = 'Balance YTD-Monthly' then
       _reportBalanceYTD;
 
-  // apro i chart
-  if ((treeMenu.Selected.Level <> 0)
-    and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART'))
+  // apro chart
+  if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART'))
     and not _chkOpenForm(treeMenu.Selected.Text) then
     _AnalisysFRM := TAnalisysFrm.Create(nil);
 
   // Config
-  if ((treeMenu.Selected.Level <> 0)
-    and (UpperCase(treeMenu.Selected.Parent.Text) = 'CONFIG'))
-    and not _chkOpenForm(treeMenu.Selected.Text) then
-    _AccountChildFRM := TAccountFrm.Create(nil);
+  if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CONFIG')) then
+  begin
+    if (treeMenu.Selected.Text = 'Account') and not _chkOpenForm(treeMenu.Selected.Text) then
+      _AccountChildFRM := TAccountFrm.Create(nil);
+    if (treeMenu.Selected.Text = 'Payee') and not _chkOpenForm(treeMenu.Selected.Text) then
+      _PayeeFRM := TPayeeFRM.Create(nil);
+  end;
 
 end;
 

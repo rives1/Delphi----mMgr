@@ -1,4 +1,4 @@
-unit frmAccount;
+unit frmCategory;
 
 interface
 
@@ -8,8 +8,9 @@ uses
   Vcl.ExtCtrls, Vcl.ComCtrls;
 
 type
-  TAccountFrm = class(TForm)
-    _fLvAccount: TListView;
+  TCategoryFrm = class(TForm)
+    _fSearch: TJvComboBox;
+    ListView1: TListView;
     StatusBar1: TStatusBar;
     Panel3: TPanel;
     _fName: TEdit;
@@ -20,36 +21,38 @@ type
     btnOK: TJvBitBtn;
     JvBitBtn1: TJvBitBtn;
     JvBitBtn2: TJvBitBtn;
-    Splitter1: TSplitter;
     procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
+    procedure _fSearchSelect(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
     procedure JvBitBtn1Click(Sender: TObject);
-    procedure _fLvAccountDblClick(Sender: TObject);
   private
     { Private declarations }
     // variabili
+    // _plEditType: string;  // properties to define if the new record
+    // _plEditID:   integer; // defines which is the ID of the record in case of record editing
     _SQLString: string; // container x query string
 
-    function _validateField: Boolean;
-    procedure _loadLvAccount;
+    function _validateField: boolean;
+    procedure _loadCmbSearch;
     procedure _loadRecord;
     procedure _recordSave;
     procedure _writeRecord;
     procedure _cleanFormNewRecord;
-    procedure _deleteAccount;
 
   public
     { Public declarations }
 
   published
+    // property _pEditType: string read _plEditType write _plEditType;
+    // property _pEditID:   integer read _plEditID write _plEditID;
 
   end;
 
 var
-  AccountFrm: TAccountFrm;
+  CategoryFrm: TCategoryFrm;
 
 implementation
 
@@ -60,27 +63,33 @@ uses
   frmMain, pasCommon;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm.btnOKClick(Sender: TObject);
+procedure TCategoryFrm.btnOKClick(Sender: TObject);
 begin
   _recordSave;
-  _fLvAccount.SetFocus;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm.FormActivate(Sender: TObject);
+procedure TCategoryFrm.FormActivate(Sender: TObject);
 begin
-  _fLvAccount.SetFocus;
+  // if (_pEditType = 'edit') and (_pEditID <> 0) then
+  // _loadRecord // carico i dati nella form
+  // else
+  // if (_pEditType = 'new') then // nuova transazione generica
+  // begin
+  _fName.SetFocus;
+  // end;
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TCategoryFrm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := caFree;
   Release;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TCategoryFrm.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   // gestione pressione tasti
   // ESC - chiudo la form
@@ -95,20 +104,19 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm.FormShow(Sender: TObject);
+procedure TCategoryFrm.FormShow(Sender: TObject);
 begin
-  _loadLvAccount;
+  _loadCmbSearch;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm.JvBitBtn1Click(Sender: TObject);
+procedure TCategoryFrm.JvBitBtn1Click(Sender: TObject);
 begin
-  _deleteAccount;
   _cleanFormNewRecord;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm._cleanFormNewRecord;
+procedure TCategoryFrm._cleanFormNewRecord;
 begin
   _fID.Text   := '';
   _fName.Text := '';
@@ -116,58 +124,38 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm._deleteAccount;
-begin
-  { TODO :
-    definire procedura cancellazione record
-    NB: effettuare check se ci sono record correlati nelle transazioni }
-end;
-
-// -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm._fLvAccountDblClick(Sender: TObject);
+procedure TCategoryFrm._fSearchSelect(Sender: TObject);
 begin
   _loadRecord;
-  _fName.SetFocus;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm._loadLvAccount;
-var
-  _lvItem: TListItem;
+procedure TCategoryFrm._loadCmbSearch;
 begin
   // carico i dati nella compo dei conti
-  _fLvAccount.Items.Clear;
-  _SQLString := 'SELECT * FROM DBACCOUNT';
+  _fSearch.Items.Clear;
+  _SQLString := 'SELECT ACCNAME FROM DBACCOUNT';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
     MainFRM.sqlQry.Open;
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
     begin
-      _lvItem         := _fLvAccount.Items.Add;
-      _lvItem.Caption := VarToStr(MainFRM.sqlQry.FieldValues['ACCNAME']);
-      if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Checking') then
-        _lvItem.GroupID := 0;
-      if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Cash') then
-        _lvItem.GroupID := 1;
-      if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'CreditCard') then
-        _lvItem.GroupID := 2;
-      if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Online') then
-        _lvItem.GroupID := 3;
-
+      _fSearch.Items.Add(MainFRM.sqlQry.FieldValues['ACCNAME']);
       MainFRM.sqlQry.Next;
     end;
   finally
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
   end;
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm._loadRecord;
+procedure TCategoryFrm._loadRecord;
 begin
   // dopo la selezione della
-  _SQLString := 'SELECT * FROM DBACCOUNT where ACCNAME = ''' + _fLvAccount.Selected.Caption + ''' ';
+  _SQLString := 'SELECT * FROM DBACCOUNT where ACCNAME = ''' + _fSearch.Text + ''' ';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
@@ -183,22 +171,21 @@ begin
   finally
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
-    _SQLString := '';
   end;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm._recordSave;
+procedure TCategoryFrm._recordSave;
 begin
   if _validateField then
   begin
     _writeRecord;
-    _loadLvAccount;
+    _loadCmbSearch;
   end;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-function TAccountFrm._validateField: Boolean;
+function TCategoryFrm._validateField: boolean;
 begin
   // verifica che i campi della mask siano compilati
   Result := True;
@@ -216,7 +203,7 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm._writeRecord;
+procedure TCategoryFrm._writeRecord;
 begin
   // salvo il record
   try

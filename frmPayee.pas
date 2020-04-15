@@ -1,55 +1,49 @@
-unit frmAccount;
+unit frmPayee;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, JvExButtons, JvBitBtn, JvExStdCtrls, JvCombobox,
-  Vcl.ExtCtrls, Vcl.ComCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.Grids, Vcl.StdCtrls, JvListBox, JvExStdCtrls,
+  JvComboListBox, Vcl.Buttons, JvExButtons, JvBitBtn;
 
 type
-  TAccountFrm = class(TForm)
-    _fLvAccount: TListView;
+  TPayeeFRM = class(TForm)
     StatusBar1: TStatusBar;
     Panel3: TPanel;
-    _fName: TEdit;
+    _flvPayee: TListView;
+    Splitter1: TSplitter;
     _fID: TEdit;
-    _fType: TJvComboBox;
+    _fName: TEdit;
     Name: TLabel;
-    Label2: TLabel;
-    btnOK: TJvBitBtn;
     JvBitBtn1: TJvBitBtn;
     JvBitBtn2: TJvBitBtn;
-    Splitter1: TSplitter;
+    btnOK: TJvBitBtn;
     procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
+    procedure _flvPayeeDblClick(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
-    procedure JvBitBtn1Click(Sender: TObject);
-    procedure _fLvAccountDblClick(Sender: TObject);
   private
     { Private declarations }
     // variabili
     _SQLString: string; // container x query string
 
     function _validateField: Boolean;
-    procedure _loadLvAccount;
+    procedure _loadLvPayee;
     procedure _loadRecord;
     procedure _recordSave;
     procedure _writeRecord;
     procedure _cleanFormNewRecord;
-    procedure _deleteAccount;
+    procedure _deletePayee;
 
   public
     { Public declarations }
-
-  published
-
   end;
 
 var
-  AccountFrm: TAccountFrm;
+  PayeeFRM: TPayeeFRM;
 
 implementation
 
@@ -59,28 +53,29 @@ implementation
 uses
   frmMain, pasCommon;
 
+{ TPayeeFRM }
+
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm.btnOKClick(Sender: TObject);
+procedure TPayeeFRM.btnOKClick(Sender: TObject);
 begin
   _recordSave;
-  _fLvAccount.SetFocus;
+  _flvPayee.SetFocus;
 end;
 
-// -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm.FormActivate(Sender: TObject);
+procedure TPayeeFRM.FormActivate(Sender: TObject);
 begin
-  _fLvAccount.SetFocus;
+  _flvPayee.SetFocus;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TPayeeFRM.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := caFree;
   Release;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TPayeeFRM.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   // gestione pressione tasti
   // ESC - chiudo la form
@@ -95,28 +90,21 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm.FormShow(Sender: TObject);
+procedure TPayeeFRM.FormShow(Sender: TObject);
 begin
-  _loadLvAccount;
+  _loadLvPayee;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm.JvBitBtn1Click(Sender: TObject);
-begin
-  _deleteAccount;
-  _cleanFormNewRecord;
-end;
-
-// -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm._cleanFormNewRecord;
+procedure TPayeeFRM._cleanFormNewRecord;
 begin
   _fID.Text   := '';
   _fName.Text := '';
-  _fType.Text := '';
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm._deleteAccount;
+procedure TPayeeFRM._deletePayee;
 begin
   { TODO :
     definire procedura cancellazione record
@@ -124,36 +112,28 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm._fLvAccountDblClick(Sender: TObject);
+procedure TPayeeFRM._flvPayeeDblClick(Sender: TObject);
 begin
   _loadRecord;
   _fName.SetFocus;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm._loadLvAccount;
+procedure TPayeeFRM._loadLvPayee;
 var
   _lvItem: TListItem;
 begin
   // carico i dati nella compo dei conti
-  _fLvAccount.Items.Clear;
-  _SQLString := 'SELECT * FROM DBACCOUNT';
+  _flvPayee.Items.Clear;
+  _SQLString := 'SELECT * FROM DBPAYEE WHERE UCASE(PAYNAME) <> ''_TRANSFER'' ';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
     MainFRM.sqlQry.Open;
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
     begin
-      _lvItem         := _fLvAccount.Items.Add;
-      _lvItem.Caption := VarToStr(MainFRM.sqlQry.FieldValues['ACCNAME']);
-      if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Checking') then
-        _lvItem.GroupID := 0;
-      if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Cash') then
-        _lvItem.GroupID := 1;
-      if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'CreditCard') then
-        _lvItem.GroupID := 2;
-      if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Online') then
-        _lvItem.GroupID := 3;
+      _lvItem         := _flvPayee.Items.Add;
+      _lvItem.Caption := VarToStr(MainFRM.sqlQry.FieldValues['PAYNAME']);
 
       MainFRM.sqlQry.Next;
     end;
@@ -161,49 +141,49 @@ begin
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
   end;
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm._loadRecord;
+procedure TPayeeFRM._loadRecord;
 begin
   // dopo la selezione della
-  _SQLString := 'SELECT * FROM DBACCOUNT where ACCNAME = ''' + _fLvAccount.Selected.Caption + ''' ';
+  _SQLString := 'SELECT * FROM DBPAYEE where PAYNAME = ''' + _flvPayee.Selected.Caption + ''' ';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
     MainFRM.sqlQry.Open;
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
     begin
-      _fID.Text   := MainFRM.sqlQry.FieldValues['ACCID'];
-      _fType.Text := MainFRM.sqlQry.FieldValues['ACCTYPE'];
-      _fName.Text := VarToStr(MainFRM.sqlQry.FieldValues['ACCNAME']);
+      _fID.Text   := MainFRM.sqlQry.FieldValues['PAYID'];
+      _fName.Text := VarToStr(MainFRM.sqlQry.FieldValues['PAYNAME']);
       MainFRM.sqlQry.Next;
     end;
 
   finally
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
-    _SQLString := '';
   end;
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm._recordSave;
+procedure TPayeeFRM._recordSave;
 begin
   if _validateField then
   begin
     _writeRecord;
-    _loadLvAccount;
+    _loadLvPayee;
   end;
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-function TAccountFrm._validateField: Boolean;
+function TPayeeFRM._validateField: Boolean;
 begin
   // verifica che i campi della mask siano compilati
   Result := True;
-  if (_fType.Text = '')
-    or (_fName.Text = '') then
+  if (_fName.Text = '') then
   begin
     MessageDlg('Data field incomplete!!', mtInformation, [mbOk], 0);
     Result := False;
@@ -213,23 +193,22 @@ begin
     if MessageDlg('Save Record?', mtConfirmation, [mbYes, mbNo], 0) = mrNo then
       Result := False;
   end;
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAccountFrm._writeRecord;
+procedure TPayeeFRM._writeRecord;
 begin
   // salvo il record
   try
     MainFRM.sqlite_conn.StartTransaction;
     if (_fID.Text = '') then
-      _SQLString := ' INSERT INTO DBACCOUNT (ACCTYPE, ACCNAME) '
-        + ' VALUES ( ''' + _fType.Text + ''' '
-        + ', ''' + _fName.Text + ''') '
+      _SQLString := ' INSERT INTO DBPAYEE (PAYNAME) '
+        + ' VALUES ( ''' + _fName.Text + ''') '
     else
-      _SQLString := 'UPDATE DBACCOUNT SET '
-        + '  ACCTYPE = ''' + _fType.Text + ''' '
-        + ', ACCNAME = ''' + _fName.Text + ''' '
-        + ' WHERE ACCID = ''' + _fID.Text + ''' ';
+      _SQLString := 'UPDATE DBPAYEE SET '
+        + ' PAYNAME = ''' + _fName.Text + ''' '
+        + ' WHERE PAYID = ''' + _fID.Text + ''' ';
 
     MainFRM.sqlQry.ExecSQL(_SQLString);
     MainFRM.sqlite_conn.Commit;
@@ -238,8 +217,8 @@ begin
     raise Exception.Create('Error in Saving. Operation Aborted');
     MainFRM.sqlite_conn.Rollback;
   end;
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-
 end.

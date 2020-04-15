@@ -139,10 +139,9 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TLedgerFrm.grdLedgerDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect;
-  State: TGridDrawState);
+procedure TLedgerFrm.grdLedgerDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
 var
-  dx: Integer;
+  dx:   Integer;
   Text: string;
 begin
 
@@ -152,7 +151,7 @@ begin
     if (ARow = 0) then
     begin
       Canvas.Brush.Color := clBtnFace;
-      Canvas.Font.Style := [fsBold];
+      Canvas.Font.Style  := [fsBold];
     end
     else
     begin
@@ -177,7 +176,7 @@ begin
       // bold per la prima linea delle caption
       FillRect(Rect);
       Text := grdLedger.cells[ACol, ARow];
-      dx := TextWidth(Text) + 2;
+      dx   := TextWidth(Text) + 2;
       TextOut(Rect.Right - dx, Rect.Top, Text);
     end;
 
@@ -242,7 +241,7 @@ end;
 procedure TLedgerFrm._openRecordForm(_pEditKind: string);
 var
   frmInsEdit: TInsEditFrm;
-  i: Integer; // var x storage del record attuale per poi recuperarlo
+  i:          Integer; // var x storage del record attuale per poi recuperarlo
 begin
   i := grdLedger.Row; // imposto la riga della grid attuale
   // creo la form e la nascondo per poter impostare le proprietà
@@ -257,8 +256,6 @@ begin
     frmInsEdit._pEditID := strToInt(grdLedger.cells[0, i]) // imposto l'ID del record da editare
   else
     frmInsEdit._pEditID := 0; // mando un generico valore da cariccare nella form utile x alcuni check
-
-  // if (_pEditKind = 'new') or (_pEditKind = 'newExp') or (_pEditKind = 'trxNew') then
 
   // passo il nome del ledger di riferimento del record
   frmInsEdit._pLedgerName := _pAccountName;
@@ -278,7 +275,7 @@ procedure TLedgerFrm._autoSizeCol(Grid: TStringGrid; Column: Integer);
 var
   i, W, WMax: Integer;
 begin
-  WMax := 0;
+  WMax  := 0;
   for i := 0 to (Grid.RowCount - 1) do
   begin
     W := Grid.Canvas.TextWidth(Grid.cells[Column, i]);
@@ -303,8 +300,8 @@ var
   i: Integer;
   J: Integer;
 begin
-  for i := 0 to grdLedger.ColCount - 1 do
-    for J := 1 to grdLedger.RowCount - 1 do
+  for i                     := 0 to grdLedger.ColCount - 1 do
+    for J                   := 1 to grdLedger.RowCount - 1 do
       grdLedger.cells[i, J] := '';
 end;
 
@@ -312,8 +309,8 @@ end;
 procedure TLedgerFrm._ChartTotals;
 var
   _lTotal: Double;
-  _YY: string; // riferimento anno per migliroare visualizzazione graph storico
-  i: Integer;
+  _YY:     string; // riferimento anno per migliroare visualizzazione graph storico
+  i:       Integer;
 begin
   // Chart totali IN/OUT
 
@@ -377,7 +374,7 @@ begin
   //
   chHistory.Series[0].Clear(); // pulisco il grafico
   _lTotal := 0;                // resetto il conteggio
-  i := 0;                      // azzero il counter delle colonne
+  i       := 0;                // azzero il counter delle colonne
   // query totalizzazione spese
   _SQLString := 'SELECT StrfTime(''%Y'', TRNDATE) || ''-'' || StrfTime(''%W'', TRNDATE) AS Period, ' +
     ' StrfTime(''%Y'', TRNDATE) AS YY,' +
@@ -408,7 +405,7 @@ begin
             chHistory.Axes.Bottom.Items.Add(i, MainFRM.sqlQry.FieldValues['YY']);
 
           _YY := MainFRM.sqlQry.FieldValues['YY'];
-          i := i + 1;
+          i   := i + 1;
         end;
         MainFRM.sqlQry.Next;
       end;
@@ -422,8 +419,8 @@ end;
 procedure TLedgerFrm._fillGrid();
 // riempiemnto della grid
 var
-  i: Integer;
-  runSum: Double;
+  i:             Integer;
+  runSum:        Double;
   _trxIndicator: string; // indica con i segni > o > se il trasferimento è in entrata o uscita
   // oppure lascio vuoto se non si tratta di un trasferimento
 begin
@@ -449,7 +446,7 @@ begin
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
     MainFRM.sqlQry.Open;
-    i := 1;
+    i      := 1;
     runSum := 0;
     if (MainFRM.sqlQry.RecordCount <> 0) then
       while not MainFRM.sqlQry.EOF do // ciclo recupero dati

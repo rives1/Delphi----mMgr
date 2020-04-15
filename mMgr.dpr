@@ -7,7 +7,8 @@ uses
   frmInsEdit in 'frmInsEdit.pas' {InsEditFrm},
   pasCommon in 'pasCommon.pas',
   frmAccount in 'frmAccount.pas' {AccountFrm},
-  frmChartAnalisys in 'frmChartAnalisys.pas' {AnalisysFrm};
+  frmChartAnalisys in 'frmChartAnalisys.pas' {AnalisysFrm},
+  frmPayee in 'frmPayee.pas' {PayeeFRM};
 
 {$R *.res}
 
