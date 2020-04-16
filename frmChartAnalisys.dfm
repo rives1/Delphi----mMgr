@@ -99,7 +99,7 @@ object AnalisysFrm: TAnalisysFrm
       end
       item
         Column = 1
-        Control = Chart5
+        Control = chartInOutMM
         Row = 1
       end>
     RowCollection = <
@@ -233,31 +233,50 @@ object AnalisysFrm: TAnalisysFrm
         Detail = {0000000000}
       end
     end
-    object Chart5: TChart
+    object chartInOutMM: TChart
       Left = 432
       Top = 235
       Width = 431
       Height = 234
       Title.Text.Strings = (
-        'TChart')
+        'In Out per Month')
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 3
-      ExplicitLeft = 268
-      ExplicitTop = 140
-      ExplicitWidth = 193
-      ExplicitHeight = 81
+      ExplicitLeft = 0
+      ExplicitTop = 240
+      ExplicitWidth = 267
+      ExplicitHeight = 140
       DefaultCanvas = 'TGDIPlusCanvas'
-      ColorPaletteIndex = 20
-      object Series4: TBarSeries
-        BarBrush.Gradient.EndColor = 9875024
-        ColorEachPoint = True
-        BarStyle = bsCilinder
-        Gradient.EndColor = 9875024
+      PrintMargins = (
+        15
+        24
+        15
+        24)
+      ColorPaletteIndex = 19
+      object BarSeries1: TBarSeries
+        BarBrush.Gradient.EndColor = 15054131
+        BarBrush.Gradient.Visible = True
+        Title = 'In'
+        BarStyle = bsRectGradient
+        Gradient.EndColor = 15054131
+        Gradient.Visible = True
+        Sides = 23
         XValues.Name = 'X'
         XValues.Order = loAscending
         YValues.Name = 'Bar'
         YValues.Order = loNone
+      end
+      object BarSeries2: TBarSeries
+        Title = 'Out'
+        XValues.Name = 'X'
+        XValues.Order = loAscending
+        YValues.Name = 'Bar'
+        YValues.Order = loNone
+        Data = {
+          00060000000000000000E66C403333333333146B409999999999536D40CCCCCC
+          CCCCCD7040CCCCCCCC4C127140FEFFFFFFFFE56C40}
+        Detail = {0000000000}
       end
     end
   end

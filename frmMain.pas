@@ -350,17 +350,17 @@ begin
     end; // try
   end;   // if
 
-  // area report
-  vNodeGroup            := treeMenu.Items.Add(nil, 'Report');
-  vNodeGroup.ImageIndex := 2;
-  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Balance YTD-Monthly');
-  vNode.ImageIndex      := 9;
-
   // area chart
   vNodeGroup            := treeMenu.Items.Add(nil, 'Chart');
   vNodeGroup.ImageIndex := 3;
   vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Analisys');
   vNode.ImageIndex      := 13;
+
+  // area report
+  vNodeGroup            := treeMenu.Items.Add(nil, 'Report');
+  vNodeGroup.ImageIndex := 2;
+  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Balance YTD-Monthly');
+  vNode.ImageIndex      := 9;
 
   // area Config
   vNodeGroup            := treeMenu.Items.Add(nil, 'Config');
@@ -395,6 +395,8 @@ begin
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART'))
     and not _chkOpenForm(treeMenu.Selected.Text) then
     _AnalisysFRM := TAnalisysFrm.Create(nil);
+    _AnalisysFRM.WindowState:=wsMaximized;
+
 
   // Config
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CONFIG')) then
