@@ -4,17 +4,18 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VclTee.TeeGDIPlus, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, VclTee.TeEngine,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VclTee.TeeGDIPlus, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls,
+  VclTee.TeEngine,
   VclTee.TeeProcs, VclTee.Chart, RzPanel, VclTee.Series;
 
 type
   TAnalisysFrm = class(TForm)
     RzGridPanel1: TRzGridPanel;
     StatusBar1: TStatusBar;
-    Chart1: TChart;
+    chartExpByCat: TChart;
     Panel1: TPanel;
     Chart2: TChart;
-    Chart4: TChart;
+    chartInOutYY: TChart;
     Chart5: TChart;
     _fdtFrom: TDateTimePicker;
     _fdtTo: TDateTimePicker;
@@ -24,6 +25,7 @@ type
     Series2: TLineSeries;
     Series1: TPieSeries;
     Series4: TBarSeries;
+    Series5: TBarSeries;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure _fdtFromChange(Sender: TObject);
@@ -34,6 +36,8 @@ type
 
     procedure _setDefaultDate;
     procedure _fillChart;
+    procedure _chartExpByCategories;
+    procedure _chartInOutYY;
 
   public
     { Public declarations }
@@ -65,26 +69,14 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAnalisysFrm._fdtFromChange(Sender: TObject);
-begin
-  _fillChart;
-end;
-
-// -------------------------------------------------------------------------------------------------------------//
-procedure TAnalisysFrm._fdtToChange(Sender: TObject);
-begin
-  _fillChart;
-end;
-
-// -------------------------------------------------------------------------------------------------------------//
-procedure TAnalisysFrm._fillChart;
+procedure TAnalisysFrm._chartExpByCategories;
 var
   _lTotal: Double;
 begin
   _lTotal := 0; // totale dei singoli record da imputare nel grafico
 
   // chart torta per totale spese categoria
-  Chart1.Series[0].Clear(); // pulisco il grafico
+  chartExpByCat.Series[0].Clear(); // pulisco il grafico
   _SQLString := 'Select CATDES, Sum(TRANSACTIONS.TRNAMOUNT) As Sum_TRNAMOUNT '
     + ' From TRANSACTIONS Inner Join '
     + ' DBCATEGORY On CATID = TRNCATEGORY '
@@ -107,7 +99,59 @@ begin
       if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
       begin
         _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
-        Chart1.SeriesList[0].Add(_lTotal, MainFRM.sqlQry.FieldValues['CATDES'] + ' - ' + FloatToStr(_lTotal));
+        chartExpByCat.SeriesList[0].Add(_lTotal, MainFRM.sqlQry.FieldValues['CATDES'] + ' - ' + FloatToStr(_lTotal));
+      end;
+      MainFRM.sqlQry.Next;
+    end;
+  finally
+    MainFRM.sqlQry.Close;
+    MainFRM.sqlQry.SQL.Clear;
+  end;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TAnalisysFrm._chartInOutYY;
+var
+  _lTotal: Double;
+begin
+  _lTotal := 0; // totale dei singoli record da imputare nel grafico
+
+  // chart torta per totale spese categoria
+  chartInOutYY.Series[0].Clear(); // pulisco il grafico
+  chartInOutYY.Series[1].Clear(); // pulisco il grafico
+
+  _SQLString := ' SELECT StrfTime(''%Y'', TRANSACTIONS.TRNDATE) As YY, '
+    + ' CATTYPE, '
+    + ' Sum(TRANSACTIONS.TRNAMOUNT) As Sum_TRNAMOUNT '
+    + ' From '
+    + ' TRANSACTIONS Left Join '
+    + ' DBCATEGORY On DBCATEGORY.CATID = TRANSACTIONS.TRNCATEGORY '
+    + ' Where CATDES <> ''_Transfer'' '
+    + ' And TRNDATE Between '''
+    + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
+    + ''' and '''
+    + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
+    + ''' Group By '
+    + ' StrfTime(''%Y'', TRANSACTIONS.TRNDATE), '
+    + ' CATTYPE '
+    + ' Order By '
+    + ' StrfTime(''%Y'', TRANSACTIONS.TRNDATE), '
+    + ' CATTYPE ';
+
+  MainFRM.sqlQry.SQL.Clear;
+  MainFRM.sqlQry.SQL.Add(_SQLString);
+  try
+    MainFRM.sqlQry.Open;
+    while not MainFRM.sqlQry.EOF do // ciclo recupero dati
+    begin
+      if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
+      begin
+        _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
+        //in base al tipo di spesa imputo su quale serie aggiungere il dato
+        if (UpperCase(MainFRM.sqlQry.FieldValues['CATTYPE']) = 'EXPENSE') then
+          chartInOutYY.SeriesList[0].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY'] + ' - ' + FloatToStr(_lTotal))
+        else
+          chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY'] + ' - ' + FloatToStr(_lTotal));
       end;
       MainFRM.sqlQry.Next;
     end;
@@ -119,11 +163,30 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
+procedure TAnalisysFrm._fdtFromChange(Sender: TObject);
+begin
+  _fillChart;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TAnalisysFrm._fdtToChange(Sender: TObject);
+begin
+  _fillChart;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TAnalisysFrm._fillChart;
+begin
+  _chartExpByCategories;
+  _chartInOutYY;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TAnalisysFrm._setDefaultDate;
 begin
   // imposto le date nella configurazionae YTD
   _fdtFrom.Date := EncodeDate(CurrentYear, 1, 1);
-  _fdtTo.Date   := Now();
+  _fdtTo.Date := Now();
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

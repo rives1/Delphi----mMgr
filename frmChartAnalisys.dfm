@@ -33,7 +33,7 @@ object AnalisysFrm: TAnalisysFrm
     ControlCollection = <
       item
         Column = 0
-        Control = Chart1
+        Control = chartExpByCat
         Row = 0
       end
       item
@@ -43,7 +43,7 @@ object AnalisysFrm: TAnalisysFrm
       end
       item
         Column = 0
-        Control = Chart4
+        Control = chartInOutYY
         Row = 1
       end
       item
@@ -59,7 +59,7 @@ object AnalisysFrm: TAnalisysFrm
         Value = 47.893239694308710000
       end>
     TabOrder = 0
-    object Chart1: TChart
+    object chartExpByCat: TChart
       Left = 2
       Top = 2
       Width = 431
@@ -126,7 +126,7 @@ object AnalisysFrm: TAnalisysFrm
         YValues.Order = loNone
       end
     end
-    object Chart4: TChart
+    object chartInOutYY: TChart
       Left = 2
       Top = 244
       Width = 431
@@ -137,15 +137,36 @@ object AnalisysFrm: TAnalisysFrm
       BevelOuter = bvNone
       TabOrder = 2
       DefaultCanvas = 'TGDIPlusCanvas'
+      PrintMargins = (
+        15
+        24
+        15
+        24)
       ColorPaletteIndex = 19
       object Series3: TBarSeries
-        BarBrush.Gradient.EndColor = 13408512
+        BarBrush.Gradient.EndColor = 39270
         BarBrush.Gradient.Visible = True
         ColorEachPoint = True
+        Title = 'In'
         BarStyle = bsRectGradient
-        Gradient.EndColor = 13408512
+        Gradient.EndColor = 39270
         Gradient.Visible = True
         Sides = 23
+        XValues.Name = 'X'
+        XValues.Order = loAscending
+        YValues.Name = 'Bar'
+        YValues.Order = loNone
+        Data = {
+          04080000000000000000006140FF04000000436172730000000000988440FF06
+          00000050686F6E65730000000000E08A40FF060000005461626C657300000000
+          00E08940FF080000004D6F6E69746F72730000000000608E40FF050000004C61
+          6D70730000000000508840FF090000004B6579626F617264730000000000E077
+          40FF0500000042696B65730000000000407240FF06000000436861697273}
+        Detail = {0000000000}
+      end
+      object Series5: TBarSeries
+        DataSource = Series1
+        Title = 'Out'
         XValues.Name = 'X'
         XValues.Order = loAscending
         YValues.Name = 'Bar'
