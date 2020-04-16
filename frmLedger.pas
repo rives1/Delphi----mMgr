@@ -30,7 +30,6 @@ type
     Transfer1: TMenuItem;
     InsertExpense1: TMenuItem;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure grdLedgerKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Edit1Click(Sender: TObject);
@@ -42,6 +41,7 @@ type
     procedure InsertDepositClick(Sender: TObject);
     procedure Transfer1Click(Sender: TObject);
     procedure InsertExpense1Click(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 
   private
     { Private declarations }
@@ -124,6 +124,45 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+var
+  _action: string; // tipologia dell'intervento da eseguire
+begin
+  /// gestione pressione tasti
+  /// INS   - aggiunge nuovo record
+  /// +     - aggiungo un nuovo record di spesa e continua con l'inserimento in serie
+  /// ENTER - edita il record corrente
+  /// ESC   - chiudo la form
+  /// *    - Trasferimento
+
+  _action := '';
+
+  case Key of
+    13:                  // ENTER
+      _action := 'edit'; // editing del record
+    27:                  // ESC
+      Self.Close;        // chiudo la form
+    45:                  // INS
+      _action := 'new';  // apro la form in inserimento
+    46:                  // DEL - elimino record direttamente dalla form del registro
+      _deleteRecord(grdLedger.cells[0, grdLedger.Row],
+        grdLedger.Row,
+        grdLedger.cells[1, grdLedger.Row]);
+    106:                   // *
+      _action := 'newTrx'; // trasferimento fra conti
+    107:                   // +
+      _action := 'newDep'; // apro la form in inserimento
+    109:                   // -
+      _action := 'newExp'; // apro la form in inserimento
+
+  end;
+  if _action <> '' then
+    _openRecordForm(_action);
+
+
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.FormShow(Sender: TObject);
 begin
   // riempio la grid
@@ -183,43 +222,6 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TLedgerFrm.grdLedgerKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-var
-  _action: string; // tipologia dell'intervento da eseguire
-begin
-  /// gestione pressione tasti
-  /// INS   - aggiunge nuovo record
-  /// +     - aggiungo un nuovo record di spesa e continua con l'inserimento in serie
-  /// ENTER - edita il record corrente
-  /// ESC   - chiudo la form
-  /// *    - Trasferimento
-
-  _action := '';
-
-  case Key of
-    13:                  // ENTER
-      _action := 'edit'; // editing del record
-    27:                  // ESC
-      Self.Close;        // chiudo la form
-    45:                  // INS
-      _action := 'new';  // apro la form in inserimento
-    46:                  // DEL - elimino record direttamente dalla form del registro
-      _deleteRecord(grdLedger.cells[0, grdLedger.Row],
-        grdLedger.Row,
-        grdLedger.cells[1, grdLedger.Row]);
-    106:                   // *
-      _action := 'newTrx'; // trasferimento fra conti
-    107:                   // +
-      _action := 'newDep'; // apro la form in inserimento
-    109:                   // -
-      _action := 'newExp'; // apro la form in inserimento
-
-  end;
-  if _action <> '' then
-    _openRecordForm(_action);
-
-end;
-
 procedure TLedgerFrm.InsertDepositClick(Sender: TObject);
 begin
   _openRecordForm('newDep');

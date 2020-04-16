@@ -17,6 +17,7 @@ object LedgerFrm: TLedgerFrm
   OnActivate = FormActivate
   OnClose = FormClose
   OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13

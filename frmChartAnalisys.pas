@@ -10,22 +10,22 @@ uses
 
 type
   TAnalisysFrm = class(TForm)
-    RzGridPanel1: TRzGridPanel;
     StatusBar1: TStatusBar;
-    chartExpByCat: TChart;
     Panel1: TPanel;
-    Chart2: TChart;
-    chartInOutYY: TChart;
-    Chart5: TChart;
     _fdtFrom: TDateTimePicker;
     _fdtTo: TDateTimePicker;
     Label1: TLabel;
     Label2: TLabel;
-    Series3: TBarSeries;
-    Series2: TLineSeries;
+    GridPanel1: TGridPanel;
+    chartExpByCat: TChart;
     Series1: TPieSeries;
-    Series4: TBarSeries;
+    Chart2: TChart;
+    Series2: TLineSeries;
+    chartInOutYY: TChart;
+    Series3: TBarSeries;
     Series5: TBarSeries;
+    Chart5: TChart;
+    Series4: TBarSeries;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure _fdtFromChange(Sender: TObject);
@@ -112,7 +112,9 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TAnalisysFrm._chartInOutYY;
 var
-  _lTotal: Double;
+  _lTotal: Double;  // calcolo totale da imputare nella serie
+  i:       integer; // ciclo per asse x elementi da inserire
+  _YY:     integer; // anno da valutare per inserimento
 begin
   _lTotal := 0; // totale dei singoli record da imputare nel grafico
 
@@ -120,8 +122,7 @@ begin
   chartInOutYY.Series[0].Clear(); // pulisco il grafico
   chartInOutYY.Series[1].Clear(); // pulisco il grafico
 
-  _SQLString := ' SELECT StrfTime(''%Y'', TRANSACTIONS.TRNDATE) As YY, '
-    + ' CATTYPE, '
+  _SQLString := ' SELECT StrfTime(''%Y'', TRANSACTIONS.TRNDATE) As YY, CATTYPE, '
     + ' Sum(TRANSACTIONS.TRNAMOUNT) As Sum_TRNAMOUNT '
     + ' From '
     + ' TRANSACTIONS Left Join '
@@ -132,27 +133,42 @@ begin
     + ''' and '''
     + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
     + ''' Group By '
-    + ' StrfTime(''%Y'', TRANSACTIONS.TRNDATE), '
-    + ' CATTYPE '
+    + ' StrfTime(''%Y'', TRANSACTIONS.TRNDATE), CATTYPE '
     + ' Order By '
-    + ' StrfTime(''%Y'', TRANSACTIONS.TRNDATE), '
-    + ' CATTYPE ';
+    + ' StrfTime(''%Y'', TRANSACTIONS.TRNDATE), CATTYPE ';
 
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
+  chartInOutYY.Axes.Bottom.Items.Clear;
+  // inizializzo var
+  i   := 0;
+  _YY := 0;
+  // eseguo ciclo sui dati
   try
     MainFRM.sqlQry.Open;
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
     begin
       if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
       begin
+        // impostazione descrizione asse X
+        if (_YY <> MainFRM.sqlQry.FieldValues['YY']) then
+        begin
+          chartInOutYY.Axes.Bottom.Items.Add(i, MainFRM.sqlQry.FieldValues['YY']);
+          _YY:=MainFRM.sqlQry.FieldValues['YY'];
+          i := i + 1;
+        end;
+
+        //inserimento dati nelle due serie in base alla tipologia della categoria
         _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
-        //in base al tipo di spesa imputo su quale serie aggiungere il dato
+        // in base al tipo di spesa imputo su quale serie aggiungere il dato
         if (UpperCase(MainFRM.sqlQry.FieldValues['CATTYPE']) = 'EXPENSE') then
-          chartInOutYY.SeriesList[0].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY'] + ' - ' + FloatToStr(_lTotal))
+          chartInOutYY.SeriesList[0].Add(_lTotal)
         else
-          chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY'] + ' - ' + FloatToStr(_lTotal));
+          // chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY']);
+          chartInOutYY.SeriesList[1].Add(_lTotal);
+
       end;
+
       MainFRM.sqlQry.Next;
     end;
   finally
@@ -185,8 +201,9 @@ end;
 procedure TAnalisysFrm._setDefaultDate;
 begin
   // imposto le date nella configurazionae YTD
-  _fdtFrom.Date := EncodeDate(CurrentYear, 1, 1);
-  _fdtTo.Date := Now();
+   _fdtFrom.Date := EncodeDate(CurrentYear, 1, 1);
+//  _fdtFrom.Date := EncodeDate(2017, 1, 1);
+  _fdtTo.Date   := Now();
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

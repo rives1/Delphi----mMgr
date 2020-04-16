@@ -4,7 +4,7 @@ object MainFRM: TMainFRM
   ActiveControl = chartBalance
   Caption = 'mMgr'
   ClientHeight = 632
-  ClientWidth = 1061
+  ClientWidth = 1105
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -106,9 +106,10 @@ object MainFRM: TMainFRM
   object StatusBar1: TStatusBar
     Left = 0
     Top = 608
-    Width = 1061
+    Width = 1105
     Height = 24
     Panels = <>
+    ExplicitWidth = 1061
   end
   object MainMenu1: TMainMenu
     Left = 244
