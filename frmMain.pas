@@ -99,7 +99,8 @@ begin
     begin
       MDIChildren[i].Show;
       MDIChildren[i].SetFocus;
-      Result := true;
+      MDIChildren[i].WindowState := wsMaximized;
+      Result                     := true;
     end;
   end;
 end;
@@ -382,9 +383,11 @@ var
   _PayeeFRM:        TPayeeFRM;
 begin
   // apro la child form del ledger. se il nodo superiore è account si tratta sicuramente di un ledger da aprire
-  if ((treeMenu.Selected.Level <> 0)and (UpperCase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
+  if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
     and not _chkOpenForm(treeMenu.Selected.Text) then
+  begin
     _LedgerChildFRM := TLedgerFrm.Create(nil);
+  end;
 
   // apro i report
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'REPORT')) then
@@ -394,9 +397,10 @@ begin
   // apro chart
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART'))
     and not _chkOpenForm(treeMenu.Selected.Text) then
-    _AnalisysFRM := TAnalisysFrm.Create(nil);
-    _AnalisysFRM.WindowState:=wsMaximized;
-
+  begin
+    _AnalisysFRM             := TAnalisysFrm.Create(nil);
+    _AnalisysFRM.WindowState := wsMaximized;
+  end;
 
   // Config
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CONFIG')) then

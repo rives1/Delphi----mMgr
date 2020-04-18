@@ -109,7 +109,6 @@ object MainFRM: TMainFRM
     Width = 1105
     Height = 24
     Panels = <>
-    ExplicitWidth = 1061
   end
   object MainMenu1: TMainMenu
     Left = 244
