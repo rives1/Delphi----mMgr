@@ -149,10 +149,16 @@ object LedgerFrm: TLedgerFrm
       BevelOuter = bvNone
       TabOrder = 0
       DefaultCanvas = 'TGDIPlusCanvas'
+      PrintMargins = (
+        15
+        29
+        15
+        29)
       ColorPaletteIndex = 13
       object Series1: TPieSeries
         Marks.Visible = False
         Title = 'Totals'
+        ValueFormat = '#,##0;(#,##0)'
         XValues.Order = loAscending
         YValues.Name = 'Pie'
         YValues.Order = loNone
@@ -202,6 +208,7 @@ object LedgerFrm: TLedgerFrm
         Marks.Visible = True
         Marks.Callout.Length = 20
         Title = 'Historical Value'
+        ValueFormat = '#,##0;(#,##0)'
         AreaChartBrush.Color = clGray
         AreaChartBrush.BackColor = clDefault
         AreaLinesPen.Visible = False

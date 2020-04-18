@@ -63,7 +63,6 @@ type
     { Public declarations }
     procedure _fillGrid;
 
-
   end;
 
 var
@@ -72,6 +71,7 @@ var
 implementation
 
 {$R *.dfm}
+
 
 uses
   frmMain, frmInsEdit;
@@ -151,7 +151,6 @@ begin
   end;
   if _action <> '' then
     _openRecordForm(_action);
-
 
 end;
 
@@ -239,24 +238,19 @@ var
   i:          Integer; // var x storage del record attuale per poi recuperarlo
 begin
   i := grdLedger.Row; // imposto la riga della grid attuale
+
   // creo la form e la nascondo per poter impostare le proprietà
   frmInsEdit := TInsEditFrm.Create(Self);
   frmInsEdit.Hide;
 
-  // imposto il tipo di editing nella proprietà della form editing
-  frmInsEdit._pEditType := _pEditKind;
-
-  // passo la tipologia dell'azione da eseguire sulla form editing
-  if _pEditKind = 'edit' then
+  frmInsEdit._pEditType := _pEditKind; // imposto il tipo di editing nella proprietà della form editing
+  if _pEditKind = 'edit' then          // passo la tipologia dell'azione da eseguire sulla form editing
     frmInsEdit._pEditID := strToInt(grdLedger.cells[0, i]) // imposto l'ID del record da editare
   else
-    frmInsEdit._pEditID := 0; // mando un generico valore da cariccare nella form utile x alcuni check
+    frmInsEdit._pEditID := 0; // mando un generico valore da caricare nella form utile x alcuni check
 
-  // passo il nome del ledger di riferimento del record
-  frmInsEdit._pLedgerName := _pAccountName;
-
-  // nostro la form modale
-  frmInsEdit.ShowModal;
+  frmInsEdit._pLedgerName := _pAccountName; // passo il nome del ledger di riferimento del record
+  frmInsEdit.ShowModal;                     // nostro la form modale
 
   // aggiorno i datidella grid
   _fillGrid;
@@ -317,6 +311,7 @@ begin
     ' FROM LedgerView ' +
     ' WHERE ' +
     ' TRNAMOUNT > 0 ' +
+    ' AND UCASE(TRNTYPE) <>  ''TRANSFER'' ' +
     ' AND ACCNAME = ''' + _pAccountName + ''' ' +
     ' ORDER BY ACCNAME';
 
@@ -328,7 +323,8 @@ begin
     begin
       if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
       begin
-        _lTotal := StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']);
+        _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
+//        StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']);
         chTotals.SeriesList[0].Add(_lTotal, 'Deposit');
       end;
       MainFRM.sqlQry.Next;
@@ -343,6 +339,7 @@ begin
     ' FROM LedgerView ' +
     ' WHERE ' +
     ' TRNAMOUNT < 0 ' +
+    ' AND UCASE(TRNTYPE) <>  ''TRANSFER'' ' +
     ' AND ACCNAME = ''' + _pAccountName + ''' ';
 
   MainFRM.sqlQry.SQL.Clear;
@@ -363,6 +360,60 @@ begin
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
   end;
+
+  // query totalizzazione spese
+  _SQLString := 'SELECT Sum(TRNAMOUNT) AS Sum_TRNAMOUNT ' +
+    ' FROM LedgerView ' +
+    ' WHERE ' +
+    ' TRNAMOUNT < 0 ' +
+    ' AND UCASE(TRNTYPE) = ''TRANSFER'' ' +
+    ' AND ACCNAME = ''' + _pAccountName + ''' ';
+
+  MainFRM.sqlQry.SQL.Clear;
+  MainFRM.sqlQry.SQL.Add(_SQLString);
+  try
+    MainFRM.sqlQry.Open;
+    while not MainFRM.sqlQry.EOF do // ciclo recupero dati
+    begin
+      if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
+      begin
+        _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
+        chTotals.SeriesList[0].Add(_lTotal, 'Trx Out');
+      end;
+      MainFRM.sqlQry.Next;
+    end;
+  finally
+    MainFRM.sqlQry.Close;
+    MainFRM.sqlQry.SQL.Clear;
+  end;
+
+  // query totalizzazione spese
+  _SQLString := 'SELECT Sum(TRNAMOUNT) AS Sum_TRNAMOUNT ' +
+    ' FROM LedgerView ' +
+    ' WHERE ' +
+    ' TRNAMOUNT > 0 ' +
+    ' AND UCASE(TRNTYPE) = ''TRANSFER'' ' +
+    ' AND ACCNAME = ''' + _pAccountName + ''' ';
+
+  MainFRM.sqlQry.SQL.Clear;
+  MainFRM.sqlQry.SQL.Add(_SQLString);
+  try
+    MainFRM.sqlQry.Open;
+    while not MainFRM.sqlQry.EOF do // ciclo recupero dati
+    begin
+      if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
+      begin
+        _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
+        chTotals.SeriesList[0].Add(_lTotal, 'Trx In');
+      end;
+      MainFRM.sqlQry.Next;
+    end;
+  finally
+    MainFRM.sqlQry.Close;
+    MainFRM.sqlQry.SQL.Clear;
+  end;
+
+
 
   //
   // Chart Storico
@@ -391,7 +442,6 @@ begin
         if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
         begin
           _lTotal := _lTotal + (MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']);
-          // FormatFloat('#,##0 K', StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']/1000));
           chHistory.Series[0].Add(_lTotal);
           // inserisco l'anno solo nella settimana iniziale
           if (_YY = MainFRM.sqlQry.FieldValues['YY']) then
@@ -459,18 +509,15 @@ begin
         if (MainFRM.sqlQry.FieldValues['TRNAMOUNT'] > 0) then
         begin
           grdLedger.cells[5, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
-          // _trxIndicator         := '>Transfer';
           _trxIndicator := '->';
         end
         else
         begin
           grdLedger.cells[6, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT'] * -1);
-          // _trxIndicator         := '<Transfer';
           _trxIndicator := '<-';
         end;
 
         runSum := runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];
-
         grdLedger.cells[7, i] := FormatFloat('#,##0.00', runSum);
         grdLedger.cells[8, i] := MainFRM.sqlQry.FieldValues['TRNDESCRIPTION'];
 
@@ -513,8 +560,10 @@ begin
   // autosize columns
   _autoSizeGrid;
 
-  //posiziorsi sull'ultimo record
-  grdLedger.Row:=grdLedger.RowCount-1;
+  // posiziorsi sull'ultimo record
+  grdLedger.Row := grdLedger.RowCount - 1;
+
+  MainFRM._fillBalanceChart;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

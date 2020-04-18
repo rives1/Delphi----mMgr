@@ -31,9 +31,9 @@ object MainFRM: TMainFRM
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Top = 407
+      Top = 375
       Width = 201
-      Height = 201
+      Height = 233
       Align = alBottom
       BevelOuter = bvNone
       Caption = 'Panel2'
@@ -44,10 +44,12 @@ object MainFRM: TMainFRM
         Left = 0
         Top = 0
         Width = 201
-        Height = 201
+        Height = 233
         Title.Text.Strings = (
           'TChart')
         Title.Visible = False
+        BottomAxis.LabelsAlternate = True
+        BottomAxis.LabelsMultiLine = True
         Chart3DPercent = 1
         Panning.MouseWheel = pmwNone
         View3D = False
@@ -65,8 +67,9 @@ object MainFRM: TMainFRM
         object Series1: TBarSeries
           Legend.Visible = False
           ColorEachPoint = True
-          Marks.Transparent = True
+          Marks.Frame.Visible = False
           ShowInLegend = False
+          ValueFormat = '#,##0;(#,##0)'
           BarStyle = bsRoundRectangle
           MultiBar = mbNone
           XValues.Name = 'X'
@@ -84,7 +87,7 @@ object MainFRM: TMainFRM
       Left = 0
       Top = 0
       Width = 201
-      Height = 407
+      Height = 375
       Align = alClient
       BorderStyle = bsNone
       Color = clBtnFace

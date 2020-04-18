@@ -5,8 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VclTee.TeeGDIPlus, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls,
-  VclTee.TeEngine,
-  VclTee.TeeProcs, VclTee.Chart, RzPanel, VclTee.Series;
+  VclTee.TeEngine, VclTee.TeeProcs, VclTee.Chart, RzPanel, VclTee.Series, FireDAC.Comp.Client, Data.DB;
 
 type
   TAnalisysFrm = class(TForm)
@@ -111,29 +110,124 @@ begin
   end;
 end;
 
+{
+  procedure TAnalisysFrm._chartExpByCategories;
+  var
+  //  _lTotal: Double;
+  _i:         integer;     // ciclo for
+  _tempTable: TFDMemTable; // tabella appogio per report
+
+  begin
+  //  _lTotal := 0; // totale dei singoli record da imputare nel grafico
+  // pulisco il grafico
+  chartInOutMM.Series[0].Clear();
+  chartInOutMM.Series[1].Clear();
+  // inizializzo la struttura della tabella
+  _tempTable := TFDMemTable.Create(nil);
+  _tempTable.FieldDefs.Add('fPeriod', ftInteger);
+  _tempTable.FieldDefs.Add('fType', ftString, 10);
+  _tempTable.FieldDefs.Add('fValue', ftFloat);
+  _tempTable.CreateDataSet;
+  _tempTable.Open;
+  // impostazione valori default della tabella
+  for _i := 1 to 12 do
+  begin
+  _tempTable.Append;
+  _tempTable.FieldByName('fPeriod').AsInteger := _i;
+  _tempTable.FieldByName('fType').AsString    := 'EXPENSE';
+  _tempTable.FieldByName('fValue').AsFloat    := 0;
+  _tempTable.Post;
+  _tempTable.Append;
+  _tempTable.FieldByName('fPeriod').AsInteger := _i;
+  _tempTable.FieldByName('fType').AsString    := 'INCOME';
+  _tempTable.FieldByName('fValue').AsFloat    := 0;
+  _tempTable.Post;
+  end;
+
+  _SQLString := ' SELECT StrfTime(''%m'', TRANSACTIONS.TRNDATE) As MM, CATTYPE, '
+  + ' Sum(TRANSACTIONS.TRNAMOUNT) As Sum_TRNAMOUNT '
+  + ' From '
+  + ' TRANSACTIONS Left Join '
+  + ' DBCATEGORY On DBCATEGORY.CATID = TRANSACTIONS.TRNCATEGORY '
+  + ' Where CATDES <> ''_Transfer'' '
+  + ' And TRNDATE Between '''
+  + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
+  + ''' and '''
+  + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
+  + ''' Group By '
+  + ' StrfTime(''%m'', TRANSACTIONS.TRNDATE), CATTYPE '
+  + ' Order By '
+  + ' StrfTime(''%m'', TRANSACTIONS.TRNDATE), CATTYPE ';
+
+  MainFRM.sqlQry.SQL.Clear;
+  MainFRM.sqlQry.SQL.Add(_SQLString);
+
+  // chart torta per totale spese categoria
+  chartExpByCat.Series[0].Clear(); // pulisco il grafico
+  _SQLString := 'Select CATDES, Sum(TRANSACTIONS.TRNAMOUNT) As Sum_TRNAMOUNT '
+  + ' From TRANSACTIONS Inner Join '
+  + ' DBCATEGORY On CATID = TRNCATEGORY '
+  + ' Where '
+  + ' CATDES <> ''_Transfer'' And '
+  + ' CATTYPE = ''Expense'' And'
+  + ' TRNDATE Between '''
+  + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
+  + ''' and '''
+  + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
+  + ''' Group By CATDES '
+  + ' Order By Sum_TRNAMOUNT Desc';
+
+  MainFRM.sqlQry.SQL.Clear;
+  MainFRM.sqlQry.SQL.Add(_SQLString);
+  try
+  MainFRM.sqlQry.Open;
+  while not MainFRM.sqlQry.EOF do // ciclo recupero dati
+  begin
+  if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
+  begin
+  _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
+  chartExpByCat.SeriesList[0].Add(_lTotal, MainFRM.sqlQry.FieldValues['CATDES'] + ' - ' + FloatToStr(_lTotal));
+  end;
+  MainFRM.sqlQry.Next;
+  end;
+  finally
+  MainFRM.sqlQry.Close;
+  MainFRM.sqlQry.SQL.Clear;
+  end;
+  end; }
 // -------------------------------------------------------------------------------------------------------------//
 procedure TAnalisysFrm._chartInOutMM;
-type
-  TTable = record // gestione della tabella per lo storage dei record del periodo
-    fPeriod: integer;
-    fType: string[4];
-    fValue: Double;
-  end;
 var
-  _lTotal:   Double;                    // calcolo totale da imputare nella serie
-  _i:        integer;                   // ciclo per asse x elementi da inserire
-  _MM:       integer;                   // anno da valutare per inserimento
-  _recTable: array [1 .. 24] of TTable;
-  _1: Integer; // 24 record per i 12 mesi
+  _lTotal:    Double;      // calcolo totale da imputare nella serie
+  _i:         integer;     // ciclo for
+  _tempTable: TFDMemTable; // tabella appogio per report
 begin
   _lTotal := 0; // totale dei singoli record da imputare nel grafico
 
-  // chart torta per totale spese categoria
-  chartInOutMM.Series[0].Clear(); // pulisco il grafico
-  chartInOutMM.Series[1].Clear(); // pulisco il grafico
-  //inizializzo il record
-  for _1 := 1 to 24 do
-
+  // pulisco il grafico
+  chartInOutMM.Series[0].Clear();
+  chartInOutMM.Series[1].Clear();
+  // inizializzo la struttura della tabella
+  _tempTable := TFDMemTable.Create(nil);
+  _tempTable.FieldDefs.Add('fPeriod', ftInteger);
+  _tempTable.FieldDefs.Add('fType', ftString, 10);
+  _tempTable.FieldDefs.Add('fValue', ftFloat);
+  _tempTable.CreateDataSet;
+  _tempTable.Open;
+  // impostazione valori default della tabella
+  for _i := 1 to 12 do
+  begin
+    _tempTable.Append;
+    _tempTable.FieldByName('fPeriod').AsInteger := _i;
+    _tempTable.FieldByName('fType').AsString    := 'EXPENSE';
+    _tempTable.FieldByName('fValue').AsFloat    := 0;
+    _tempTable.Post;
+    _tempTable.Append;
+    _tempTable.FieldByName('fPeriod').AsInteger := _i;
+    _tempTable.FieldByName('fType').AsString    := 'INCOME';
+    _tempTable.FieldByName('fValue').AsFloat    := 0;
+    _tempTable.Post;
+  end;
 
   _SQLString := ' SELECT StrfTime(''%m'', TRANSACTIONS.TRNDATE) As MM, CATTYPE, '
     + ' Sum(TRANSACTIONS.TRNAMOUNT) As Sum_TRNAMOUNT '
@@ -153,61 +247,59 @@ begin
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   chartInOutMM.Axes.Bottom.Items.Clear;
-  // inizializzo var
-  _i  := 0;
-  _MM := 0;
+
+  // _MM := 0;
   // eseguo ciclo sui dati
   try
     MainFRM.sqlQry.Open;
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
     begin
-      if (UpperCase(MainFRM.sqlQry.FieldValues['CATTYPE']) = 'EXPENSE') then
-        chartInOutMM.SeriesList[0].Add(_lTotal)
-      else
-        // chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY']);
-        chartInOutMM.SeriesList[1].Add(_lTotal);
+      // cerco nella tabella il record del periodo e del tipo di movimento
+      _tempTable.First;
+      while not _tempTable.EOF do
+      begin
+        if (StrToInt(MainFRM.sqlQry.FieldValues['MM']) = _tempTable.FieldByName('fPeriod').AsInteger)
+          and (UpperCase(MainFRM.sqlQry.FieldValues['CATTYPE']) = _tempTable.FieldByName('fType').AsString) then
+        begin
+          _tempTable.Edit;
+          _tempTable.FieldByName('fValue').AsFloat := MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'];
+          _tempTable.Post
+        end;
+        _tempTable.Next;
+      end;
       MainFRM.sqlQry.Next;
+    end;
 
-    end
-{  else
-  begin
-    chartInOutMM.SeriesList[0].Add(0);
+    // ciclo di riempimento del chart
+    _tempTable.First;
+    while not _tempTable.EOF do
+    begin
+      _lTotal := Abs(_tempTable.FieldByName('fValue').AsFloat);
+      if UpperCase(_tempTable.FieldByName('fType').AsString) = 'EXPENSE' then
+        if _lTotal = 0 then
+          chartInOutMM.SeriesList[0].AddNull(0)
+        else
+          chartInOutMM.SeriesList[0].Add(_lTotal)
+      else
+      begin
+        if _lTotal = 0 then
+          chartInOutMM.SeriesList[1].AddNull(0)
+        else
+          chartInOutMM.SeriesList[1].Add(_lTotal)
+      end;
+      // etichetta dell'asse x
+      chartInOutMM.Axes.Bottom.Items.Add(_tempTable.FieldByName('fPeriod').AsInteger-1,
+        _tempTable.FieldByName('fPeriod').AsString);
 
+      _tempTable.Next; // next record
+    end;
+
+  finally
+    MainFRM.sqlQry.Close;
+    MainFRM.sqlQry.SQL.Clear;
   end;
 
-  {
-    begin
-    if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
-    begin
-    // impostazione descrizione asse X
-    if (_MM <> MainFRM.sqlQry.FieldValues['MM']) then
-    begin
-    chartInOutMM.Axes.Bottom.Items.Add(_i, MainFRM.sqlQry.FieldValues['MM']);
-    _MM := MainFRM.sqlQry.FieldValues['MM'];
-    _i  := _i + 1;
-    end;
-
-    // chartInOutYY.SeriesList[0].AddNull(0);
-
-    // inserimento dati nelle due serie in base alla tipologia della categoria
-    _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
-    // in base al tipo di spesa imputo su quale serie aggiungere il dato
-    if (UpperCase(MainFRM.sqlQry.FieldValues['CATTYPE']) = 'EXPENSE') then
-    chartInOutMM.SeriesList[0].Add(_lTotal)
-    else
-    // chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY']);
-    chartInOutMM.SeriesList[1].Add(_lTotal);
-
-    end;
-
-    MainFRM.sqlQry.Next;
-    end;
-  }
-
-finally
-  MainFRM.sqlQry.Close;
-  MainFRM.sqlQry.SQL.Clear;
-end;
+  _tempTable.Close;
 
 end;
 
@@ -218,7 +310,7 @@ var
   _i:      integer; // ciclo per asse x elementi da inserire
   _YY:     integer; // anno da valutare per inserimento
 begin
-  _lTotal := 0; // totale dei singoli record da imputare nel grafico
+  // _lTotal := 0; // totale dei singoli record da imputare nel grafico
 
   // chart torta per totale spese categoria
   chartInOutYY.Series[0].Clear(); // pulisco il grafico

@@ -128,6 +128,7 @@ object AnalisysFrm: TAnalisysFrm
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 19
       object Series1: TPieSeries
+        ValueFormat = '#,##0;(#,##0)'
         XValues.Order = loAscending
         YValues.Name = 'Pie'
         YValues.Order = loNone
@@ -167,6 +168,7 @@ object AnalisysFrm: TAnalisysFrm
       object Series2: TLineSeries
         ColorEachPoint = True
         Shadow.Visible = False
+        ValueFormat = '#,##0;(#,##0)'
         Brush.BackColor = clDefault
         LinePen.Color = 16777164
         Pointer.InflateMargins = True
@@ -182,6 +184,7 @@ object AnalisysFrm: TAnalisysFrm
       Top = 235
       Width = 431
       Height = 234
+      Legend.Alignment = laTop
       Title.Text.Strings = (
         'In Out per Year')
       Align = alClient
@@ -198,6 +201,7 @@ object AnalisysFrm: TAnalisysFrm
         BarBrush.Gradient.EndColor = 15054131
         BarBrush.Gradient.Visible = True
         Title = 'In'
+        ValueFormat = '#,##0;(#,##0)'
         BarStyle = bsRectGradient
         Gradient.EndColor = 15054131
         Gradient.Visible = True
@@ -209,6 +213,7 @@ object AnalisysFrm: TAnalisysFrm
       end
       object Series5: TBarSeries
         Title = 'Out'
+        ValueFormat = '#,##0;(#,##0)'
         XValues.Name = 'X'
         XValues.Order = loAscending
         YValues.Name = 'Bar'
@@ -224,11 +229,13 @@ object AnalisysFrm: TAnalisysFrm
       Top = 235
       Width = 431
       Height = 234
+      Legend.Alignment = laTop
       Title.Text.Strings = (
         'In Out per Month')
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 3
+      ExplicitTop = 241
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15
@@ -239,7 +246,9 @@ object AnalisysFrm: TAnalisysFrm
       object BarSeries1: TBarSeries
         BarBrush.Gradient.EndColor = 15054131
         BarBrush.Gradient.Visible = True
+        Marks.Angle = 90
         Title = 'In'
+        ValueFormat = '#,##0;(#,##0)'
         BarStyle = bsRectGradient
         Gradient.EndColor = 15054131
         Gradient.Visible = True
@@ -250,7 +259,9 @@ object AnalisysFrm: TAnalisysFrm
         YValues.Order = loNone
       end
       object BarSeries2: TBarSeries
+        Marks.Angle = 90
         Title = 'Out'
+        ValueFormat = '#,##0;(#,##0)'
         XValues.Name = 'X'
         XValues.Order = loAscending
         YValues.Name = 'Bar'

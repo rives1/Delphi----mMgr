@@ -490,15 +490,7 @@ begin
         + ', TRNACCOUNT = ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _plLedgerName) + ''' '
         + ', TRNDESCRIPTION = ''' + _fDescription.Text + ''' '
         + ' WHERE TRNID = ''' + IntToStr(_pEditID) + ''' ';
-    // ShowMessage(_getDBID('DBPAYEE', 'PAYID', 'PAYNAME', UpperCase(_fPayee.Text)));
-    // try
     MainFRM.sqlQry.ExecSQL(_SQLString);
-    { TODO : gestione eccezione + verficare su rollback in caso di errore }
-
-    // finally
-    // MainFRM.sqlQry.Close;
-    // MainFRM.sqlQry.SQL.Clear;
-    // end;
 
     /// gestione trasferimenti
     /// il trx inserisce un mov di scarico e quindi uno di carico
@@ -533,7 +525,19 @@ begin
       end
       else
       begin
-        // aggiorno trasferimento -- modificare solo il movimento correlato
+{        //salvo il record che sto editando
+        _SQLString := 'UPDATE TRANSACTIONS SET ' + '  TRNTYPE = ''' + _fType.Text + ''' '
+          + ', TRNDATE = datetime(''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''') '
+          + ', TRNPAYEE = ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
+          + ', TRNCATEGORY =  ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
+          + ', TRNSUBCATEGORY = ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
+          + ', TRNAMOUNT = ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
+          + ', TRNACCOUNT = ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountFrom.Text) + ''' '
+          + ', TRNDESCRIPTION = ''' + _fDescription.Text + ''' '
+          + ' WHERE TRNID = ''' + IntToStr(_pEditID) + ''' ';
+ }
+
+        // aggiorno trasferimento -- aggiorno il movimento correlato
         _SQLString := 'UPDATE TRANSACTIONS SET ' + '  TRNTYPE = ''' + _fType.Text + ''' '
           + ', TRNDATE = datetime(''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''') '
           + ', TRNPAYEE = ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
@@ -542,7 +546,7 @@ begin
           + ', TRNAMOUNT = ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
           + ', TRNACCOUNT = ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' '
           + ', TRNDESCRIPTION = ''' + _fDescription.Text + ''' '
-          + ' WHERE TRNID = ''' + IntToStr(_pEditID) + ''' ';
+          + ' WHERE TRNID = ''' + _getDBField('TRANSACTIONS', 'TRNTRANSFERID', 'TRNID', IntToStr(_pEditID)) + ''' ';
         MainFRM.sqlQry.ExecSQL(_SQLString);
       end;
 

@@ -45,11 +45,12 @@ type
     procedure _closeDB;
     procedure _treeMenuCreate;
     procedure _treeSelectOpen;
-    procedure _fillBalanceChart;
     procedure _reportBalanceYTD;
 
   public
     { Public declarations }
+    procedure _fillBalanceChart;
+
   end;
 
 var
@@ -387,6 +388,7 @@ begin
     and not _chkOpenForm(treeMenu.Selected.Text) then
   begin
     _LedgerChildFRM             := TLedgerFrm.Create(nil);
+
     _LedgerChildFRM.WindowState := wsMaximized;
   end;
 
