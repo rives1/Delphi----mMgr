@@ -386,7 +386,8 @@ begin
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
     and not _chkOpenForm(treeMenu.Selected.Text) then
   begin
-    _LedgerChildFRM := TLedgerFrm.Create(nil);
+    _LedgerChildFRM             := TLedgerFrm.Create(nil);
+    _LedgerChildFRM.WindowState := wsMaximized;
   end;
 
   // apro i report

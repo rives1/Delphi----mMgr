@@ -52,7 +52,6 @@ type
     _SQLString: string; // var per tutti gli statement sql da comporre
 
     // local functions
-    procedure _fillGrid;
     procedure _clearGrid;
     procedure _autoSizeCol(Grid: TStringGrid; Column: Integer);
     procedure _autoSizeGrid;
@@ -62,11 +61,8 @@ type
 
   public
     { Public declarations }
-    // gestione proprietà
+    procedure _fillGrid;
 
-    { TODO : da eliminare }
-    // published
-    // property _pAccountName: string read _plAccountName write _plAccountName;
 
   end;
 
@@ -76,7 +72,6 @@ var
 implementation
 
 {$R *.dfm}
-
 
 uses
   frmMain, frmInsEdit;
@@ -145,9 +140,7 @@ begin
     45:                  // INS
       _action := 'new';  // apro la form in inserimento
     46:                  // DEL - elimino record direttamente dalla form del registro
-      _deleteRecord(grdLedger.cells[0, grdLedger.Row],
-        grdLedger.Row,
-        grdLedger.cells[1, grdLedger.Row]);
+      _deleteRecord(grdLedger.cells[0, grdLedger.Row], grdLedger.Row, grdLedger.cells[1, grdLedger.Row]);
     106:                   // *
       _action := 'newTrx'; // trasferimento fra conti
     107:                   // +
@@ -519,6 +512,9 @@ begin
 
   // autosize columns
   _autoSizeGrid;
+
+  //posiziorsi sull'ultimo record
+  grdLedger.Row:=grdLedger.RowCount-1;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

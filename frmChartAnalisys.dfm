@@ -110,10 +110,6 @@ object AnalisysFrm: TAnalisysFrm
         Value = 50.000000000000000000
       end>
     TabOrder = 2
-    ExplicitLeft = 20
-    ExplicitTop = 52
-    ExplicitWidth = 731
-    ExplicitHeight = 394
     object chartExpByCat: TChart
       Left = 1
       Top = 1
@@ -129,8 +125,6 @@ object AnalisysFrm: TAnalisysFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitTop = 6
-      ExplicitHeight = 242
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 19
       object Series1: TPieSeries
@@ -168,10 +162,6 @@ object AnalisysFrm: TAnalisysFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitLeft = 274
-      ExplicitTop = 11
-      ExplicitWidth = 267
-      ExplicitHeight = 139
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 19
       object Series2: TLineSeries
@@ -197,10 +187,6 @@ object AnalisysFrm: TAnalisysFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 2
-      ExplicitLeft = 0
-      ExplicitTop = 240
-      ExplicitWidth = 267
-      ExplicitHeight = 140
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15
@@ -243,10 +229,6 @@ object AnalisysFrm: TAnalisysFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 3
-      ExplicitLeft = 0
-      ExplicitTop = 240
-      ExplicitWidth = 267
-      ExplicitHeight = 140
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15

@@ -113,17 +113,27 @@ end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TAnalisysFrm._chartInOutMM;
+type
+  TTable = record // gestione della tabella per lo storage dei record del periodo
+    fPeriod: integer;
+    fType: string[4];
+    fValue: Double;
+  end;
 var
-  _lTotal:    Double;  // calcolo totale da imputare nella serie
-  _i:         integer; // ciclo per asse x elementi da inserire
-  _MM:        integer; // anno da valutare per inserimento
-  _chk2Serie: bool;
+  _lTotal:   Double;                    // calcolo totale da imputare nella serie
+  _i:        integer;                   // ciclo per asse x elementi da inserire
+  _MM:       integer;                   // anno da valutare per inserimento
+  _recTable: array [1 .. 24] of TTable;
+  _1: Integer; // 24 record per i 12 mesi
 begin
   _lTotal := 0; // totale dei singoli record da imputare nel grafico
 
   // chart torta per totale spese categoria
   chartInOutMM.Series[0].Clear(); // pulisco il grafico
   chartInOutMM.Series[1].Clear(); // pulisco il grafico
+  //inizializzo il record
+  for _1 := 1 to 24 do
+
 
   _SQLString := ' SELECT StrfTime(''%m'', TRANSACTIONS.TRNDATE) As MM, CATTYPE, '
     + ' Sum(TRANSACTIONS.TRNAMOUNT) As Sum_TRNAMOUNT '
@@ -151,35 +161,53 @@ begin
     MainFRM.sqlQry.Open;
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
     begin
-      if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
-      begin
-        // impostazione descrizione asse X
-        if (_MM <> MainFRM.sqlQry.FieldValues['MM']) then
-        begin
-          chartInOutMM.Axes.Bottom.Items.Add(_i, MainFRM.sqlQry.FieldValues['MM']);
-          _MM := MainFRM.sqlQry.FieldValues['MM'];
-          _i  := _i + 1;
-        end;
-
-//        chartInOutYY.SeriesList[0].AddNull(0);
-
-        // inserimento dati nelle due serie in base alla tipologia della categoria
-        _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
-        // in base al tipo di spesa imputo su quale serie aggiungere il dato
-        if (UpperCase(MainFRM.sqlQry.FieldValues['CATTYPE']) = 'EXPENSE') then
-          chartInOutMM.SeriesList[0].Add(_lTotal)
-        else
-          // chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY']);
-          chartInOutMM.SeriesList[1].Add(_lTotal);
-
-      end;
-
+      if (UpperCase(MainFRM.sqlQry.FieldValues['CATTYPE']) = 'EXPENSE') then
+        chartInOutMM.SeriesList[0].Add(_lTotal)
+      else
+        // chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY']);
+        chartInOutMM.SeriesList[1].Add(_lTotal);
       MainFRM.sqlQry.Next;
-    end;
-  finally
-    MainFRM.sqlQry.Close;
-    MainFRM.sqlQry.SQL.Clear;
+
+    end
+{  else
+  begin
+    chartInOutMM.SeriesList[0].Add(0);
+
   end;
+
+  {
+    begin
+    if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
+    begin
+    // impostazione descrizione asse X
+    if (_MM <> MainFRM.sqlQry.FieldValues['MM']) then
+    begin
+    chartInOutMM.Axes.Bottom.Items.Add(_i, MainFRM.sqlQry.FieldValues['MM']);
+    _MM := MainFRM.sqlQry.FieldValues['MM'];
+    _i  := _i + 1;
+    end;
+
+    // chartInOutYY.SeriesList[0].AddNull(0);
+
+    // inserimento dati nelle due serie in base alla tipologia della categoria
+    _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
+    // in base al tipo di spesa imputo su quale serie aggiungere il dato
+    if (UpperCase(MainFRM.sqlQry.FieldValues['CATTYPE']) = 'EXPENSE') then
+    chartInOutMM.SeriesList[0].Add(_lTotal)
+    else
+    // chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY']);
+    chartInOutMM.SeriesList[1].Add(_lTotal);
+
+    end;
+
+    MainFRM.sqlQry.Next;
+    end;
+  }
+
+finally
+  MainFRM.sqlQry.Close;
+  MainFRM.sqlQry.SQL.Clear;
+end;
 
 end;
 
@@ -187,7 +215,7 @@ end;
 procedure TAnalisysFrm._chartInOutYY;
 var
   _lTotal: Double;  // calcolo totale da imputare nella serie
-  i:       integer; // ciclo per asse x elementi da inserire
+  _i:      integer; // ciclo per asse x elementi da inserire
   _YY:     integer; // anno da valutare per inserimento
 begin
   _lTotal := 0; // totale dei singoli record da imputare nel grafico
@@ -215,7 +243,7 @@ begin
   MainFRM.sqlQry.SQL.Add(_SQLString);
   chartInOutYY.Axes.Bottom.Items.Clear;
   // inizializzo var
-  i   := 0;
+  _i  := 0;
   _YY := 0;
   // eseguo ciclo sui dati
   try
@@ -227,9 +255,9 @@ begin
         // impostazione descrizione asse X
         if (_YY <> MainFRM.sqlQry.FieldValues['YY']) then
         begin
-          chartInOutYY.Axes.Bottom.Items.Add(i, MainFRM.sqlQry.FieldValues['YY']);
+          chartInOutYY.Axes.Bottom.Items.Add(_i, MainFRM.sqlQry.FieldValues['YY']);
           _YY := MainFRM.sqlQry.FieldValues['YY'];
-          i   := i + 1;
+          _i  := _i + 1;
         end;
 
         // inserimento dati nelle due serie in base alla tipologia della categoria

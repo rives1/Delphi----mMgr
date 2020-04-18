@@ -57,7 +57,7 @@ type
     procedure _loadCmbPayee;
     procedure _loadCmbCategory;
     procedure _loadCmbSubcategory;
-    procedure _loadRecord;
+    procedure _recordLoad;
     procedure _writeRecord;
     procedure _recordSave;
     procedure _newPayee;
@@ -87,7 +87,7 @@ implementation
 
 
 uses
-  frmMain, pasCommon;
+  frmMain, frmLedger, pasCommon;
 
 { TInsEditFrm }
 
@@ -101,7 +101,7 @@ end;
 procedure TInsEditFrm.FormActivate(Sender: TObject);
 begin
   if (_pEditType = 'edit') and (_pEditID <> 0) then
-    _loadRecord // carico i dati nella form
+    _recordLoad // carico i dati nella form
   else
   begin
     if (_pEditType = 'newExp') then // nuova spesa
@@ -184,7 +184,7 @@ begin
     _fPayee.Enabled       := True;
     _fCategory.Enabled    := True;
     _fSubCategory.Enabled := True;
-    if _pEditType <> 'edit' then // azzero i campi se non sto moidificando il record
+    if _pEditType <> 'edit' then // azzero i campi se non sto modificando il record
     begin
       _fAccountTo.Text   := '';
       _fPayee.Text       := '';
@@ -380,7 +380,7 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TInsEditFrm._loadRecord;
+procedure TInsEditFrm._recordLoad;
 var
   _trxID: string; // rif recupero mov correalto trasferimento
 begin
@@ -435,14 +435,21 @@ procedure TInsEditFrm._recordSave;
 begin
   if _validateField then
   begin
-    _newPayee;
+//    _newPayee; //il nuovo payee viene inserito all'atto dell'uscita dal campo del payee stesso
     _writeRecord;
     // nel caso di editing di un record chiudo la form adesso
     if _pEditType = 'edit' then
       self.Close
     else
+    begin
       _cleanFormNewRecord;
+      _changeType;
+    end;
+    //aggiorno la lista nella form ledger
+    //LedgerFrm._fillGrid;
+
   end;
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
