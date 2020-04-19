@@ -62,7 +62,7 @@ implementation
 
 
 uses
-  frmLedger, frmAccount, frmChartAnalisys, frmPayee;
+  frmLedger, frmAccount, frmChartAnalisys, frmPayee, frmCategory;
 
 { TForm1 }
 
@@ -371,6 +371,8 @@ begin
   vNode.ImageIndex      := 14;
   vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Payee');
   vNode.ImageIndex      := 15;
+  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Category');
+  vNode.ImageIndex      := 17;
 
   treeMenu.FullExpand;
 end;
@@ -382,6 +384,7 @@ var
   _AccountChildFRM: TAccountFrm;
   _AnalisysFRM:     TAnalisysFrm;
   _PayeeFRM:        TPayeeFRM;
+  _CategoryFRM:     TCategoryFrm;
 begin
   // apro la child form del ledger. se il nodo superiore è account si tratta sicuramente di un ledger da aprire
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
@@ -412,6 +415,8 @@ begin
       _AccountChildFRM := TAccountFrm.Create(nil);
     if (treeMenu.Selected.Text = 'Payee') and not _chkOpenForm(treeMenu.Selected.Text) then
       _PayeeFRM := TPayeeFRM.Create(nil);
+    if (treeMenu.Selected.Text = 'Category') and not _chkOpenForm(treeMenu.Selected.Text) then
+      _CategoryFRM := TCategoryFrm.Create(nil);
   end;
 
 end;

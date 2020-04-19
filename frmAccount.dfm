@@ -1,10 +1,9 @@
 object AccountFrm: TAccountFrm
   Left = 0
   Top = 0
-  BorderStyle = bsSingle
   Caption = 'Account'
-  ClientHeight = 295
-  ClientWidth = 485
+  ClientHeight = 285
+  ClientWidth = 475
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -26,14 +25,14 @@ object AccountFrm: TAccountFrm
     Left = 211
     Top = 0
     Width = 5
-    Height = 276
+    Height = 266
     ExplicitHeight = 493
   end
   object _fLvAccount: TListView
     Left = 0
     Top = 0
     Width = 211
-    Height = 276
+    Height = 266
     Align = alLeft
     BorderStyle = bsNone
     Columns = <
@@ -84,25 +83,29 @@ object AccountFrm: TAccountFrm
     GroupView = True
     ReadOnly = True
     RowSelect = True
+    PopupMenu = PopupMenu1
     SortType = stText
     TabOrder = 0
     ViewStyle = vsReport
     OnDblClick = _fLvAccountDblClick
-    ExplicitTop = -6
-    ExplicitHeight = 493
+    ExplicitLeft = -1
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 276
-    Width = 485
+    Top = 266
+    Width = 475
     Height = 19
-    Panels = <>
+    Panels = <
+      item
+        Text = 'Double click to edit Account'
+        Width = 50
+      end>
   end
   object Panel3: TPanel
     Left = 216
     Top = 0
-    Width = 269
-    Height = 276
+    Width = 259
+    Height = 266
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 2
@@ -158,43 +161,31 @@ object AccountFrm: TAccountFrm
     end
     object btnOK: TJvBitBtn
       Left = 168
-      Top = 211
+      Top = 165
       Width = 75
       Height = 25
       Caption = '&Save'
       TabOrder = 3
       OnClick = btnOKClick
     end
-    object JvBitBtn1: TJvBitBtn
-      Left = 18
-      Top = 165
-      Width = 75
-      Height = 25
-      Caption = '&New'
-      TabOrder = 4
-      TabStop = False
-      OnClick = JvBitBtn1Click
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 80
+    Top = 165
+    object NewAccount1: TMenuItem
+      Caption = 'New Account'
+      OnClick = NewAccount1Click
     end
-    object JvBitBtn2: TJvBitBtn
-      Left = 18
-      Top = 196
-      Width = 75
-      Height = 25
-      Caption = '&Delete'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clRed
-      Font.Height = -11
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 5
-      TabStop = False
-      OnClick = JvBitBtn1Click
-      HotTrackFont.Charset = DEFAULT_CHARSET
-      HotTrackFont.Color = clWindowText
-      HotTrackFont.Height = -11
-      HotTrackFont.Name = 'Tahoma'
-      HotTrackFont.Style = []
+    object EditAccount1: TMenuItem
+      Caption = 'Edit Account'
+      OnClick = EditAccount1Click
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object DeleteAccount1: TMenuItem
+      Caption = 'Delete Account'
+      OnClick = DeleteAccount1Click
     end
   end
 end

@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, JvExButtons, JvBitBtn, JvExStdCtrls, JvCombobox,
-  Vcl.ExtCtrls, Vcl.ComCtrls;
+  Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.Menus;
 
 type
   TAccountFrm = class(TForm)
@@ -18,9 +18,12 @@ type
     Name: TLabel;
     Label2: TLabel;
     btnOK: TJvBitBtn;
-    JvBitBtn1: TJvBitBtn;
-    JvBitBtn2: TJvBitBtn;
     Splitter1: TSplitter;
+    PopupMenu1: TPopupMenu;
+    NewAccount1: TMenuItem;
+    EditAccount1: TMenuItem;
+    N1: TMenuItem;
+    DeleteAccount1: TMenuItem;
     procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -28,6 +31,9 @@ type
     procedure btnOKClick(Sender: TObject);
     procedure JvBitBtn1Click(Sender: TObject);
     procedure _fLvAccountDblClick(Sender: TObject);
+    procedure NewAccount1Click(Sender: TObject);
+    procedure EditAccount1Click(Sender: TObject);
+    procedure DeleteAccount1Click(Sender: TObject);
   private
     { Private declarations }
     // variabili
@@ -64,6 +70,20 @@ procedure TAccountFrm.btnOKClick(Sender: TObject);
 begin
   _recordSave;
   _fLvAccount.SetFocus;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TAccountFrm.DeleteAccount1Click(Sender: TObject);
+begin
+  _deleteAccount;
+  _cleanFormNewRecord;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TAccountFrm.EditAccount1Click(Sender: TObject);
+begin
+  _loadRecord;
+  _fName.SetFocus;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -107,6 +127,12 @@ begin
   _cleanFormNewRecord;
 end;
 
+procedure TAccountFrm.NewAccount1Click(Sender: TObject);
+begin
+  _cleanFormNewRecord;
+
+end;
+
 // -------------------------------------------------------------------------------------------------------------//
 procedure TAccountFrm._cleanFormNewRecord;
 begin
@@ -118,9 +144,31 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TAccountFrm._deleteAccount;
 begin
-  { TODO :
-    definire procedura cancellazione record
-    NB: effettuare check se ci sono record correlati nelle transazioni }
+  _SQLString := 'SELECT * FROM LedgerView WHERE ACCNAME = ' + _fLvAccount.Selected.Caption;
+
+  MainFRM.sqlQry.SQL.Clear;
+  MainFRM.sqlQry.SQL.Add(_SQLString);
+  try
+    MainFRM.sqlite_conn.StartTransaction;
+    MainFRM.sqlQry.Open;
+    if MainFRM.sqlQry.RecordCount > 0 then
+      MessageDlg('Data alreay used in application. Impossible to delete.', mtInformation, [mbOk], 0)
+    else
+    if MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    begin
+      _SQLString := 'DELETE FROM DBACCOUNT WHERE ACCNAME = ' + _fLvAccount.Selected.Caption;
+      // esecuzione della query di cancellazione
+      MainFRM.sqlQry.ExecSQL(_SQLString);
+      MainFRM.sqlite_conn.Commit;
+    end;
+    MainFRM.sqlQry.Close;
+
+  except
+    begin
+      raise Exception.Create('Error in deleting data. Operation Aborted');
+      MainFRM.sqlite_conn.Rollback;
+    end;
+  end;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

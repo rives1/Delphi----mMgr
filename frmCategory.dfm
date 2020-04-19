@@ -1,10 +1,9 @@
 object CategoryFrm: TCategoryFrm
   Left = 0
   Top = 0
-  BorderStyle = bsSingle
   Caption = 'Category'
-  ClientHeight = 512
-  ClientWidth = 609
+  ClientHeight = 446
+  ClientWidth = 449
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -21,43 +20,65 @@ object CategoryFrm: TCategoryFrm
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
+  object Splitter1: TSplitter
+    Left = 176
+    Top = 0
+    Width = 8
+    Height = 427
+    ExplicitLeft = 243
+    ExplicitHeight = 493
+  end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 493
-    Width = 609
+    Top = 427
+    Width = 449
     Height = 19
-    Panels = <>
-    ExplicitWidth = 642
+    Panels = <
+      item
+        Text = 
+          'Double click to edit Category/Subcategory - Right click for acti' +
+          'ons'
+        Width = 50
+      end>
+    ExplicitTop = 433
+    ExplicitWidth = 508
   end
   object Panel3: TPanel
-    Left = 249
-    Top = 8
-    Width = 354
-    Height = 253
+    Left = 184
+    Top = 0
+    Width = 265
+    Height = 427
+    Align = alClient
+    BevelOuter = bvNone
     TabOrder = 1
+    ExplicitLeft = 182
+    ExplicitWidth = 292
     object Name: TLabel
-      Left = 24
-      Top = 48
-      Width = 27
+      Left = 14
+      Top = 38
+      Width = 53
       Height = 13
-      Caption = 'Name'
+      Caption = 'Description'
     end
-    object Label2: TLabel
-      Left = 24
-      Top = 86
+    object _lblType: TLabel
+      Left = 14
+      Top = 89
       Width = 24
       Height = 13
       Caption = 'Type'
     end
     object _fName: TEdit
-      Left = 93
-      Top = 45
-      Width = 198
+      Left = 25
+      Top = 60
+      Width = 226
       Height = 21
+      BorderStyle = bsNone
+      Ctl3D = True
+      ParentCtl3D = False
       TabOrder = 0
     end
     object _fID: TEdit
-      Left = 226
+      Left = 187
       Top = 8
       Width = 65
       Height = 21
@@ -71,88 +92,78 @@ object CategoryFrm: TCategoryFrm
       TabOrder = 1
     end
     object _fType: TJvComboBox
-      Left = 93
-      Top = 83
-      Width = 138
+      Left = 25
+      Top = 108
+      Width = 157
       Height = 21
       AutoDropDown = True
       TabOrder = 2
       Text = ''
       Items.Strings = (
-        'Cash'
-        'Cheching'
-        'CreditCard'
-        'Online')
+        'Expense'
+        'Income')
     end
     object btnOK: TJvBitBtn
-      Left = 252
-      Top = 201
+      Left = 178
+      Top = 156
       Width = 75
       Height = 25
       Caption = '&Save'
       TabOrder = 3
       OnClick = btnOKClick
     end
-    object JvBitBtn1: TJvBitBtn
-      Left = 252
-      Top = 122
-      Width = 75
-      Height = 25
-      Caption = '&New'
-      TabOrder = 4
-      TabStop = False
-      OnClick = JvBitBtn1Click
-    end
-    object JvBitBtn2: TJvBitBtn
-      Left = 252
-      Top = 162
-      Width = 75
-      Height = 25
-      Caption = '&Delete'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clRed
-      Font.Height = -11
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 5
-      TabStop = False
-      OnClick = JvBitBtn1Click
-      HotTrackFont.Charset = DEFAULT_CHARSET
-      HotTrackFont.Color = clWindowText
-      HotTrackFont.Height = -11
-      HotTrackFont.Name = 'Tahoma'
-      HotTrackFont.Style = []
-    end
-    object _fSubCat: TEdit
-      Left = 248
-      Top = 83
-      Width = 43
-      Height = 21
-      TabOrder = 6
-    end
   end
   object _treeCategory: TTreeView
     Left = 0
     Top = 0
-    Width = 243
-    Height = 493
+    Width = 176
+    Height = 427
     Align = alLeft
     BevelInner = bvNone
     BevelOuter = bvNone
     BorderStyle = bsNone
+    DragMode = dmAutomatic
     Indent = 19
+    PopupMenu = PopupMenu1
     ReadOnly = True
     RowSelect = True
     SortType = stBoth
     TabOrder = 2
+    OnDblClick = _treeCategoryDblClick
+    OnDragDrop = _treeCategoryDragDrop
+    OnDragOver = _treeCategoryDragOver
     Items.NodeData = {
       0301000000340000000000000000000000FFFFFFFFFFFFFFFF00000000000000
       0002000000010B680065007200740065006800790072007400680079002A0000
-      000000000000000000FFFFFFFFFFFFFFFF000000000000000001000000010636
+      000000000000000000FFFFFFFFFFFFFFFF000000000000000000000000010636
       0035003400360034003600300000000000000000000000FFFFFFFFFFFFFFFF00
-      0000000000000000000000010972007400790072007400790072007400790030
-      0000000000000000000000FFFFFFFFFFFFFFFF00000000000000000000000001
-      09650068006700670064006400680068006600}
+      00000000000000000000000109650068006700670064006400680068006600}
+    ExplicitLeft = 2
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 50
+    Top = 295
+    object NewCategory1: TMenuItem
+      Caption = 'New Category'
+      OnClick = NewCategory1Click
+    end
+    object NewSubcategory1: TMenuItem
+      Caption = 'New Subcategory'
+      OnClick = NewSubcategory1Click
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object Edit1: TMenuItem
+      Caption = 'Edit'
+      OnClick = Edit1Click
+    end
+    object N2: TMenuItem
+      Caption = '-'
+    end
+    object Delete1: TMenuItem
+      Caption = 'Delete'
+      OnClick = Delete1Click
+    end
   end
 end
