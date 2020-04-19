@@ -412,11 +412,20 @@ begin
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CONFIG')) then
   begin
     if (treeMenu.Selected.Text = 'Account') and not _chkOpenForm(treeMenu.Selected.Text) then
+      begin
       _AccountChildFRM := TAccountFrm.Create(nil);
+      _AccountChildFRM.WindowState:=wsMaximized;
+      end;
     if (treeMenu.Selected.Text = 'Payee') and not _chkOpenForm(treeMenu.Selected.Text) then
+      begin
       _PayeeFRM := TPayeeFRM.Create(nil);
+      _PayeeFRM.WindowState:=wsMaximized;
+      end;
     if (treeMenu.Selected.Text = 'Category') and not _chkOpenForm(treeMenu.Selected.Text) then
+      begin
       _CategoryFRM := TCategoryFrm.Create(nil);
+      _CategoryFRM.WindowState:=wsMaximized;
+      end;
   end;
 
 end;

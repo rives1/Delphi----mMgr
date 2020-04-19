@@ -115,8 +115,8 @@ object AnalisysFrm: TAnalisysFrm
     object chartExpByCat: TChart
       Left = 0
       Top = 0
-      Width = 431
-      Height = 234
+      Width = 432
+      Height = 235
       Legend.Visible = False
       Title.Text.Strings = (
         'Expenses by Category')
@@ -127,9 +127,12 @@ object AnalisysFrm: TAnalisysFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitLeft = 1
-      ExplicitTop = 1
       DefaultCanvas = 'TGDIPlusCanvas'
+      PrintMargins = (
+        15
+        23
+        15
+        23)
       ColorPaletteIndex = 19
       object Series1: TPieSeries
         Marks.Frame.Visible = False
@@ -160,18 +163,16 @@ object AnalisysFrm: TAnalisysFrm
       end
     end
     object Chart2: TChart
-      Left = 431
+      Left = 432
       Top = 0
-      Width = 431
-      Height = 234
+      Width = 432
+      Height = 235
       Title.Text.Strings = (
         'TChart')
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
       Visible = False
-      ExplicitLeft = 432
-      ExplicitTop = 1
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 19
       object Series2: TLineSeries
@@ -190,17 +191,15 @@ object AnalisysFrm: TAnalisysFrm
     end
     object chartInOutYY: TChart
       Left = 0
-      Top = 234
-      Width = 431
-      Height = 234
+      Top = 235
+      Width = 432
+      Height = 235
       Legend.Alignment = laTop
       Title.Text.Strings = (
         'In Out per Year')
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 2
-      ExplicitLeft = 1
-      ExplicitTop = 235
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15
@@ -238,18 +237,16 @@ object AnalisysFrm: TAnalisysFrm
       end
     end
     object chartInOutMM: TChart
-      Left = 431
-      Top = 234
-      Width = 431
-      Height = 234
+      Left = 432
+      Top = 235
+      Width = 432
+      Height = 235
       Legend.Alignment = laTop
       Title.Text.Strings = (
         'In Out per Month')
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 3
-      ExplicitLeft = 432
-      ExplicitTop = 241
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15
