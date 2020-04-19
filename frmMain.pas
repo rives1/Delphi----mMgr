@@ -40,7 +40,7 @@ type
 
     // local function
     function _openDB(_pDBFname: string): boolean;
-    function _SeekNode(pvSkString: string): TTreeNode;
+//    function _SeekNode(pvSkString: string): TTreeNode;
     function _chkOpenForm(_frmCaption: string): boolean;
     procedure _closeDB;
     procedure _treeMenuCreate;
@@ -274,6 +274,7 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
+{
 function TMainFRM._SeekNode(pvSkString: string): TTreeNode;
 var
   i: integer;
@@ -290,7 +291,7 @@ begin
     end;
   end;
 end;
-
+}
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM._treeMenuCreate;
 // creazione di tutto l'albero del menù

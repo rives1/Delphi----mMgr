@@ -3,7 +3,7 @@ unit frmPayee;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, System.UITypes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.Grids, Vcl.StdCtrls, JvListBox, JvExStdCtrls,
   JvComboListBox, Vcl.Buttons, JvExButtons, JvBitBtn, Vcl.Menus;
 
