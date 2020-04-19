@@ -11,9 +11,11 @@ object AnalisysFrm: TAnalisysFrm
   Font.Name = 'Tahoma'
   Font.Style = []
   FormStyle = fsMDIChild
+  KeyPreview = True
   OldCreateOrder = False
   Visible = True
   OnClose = FormClose
+  OnKeyDown = FormKeyDown
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
@@ -73,7 +75,7 @@ object AnalisysFrm: TAnalisysFrm
     Width = 864
     Height = 470
     Align = alClient
-    Caption = 'GridPanel1'
+    BevelOuter = bvNone
     ColumnCollection = <
       item
         Value = 50.000000000000000000
@@ -111,8 +113,8 @@ object AnalisysFrm: TAnalisysFrm
       end>
     TabOrder = 2
     object chartExpByCat: TChart
-      Left = 1
-      Top = 1
+      Left = 0
+      Top = 0
       Width = 431
       Height = 234
       Legend.Visible = False
@@ -125,9 +127,13 @@ object AnalisysFrm: TAnalisysFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitLeft = 1
+      ExplicitTop = 1
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 19
       object Series1: TPieSeries
+        Marks.Frame.Visible = False
+        Marks.Callout.Length = 20
         ValueFormat = '#,##0;(#,##0)'
         XValues.Order = loAscending
         YValues.Name = 'Pie'
@@ -154,8 +160,8 @@ object AnalisysFrm: TAnalisysFrm
       end
     end
     object Chart2: TChart
-      Left = 432
-      Top = 1
+      Left = 431
+      Top = 0
       Width = 431
       Height = 234
       Title.Text.Strings = (
@@ -163,6 +169,9 @@ object AnalisysFrm: TAnalisysFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
+      Visible = False
+      ExplicitLeft = 432
+      ExplicitTop = 1
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 19
       object Series2: TLineSeries
@@ -180,8 +189,8 @@ object AnalisysFrm: TAnalisysFrm
       end
     end
     object chartInOutYY: TChart
-      Left = 1
-      Top = 235
+      Left = 0
+      Top = 234
       Width = 431
       Height = 234
       Legend.Alignment = laTop
@@ -190,6 +199,8 @@ object AnalisysFrm: TAnalisysFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 2
+      ExplicitLeft = 1
+      ExplicitTop = 235
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15
@@ -200,6 +211,7 @@ object AnalisysFrm: TAnalisysFrm
       object Series3: TBarSeries
         BarBrush.Gradient.EndColor = 15054131
         BarBrush.Gradient.Visible = True
+        Marks.Frame.Visible = False
         Title = 'In'
         ValueFormat = '#,##0;(#,##0)'
         BarStyle = bsRectGradient
@@ -212,6 +224,7 @@ object AnalisysFrm: TAnalisysFrm
         YValues.Order = loNone
       end
       object Series5: TBarSeries
+        Marks.Frame.Visible = False
         Title = 'Out'
         ValueFormat = '#,##0;(#,##0)'
         XValues.Name = 'X'
@@ -225,8 +238,8 @@ object AnalisysFrm: TAnalisysFrm
       end
     end
     object chartInOutMM: TChart
-      Left = 432
-      Top = 235
+      Left = 431
+      Top = 234
       Width = 431
       Height = 234
       Legend.Alignment = laTop
@@ -235,6 +248,7 @@ object AnalisysFrm: TAnalisysFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 3
+      ExplicitLeft = 432
       ExplicitTop = 241
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (

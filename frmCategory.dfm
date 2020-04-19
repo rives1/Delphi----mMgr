@@ -4,7 +4,7 @@ object CategoryFrm: TCategoryFrm
   BorderStyle = bsSingle
   Caption = 'Category'
   ClientHeight = 512
-  ClientWidth = 642
+  ClientWidth = 609
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -21,71 +21,20 @@ object CategoryFrm: TCategoryFrm
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object _fSearch: TJvComboBox
-    Left = 324
-    Top = 441
-    Width = 168
-    Height = 22
-    AutoDropDown = True
-    Style = csOwnerDrawVariable
-    Color = clInactiveCaption
-    TabOrder = 0
-    TabStop = False
-    Text = ''
-    OnSelect = _fSearchSelect
-  end
-  object ListView1: TListView
-    Left = 8
-    Top = 8
-    Width = 211
-    Height = 376
-    Checkboxes = True
-    Columns = <
-      item
-        AutoSize = True
-        Caption = 'nome'
-      end
-      item
-        AutoSize = True
-        Caption = 'subc'
-      end>
-    GridLines = True
-    Groups = <
-      item
-        Header = 'gruppo'
-        GroupID = 0
-        State = [lgsNormal]
-        HeaderAlign = taLeftJustify
-        FooterAlign = taLeftJustify
-        TitleImage = -1
-      end>
-    Items.ItemData = {
-      05C80000000400000000000000FFFFFFFFFFFFFFFF0000000000000000000000
-      0004630061007400330000000000FFFFFFFFFFFFFFFF01000000000000000000
-      0000046300610074003300057300750062003400340010F7331C00000000FFFF
-      FFFFFFFFFFFF00000000FFFFFFFF000000000A630061007400650067006F0072
-      0069006100310000000000FFFFFFFFFFFFFFFF01000000FFFFFFFF000000000A
-      630061007400650067006F0072006900610031000873006F00740074006F0063
-      002000310080F0331CFFFFFFFF}
-    GroupView = True
-    RowSelect = True
-    SortType = stText
-    TabOrder = 1
-    ViewStyle = vsReport
-  end
   object StatusBar1: TStatusBar
     Left = 0
     Top = 493
-    Width = 642
+    Width = 609
     Height = 19
     Panels = <>
+    ExplicitWidth = 642
   end
   object Panel3: TPanel
-    Left = 300
-    Top = 22
-    Width = 311
-    Height = 284
-    TabOrder = 3
+    Left = 249
+    Top = 8
+    Width = 354
+    Height = 253
+    TabOrder = 1
     object Name: TLabel
       Left = 24
       Top = 48
@@ -136,8 +85,8 @@ object CategoryFrm: TCategoryFrm
         'Online')
     end
     object btnOK: TJvBitBtn
-      Left = 217
-      Top = 206
+      Left = 252
+      Top = 201
       Width = 75
       Height = 25
       Caption = '&Save'
@@ -145,8 +94,8 @@ object CategoryFrm: TCategoryFrm
       OnClick = btnOKClick
     end
     object JvBitBtn1: TJvBitBtn
-      Left = 217
-      Top = 127
+      Left = 252
+      Top = 122
       Width = 75
       Height = 25
       Caption = '&New'
@@ -155,8 +104,8 @@ object CategoryFrm: TCategoryFrm
       OnClick = JvBitBtn1Click
     end
     object JvBitBtn2: TJvBitBtn
-      Left = 217
-      Top = 167
+      Left = 252
+      Top = 162
       Width = 75
       Height = 25
       Caption = '&Delete'
@@ -175,5 +124,35 @@ object CategoryFrm: TCategoryFrm
       HotTrackFont.Name = 'Tahoma'
       HotTrackFont.Style = []
     end
+    object _fSubCat: TEdit
+      Left = 248
+      Top = 83
+      Width = 43
+      Height = 21
+      TabOrder = 6
+    end
+  end
+  object _treeCategory: TTreeView
+    Left = 0
+    Top = 0
+    Width = 243
+    Height = 493
+    Align = alLeft
+    BevelInner = bvNone
+    BevelOuter = bvNone
+    BorderStyle = bsNone
+    Indent = 19
+    ReadOnly = True
+    RowSelect = True
+    SortType = stBoth
+    TabOrder = 2
+    Items.NodeData = {
+      0301000000340000000000000000000000FFFFFFFFFFFFFFFF00000000000000
+      0002000000010B680065007200740065006800790072007400680079002A0000
+      000000000000000000FFFFFFFFFFFFFFFF000000000000000001000000010636
+      0035003400360034003600300000000000000000000000FFFFFFFFFFFFFFFF00
+      0000000000000000000000010972007400790072007400790072007400790030
+      0000000000000000000000FFFFFFFFFFFFFFFF00000000000000000000000001
+      09650068006700670064006400680068006600}
   end
 end

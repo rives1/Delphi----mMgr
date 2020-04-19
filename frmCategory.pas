@@ -9,8 +9,6 @@ uses
 
 type
   TCategoryFrm = class(TForm)
-    _fSearch: TJvComboBox;
-    ListView1: TListView;
     StatusBar1: TStatusBar;
     Panel3: TPanel;
     _fName: TEdit;
@@ -21,6 +19,8 @@ type
     btnOK: TJvBitBtn;
     JvBitBtn1: TJvBitBtn;
     JvBitBtn2: TJvBitBtn;
+    _treeCategory: TTreeView;
+    _fSubCat: TEdit;
     procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -31,23 +31,17 @@ type
   private
     { Private declarations }
     // variabili
-    // _plEditType: string;  // properties to define if the new record
-    // _plEditID:   integer; // defines which is the ID of the record in case of record editing
     _SQLString: string; // container x query string
 
     function _validateField: boolean;
-    procedure _loadCmbSearch;
-    procedure _loadRecord;
+    procedure _recordLoad;
     procedure _recordSave;
-    procedure _writeRecord;
+    procedure _recordWrite;
     procedure _cleanFormNewRecord;
+    procedure _treeCategoryFill;
 
   public
     { Public declarations }
-
-  published
-    // property _pEditType: string read _plEditType write _plEditType;
-    // property _pEditID:   integer read _plEditID write _plEditID;
 
   end;
 
@@ -71,14 +65,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TCategoryFrm.FormActivate(Sender: TObject);
 begin
-  // if (_pEditType = 'edit') and (_pEditID <> 0) then
-  // _loadRecord // carico i dati nella form
-  // else
-  // if (_pEditType = 'new') then // nuova transazione generica
-  // begin
-  _fName.SetFocus;
-  // end;
-
+  _treeCategory.SetFocus;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -106,7 +93,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TCategoryFrm.FormShow(Sender: TObject);
 begin
-  _loadCmbSearch;
+  _treeCategoryFill;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -126,36 +113,14 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TCategoryFrm._fSearchSelect(Sender: TObject);
 begin
-  _loadRecord;
+  _recordLoad;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TCategoryFrm._loadCmbSearch;
-begin
-  // carico i dati nella compo dei conti
-  _fSearch.Items.Clear;
-  _SQLString := 'SELECT ACCNAME FROM DBACCOUNT';
-  MainFRM.sqlQry.SQL.Clear;
-  MainFRM.sqlQry.SQL.Add(_SQLString);
-  try
-    MainFRM.sqlQry.Open;
-    while not MainFRM.sqlQry.EOF do // ciclo recupero dati
-    begin
-      _fSearch.Items.Add(MainFRM.sqlQry.FieldValues['ACCNAME']);
-      MainFRM.sqlQry.Next;
-    end;
-  finally
-    MainFRM.sqlQry.Close;
-    MainFRM.sqlQry.SQL.Clear;
-  end;
-
-end;
-
-// -------------------------------------------------------------------------------------------------------------//
-procedure TCategoryFrm._loadRecord;
+procedure TCategoryFrm._recordLoad;
 begin
   // dopo la selezione della
-  _SQLString := 'SELECT * FROM DBACCOUNT where ACCNAME = ''' + _fSearch.Text + ''' ';
+  // _SQLString := 'SELECT * FROM DBACCOUNT where ACCNAME = ''' +  + ''' ';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
@@ -179,18 +144,65 @@ procedure TCategoryFrm._recordSave;
 begin
   if _validateField then
   begin
-    _writeRecord;
-    _loadCmbSearch;
+    _recordWrite;
+    _treeCategoryFill;
   end;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TCategoryFrm._treeCategoryFill;
+// creazione di tutto l'albero del menù
+var
+  _vNodeSub, _vNodeCat: TTreeNode; // nodo riferimento
+  _vNodeText:           string;    // testo da inserire nel nodo
+  _chkCatNode:          string;    // controllo per inserimento ramo categoria
+begin
+  // inizializzazione var
+  _vNodeSub := nil;
+  _vNodeCat := nil;
+
+  _treeCategory.Items.Clear();
+  if (MainFRM.sqlite_conn.Connected) then
+  begin
+    MainFRM.sqlQry.Close;
+    MainFRM.sqlQry.SQL.Clear;
+    MainFRM.sqlQry.SQL.Add('Select * From DBCATEGORY Left Join '
+      + ' DBSUBCATEGORY On DBCATEGORY.CATID = DBSUBCATEGORY.SUBCATID '
+      + ' where UCASE(CATDES) <> ''_TRANSFER'' '
+      + ' order By DBCATEGORY.CATDES, DBSUBCATEGORY.SUBCDES');
+    try
+      MainFRM.sqlQry.Active := true;
+      if (MainFRM.sqlQry.RecordCount <> 0) then
+        while not MainFRM.sqlQry.EOF do // ciclo recupero dati
+        begin
+          // aggiungo il nodo
+          if (_chkCatNode <> MainFRM.sqlQry.FieldValues['CATDES']) then
+          begin
+            _vNodeCat               := _treeCategory.Items.AddChild(nil, MainFRM.sqlQry.FieldValues['CATDES']);
+            _vNodeCat.SelectedIndex := 1; // imposto 1 nel caso si tratti di una categoria necessario
+                                          // per gestire il salavataggio del record.
+          end;
+          // aggiungo nodo sub se esiste
+          if (MainFRM.sqlQry.FieldValues['SUBCDES'] <> null) then
+            _vNodeSub := _treeCategory.Items.AddChild(_vNodeCat, MainFRM.sqlQry.FieldValues['SUBCDES']);
+
+          _chkCatNode := MainFRM.sqlQry.FieldValues['CATDES'];
+          MainFRM.sqlQry.Next;
+        end;
+    except
+      MessageDlg('Error adding data to tree menu', mtError, [mbOk], 0);
+    end; // try
+  end;   // if
+
+  _treeCategory.FullExpand;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 function TCategoryFrm._validateField: boolean;
 begin
   // verifica che i campi della mask siano compilati
-  Result := True;
-  if (_fType.Text = '')
-    or (_fName.Text = '') then
+  Result := true;
+  if (_fType.Text = '') or (_fName.Text = '') then
   begin
     MessageDlg('Data field incomplete!!', mtInformation, [mbOk], 0);
     Result := False;
@@ -203,7 +215,7 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TCategoryFrm._writeRecord;
+procedure TCategoryFrm._recordWrite;
 begin
   // salvo il record
   try

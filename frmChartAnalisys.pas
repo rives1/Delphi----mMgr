@@ -30,6 +30,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure _fdtFromChange(Sender: TObject);
     procedure _fdtToChange(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
     _SQLString: string; // container x query string
@@ -60,6 +61,16 @@ procedure TAnalisysFrm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := caFree;
   Release;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TAnalisysFrm.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  case Key of
+    27: // ESC
+      if (MessageDlg('Close Form?', mtConfirmation, [mbOk, mbCancel], 0) = mrOk) then
+        Self.Close; // chiudo la form
+  end;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -202,8 +213,6 @@ var
   _i:         integer;     // ciclo for
   _tempTable: TFDMemTable; // tabella appogio per report
 begin
-  _lTotal := 0; // totale dei singoli record da imputare nel grafico
-
   // pulisco il grafico
   chartInOutMM.Series[0].Clear();
   chartInOutMM.Series[1].Clear();
@@ -248,8 +257,7 @@ begin
   MainFRM.sqlQry.SQL.Add(_SQLString);
   chartInOutMM.Axes.Bottom.Items.Clear;
 
-  // _MM := 0;
-  // eseguo ciclo sui dati
+  // eseguo ciclo sui dati inserendo i dati nella tabella
   try
     MainFRM.sqlQry.Open;
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
@@ -270,6 +278,7 @@ begin
       MainFRM.sqlQry.Next;
     end;
 
+    _lTotal := 0; // totale dei singoli record da imputare nel grafico
     // ciclo di riempimento del chart
     _tempTable.First;
     while not _tempTable.EOF do
@@ -288,7 +297,7 @@ begin
           chartInOutMM.SeriesList[1].Add(_lTotal)
       end;
       // etichetta dell'asse x
-      chartInOutMM.Axes.Bottom.Items.Add(_tempTable.FieldByName('fPeriod').AsInteger-1,
+      chartInOutMM.Axes.Bottom.Items.Add(_tempTable.FieldByName('fPeriod').AsInteger - 1,
         _tempTable.FieldByName('fPeriod').AsString);
 
       _tempTable.Next; // next record
@@ -330,10 +339,10 @@ begin
     + ' StrfTime(''%Y'', TRANSACTIONS.TRNDATE), CATTYPE '
     + ' Order By '
     + ' StrfTime(''%Y'', TRANSACTIONS.TRNDATE), CATTYPE ';
-
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   chartInOutYY.Axes.Bottom.Items.Clear;
+
   // inizializzo var
   _i  := 0;
   _YY := 0;
@@ -360,7 +369,6 @@ begin
         else
           // chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY']);
           chartInOutYY.SeriesList[1].Add(_lTotal);
-
       end;
 
       MainFRM.sqlQry.Next;
@@ -369,7 +377,6 @@ begin
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
   end;
-
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -397,7 +404,6 @@ procedure TAnalisysFrm._setDefaultDate;
 begin
   // imposto le date nella configurazionae YTD
   _fdtFrom.Date := EncodeDate(CurrentYear, 1, 1);
-  // _fdtFrom.Date := EncodeDate(2017, 1, 1);
   _fdtTo.Date := Now();
 end;
 

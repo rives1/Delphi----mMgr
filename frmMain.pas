@@ -4,13 +4,13 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls,
-  Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, System.ImageList, Vcl.ImgList, Vcl.ExtCtrls, VclTee.TeeGDIPlus, Vcl.StdCtrls,
-  Vcl.Buttons, VclTee.TeEngine, VclTee.TeeProcs, VclTee.Chart, Data.SqlExpr, Data.DbxSqlite, Data.DB, Vcl.Menus,
-  Data.FMTBcd, FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteDef, FireDAC.Stan.Intf, FireDAC.Phys, FireDAC.Phys.SQLite,
-  FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Async,
-  FireDAC.VCLUI.Wait, FireDAC.Comp.Client, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
-  FireDAC.Comp.DataSet, Vcl.BaseImageCollection, Vcl.ImageCollection, Vcl.VirtualImageList, FireDAC.Stan.Pool,
-  VclTee.Series, frxClass, frxDBSet, frxExportBaseDialog, frxExportPDF, frxPreview;
+  VclTee.TeeGDIPlus, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf,
+  FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef,
+  FireDAC.Stan.ExprFuncs, FireDAC.VCLUI.Wait, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
+  FireDAC.Comp.Client, frxClass, frxDBSet, Vcl.BaseImageCollection, Vcl.ImageCollection, System.ImageList, Vcl.ImgList,
+  Vcl.VirtualImageList, Data.DB, FireDAC.Comp.DataSet, Vcl.Menus, Vcl.ComCtrls, VclTee.TeEngine, VclTee.Series,
+  VclTee.TeeProcs, VclTee.Chart, Vcl.ExtCtrls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Data.SqlExpr,
+  Data.DbxSqlite, Data.FMTBcd, frxExportBaseDialog, frxExportPDF, frxPreview;
 
 type
   TMainFRM = class(TForm)
@@ -387,7 +387,7 @@ begin
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
     and not _chkOpenForm(treeMenu.Selected.Text) then
   begin
-    _LedgerChildFRM             := TLedgerFrm.Create(nil);
+    _LedgerChildFRM := TLedgerFrm.Create(nil);
 
     _LedgerChildFRM.WindowState := wsMaximized;
   end;

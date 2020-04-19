@@ -8,7 +8,8 @@ uses
   pasCommon in 'pasCommon.pas',
   frmAccount in 'frmAccount.pas' {AccountFrm},
   frmChartAnalisys in 'frmChartAnalisys.pas' {AnalisysFrm},
-  frmPayee in 'frmPayee.pas' {PayeeFRM};
+  frmPayee in 'frmPayee.pas' {PayeeFRM},
+  frmCategory in 'frmCategory.pas' {CategoryFrm};
 
 {$R *.res}
 
@@ -16,5 +17,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TMainFRM, MainFRM);
+  Application.CreateForm(TCategoryFrm, CategoryFrm);
   Application.Run;
 end.
