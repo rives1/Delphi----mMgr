@@ -7,16 +7,16 @@ uses
 
 function _UpCase(_pString: string): string;
 function _getDBField(_pTBL: string; _pIDfld: string; _pDESfld: string; _pParam: string): string;
-function _iniRW(_pFName:string; _pOperation: char):Boolean;
+function _iniRW(_pFName: string; _pOperation: char): Boolean;
 
 implementation
 
 var
   _SQLString: string;
-  _iniFName : TiniFile;
+  _iniFName:  TiniFile;
 
-// -------------------------------------------------------------------------------------------------------------//
-/// ritorno la stringa passata come prima lettera maiuscola e poi tutto minuscolo
+  // -------------------------------------------------------------------------------------------------------------//
+  /// ritorno la stringa passata come prima lettera maiuscola e poi tutto minuscolo
 function _UpCase(_pString: string): string;
 begin
   Result := Uppercase(Copy(_pString, 1, 1)) + Lowercase(Copy(_pString, 2, Length(_pString)));
@@ -40,29 +40,30 @@ begin
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
   end;
-
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 /// lettura/scrittura del file ini
 { TODO : sistemare la parametrizzazione della funzione per gestire megli la scrittura/recupero dei parametri }
-function _IniRW(_pFName:string; _pOperation: char):Boolean;
+function _iniRW(_pFName: string; _pOperation: char): Boolean;
+begin
+  Result := False;
+  // Load INI settings
+  if _pOperation = 'R' then
   begin
-    Result := False;
-    //Load INI settings
-    if _pOperation = 'R' then
-      begin
-        _iniFName := tINIFile.Create(ExtractFilePath(Application.ExeName)+_pFName);
-//        vDBName := _iniFName.ReadString('FILE','LastFile','X');
-        _iniFName.Free;
-        Result:=True;
-      end;
-    //write ini file
-    if _pOperation = 'W' then
-      begin
-        _iniFName := tINIFile.Create(ExtractFilePath(Application.ExeName)+_pFName);
-//        _iniFName.WriteString('FILE','LastFile',vDBName);
-        _iniFName.Free;
-        Result:=True;
-     end;
-  end;end.
+    _iniFName := TiniFile.Create(ExtractFilePath(Application.ExeName) + _pFName);
+    // vDBName := _iniFName.ReadString('FILE','LastFile','X');
+    _iniFName.Free;
+    Result := True;
+  end;
+  // write ini file
+  if _pOperation = 'W' then
+  begin
+    _iniFName := TiniFile.Create(ExtractFilePath(Application.ExeName) + _pFName);
+    // _iniFName.WriteString('FILE','LastFile',vDBName);
+    _iniFName.Free;
+    Result := True;
+  end;
+end;
+
+end.
