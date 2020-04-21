@@ -48,6 +48,13 @@ object AnalisysFrm: TAnalisysFrm
       Height = 13
       Caption = 'To'
     end
+    object Label7: TLabel
+      Left = 391
+      Top = 12
+      Width = 39
+      Height = 13
+      Caption = 'Account'
+    end
     object _fdtFrom: TDateTimePicker
       Left = 90
       Top = 9
@@ -67,6 +74,15 @@ object AnalisysFrm: TAnalisysFrm
       Time = 0.919157187498058200
       TabOrder = 1
       OnChange = _fdtToChange
+    end
+    object _fAccount: TJvComboBox
+      Left = 443
+      Top = 9
+      Width = 164
+      Height = 21
+      TabOrder = 2
+      Text = ''
+      OnSelect = _fAccountSelect
     end
   end
   object GridPanel1: TGridPanel

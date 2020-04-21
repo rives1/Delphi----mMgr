@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, System.UITypes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VclTee.TeeGDIPlus, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls,
-  VclTee.TeEngine, VclTee.TeeProcs, VclTee.Chart, RzPanel, VclTee.Series, FireDAC.Comp.Client, Data.DB, Vcl.Menus;
+  VclTee.TeEngine, VclTee.TeeProcs, VclTee.Chart, RzPanel, VclTee.Series, FireDAC.Comp.Client, Data.DB, Vcl.Menus,
+  JvExStdCtrls, JvCombobox;
 
 type
   TAnalisysFrm = class(TForm)
@@ -26,17 +27,21 @@ type
     chartInOutMM: TChart;
     BarSeries1: TBarSeries;
     BarSeries2: TBarSeries;
+    _fAccount: TJvComboBox;
+    Label7: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure _fdtFromChange(Sender: TObject);
     procedure _fdtToChange(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure _fAccountSelect(Sender: TObject);
 
   private
     { Private declarations }
     _SQLString: string; // container x query string
 
     procedure _setDefaultDate;
+    procedure _loadCmbAccount;
     procedure _fillChart;
     procedure _chartExpByCategories;
     procedure _chartInOutYY;
@@ -78,6 +83,7 @@ end;
 procedure TAnalisysFrm.FormShow(Sender: TObject);
 begin
   _setDefaultDate;
+  _loadCmbAccount;
   _fillChart;
 end;
 
@@ -92,15 +98,21 @@ begin
   chartExpByCat.Series[0].Clear(); // pulisco il grafico
   _SQLString := 'Select CATDES, Sum(TRANSACTIONS.TRNAMOUNT) As Sum_TRNAMOUNT '
     + ' From TRANSACTIONS Inner Join '
-    + ' DBCATEGORY On CATID = TRNCATEGORY '
+    + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
+    + ' DBACCOUNT On ACCID = TRNACCOUNT '
     + ' Where '
     + ' CATDES <> ''_Transfer'' And '
-    + ' CATTYPE = ''Expense'' And'
+    + ' CATTYPE = ''Expense'' And';
+
+    if (_fAccount.Text <> 'ALL') then
+      _SQLString := _SQLString + ' ACCNAME = ''' + trim(_fAccount.Text) + ''' and ';
+
+    _SQLString := _SQLString
     + ' TRNDATE Between '''
     + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
     + ''' and '''
     + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
-    + ''' Group By CATDES '
+    + ''' Group By CATDES, ACCNAME '
     + ' Order By Sum_TRNAMOUNT Desc';
 
   MainFRM.sqlQry.SQL.Clear;
@@ -243,9 +255,14 @@ begin
     + ' Sum(TRANSACTIONS.TRNAMOUNT) As Sum_TRNAMOUNT '
     + ' From '
     + ' TRANSACTIONS Left Join '
-    + ' DBCATEGORY On DBCATEGORY.CATID = TRANSACTIONS.TRNCATEGORY '
-    + ' Where CATDES <> ''_Transfer'' '
-    + ' And TRNDATE Between '''
+    + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
+    + ' DBACCOUNT On ACCID = TRNACCOUNT '
+    + ' Where CATDES <> ''_Transfer'' ';
+    if (_fAccount.Text <> 'ALL') then
+      _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
+
+    _SQLString := _SQLString
+    + ' and TRNDATE Between '''
     + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
     + ''' and '''
     + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
@@ -330,8 +347,13 @@ begin
     + ' Sum(TRANSACTIONS.TRNAMOUNT) As Sum_TRNAMOUNT '
     + ' From '
     + ' TRANSACTIONS Left Join '
-    + ' DBCATEGORY On DBCATEGORY.CATID = TRANSACTIONS.TRNCATEGORY '
-    + ' Where CATDES <> ''_Transfer'' '
+    + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
+    + ' DBACCOUNT On ACCID = TRNACCOUNT '
+    + ' Where CATDES <> ''_Transfer'' ';
+    if (_fAccount.Text <> 'ALL') then
+      _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
+
+    _SQLString := _SQLString
     + ' And TRNDATE Between '''
     + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
     + ''' and '''
@@ -381,6 +403,12 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
+procedure TAnalisysFrm._fAccountSelect(Sender: TObject);
+begin
+  _fillChart;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TAnalisysFrm._fdtFromChange(Sender: TObject);
 begin
   _fillChart;
@@ -398,6 +426,33 @@ begin
   _chartExpByCategories;
   _chartInOutYY;
   _chartInOutMM;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TAnalisysFrm._loadCmbAccount;
+begin
+  // carico i dati nella compo dei payee
+  _fAccount.Items.Clear;
+  _fAccount.Items.Add('ALL');
+  _SQLString := 'SELECT ACCNAME FROM DBACCOUNT ORDER BY ACCNAME';
+  MainFRM.sqlQry.SQL.Clear;
+  MainFRM.sqlQry.SQL.Add(_SQLString);
+  try
+    MainFRM.sqlQry.Open;
+    while not MainFRM.sqlQry.EOF do // ciclo recupero dati
+    begin
+      // aggiungo solo gli account che non sono quelli del ledger aperto per evitare autotrasferimenti
+//      if (MainFRM.sqlQry.FieldValues['ACCNAME'] <> _plLedgerName) then
+      _fAccount.Items.Add(MainFRM.sqlQry.FieldValues['ACCNAME']);
+      MainFRM.sqlQry.Next;
+    end;
+  finally
+    // _fAccountTo.items.AddStrings(_fAccountFrom.Items); //aggiungo l'elenco in massa prendendolo dal campo riempito
+    MainFRM.sqlQry.Close;
+    MainFRM.sqlQry.SQL.Clear;
+  end;
+  _fAccount.Text:='ALL';
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
