@@ -110,8 +110,8 @@
             <Form>AccountFrm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="frmChartAnalisys.pas">
-            <Form>AnalisysFrm</Form>
+        <DCCReference Include="frmChartAnalisys1.pas">
+            <Form>AnalisysFrm1</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmPayee.pas">
@@ -120,6 +120,10 @@
         </DCCReference>
         <DCCReference Include="frmCategory.pas">
             <Form>CategoryFrm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="frmChartAnalisys2.pas">
+            <Form>AnalisysFrm2</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">
