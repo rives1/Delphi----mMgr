@@ -76,7 +76,7 @@ end;
 procedure TMainFRM.FormCreate(Sender: TObject);
 begin
   // apro il db
-  _openDB(ExtractFilePath(Application.ExeName) + 'dbone.db');
+  _openDB(ExtractFilePath(Application.ExeName) + '\db\dbone.db');
   // riempio il menu
   _treeMenuCreate;
   // riempimento chart saldi
@@ -271,7 +271,7 @@ begin
   end;
 
   // apertura report
-  rptStandard.LoadFromFile(ExtractFilePath(Application.ExeName) + 'Balance-YTD.fr3');
+  rptStandard.LoadFromFile(ExtractFilePath(Application.ExeName) + '\report\Balance-YTD.fr3');
   rptStandard.ShowReport();
 end;
 
