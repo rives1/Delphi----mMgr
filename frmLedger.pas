@@ -3,13 +3,11 @@ unit frmLedger;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, JvExComCtrls, JvComCtrls,
-  RzTreeVw, JvLookOut, JvExControls, JvOutlookBar, Vcl.Grids, JvgStringGrid,
-  VclTee.TeeGDIPlus, VclTee.Series, VclTee.TeEngine, RzPanel, VclTee.TeeProcs,
-  VclTee.Chart, Vcl.ExtCtrls, RzSplit, JvExGrids, JvStringGrid, RzGrids,
-  JvListView, Vcl.Menus, JvComponentBase, JvgExportComponents;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, System.UITypes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, JvExComCtrls, JvComCtrls, RzTreeVw, JvLookOut, JvExControls,
+  JvOutlookBar, Vcl.Grids, JvgStringGrid, VclTee.TeeGDIPlus, VclTee.Series, VclTee.TeEngine, RzPanel, VclTee.TeeProcs,
+  VclTee.Chart, Vcl.ExtCtrls, RzSplit, JvExGrids, JvStringGrid, RzGrids, JvListView, Vcl.Menus, JvComponentBase,
+  JvgExportComponents;
 
 type
   TLedgerFrm = class(TForm)
@@ -324,7 +322,7 @@ begin
       if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
       begin
         _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
-//        StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']);
+        // StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']);
         chTotals.SeriesList[0].Add(_lTotal, 'Deposit');
       end;
       MainFRM.sqlQry.Next;
@@ -412,8 +410,6 @@ begin
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
   end;
-
-
 
   //
   // Chart Storico
@@ -509,15 +505,15 @@ begin
         if (MainFRM.sqlQry.FieldValues['TRNAMOUNT'] > 0) then
         begin
           grdLedger.cells[5, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
-          _trxIndicator := '->';
+          _trxIndicator         := '->';
         end
         else
         begin
           grdLedger.cells[6, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT'] * -1);
-          _trxIndicator := '<-';
+          _trxIndicator         := '<-';
         end;
 
-        runSum := runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];
+        runSum                := runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];
         grdLedger.cells[7, i] := FormatFloat('#,##0.00', runSum);
         grdLedger.cells[8, i] := MainFRM.sqlQry.FieldValues['TRNDESCRIPTION'];
 

@@ -3,9 +3,9 @@ unit frmPayee;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, System.UITypes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.Grids, Vcl.StdCtrls, JvListBox, JvExStdCtrls,
-  JvComboListBox, Vcl.Buttons, JvExButtons, JvBitBtn;
+  JvComboListBox, Vcl.Buttons, JvExButtons, JvBitBtn, Vcl.Menus;
 
 type
   TPayeeFRM = class(TForm)
@@ -16,15 +16,21 @@ type
     _fID: TEdit;
     _fName: TEdit;
     Name: TLabel;
-    JvBitBtn1: TJvBitBtn;
-    JvBitBtn2: TJvBitBtn;
     btnOK: TJvBitBtn;
+    PopupMenu1: TPopupMenu;
+    NewPayee1: TMenuItem;
+    EditPayee1: TMenuItem;
+    N1: TMenuItem;
+    Delete1: TMenuItem;
     procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure _flvPayeeDblClick(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
+    procedure NewPayee1Click(Sender: TObject);
+    procedure EditPayee1Click(Sender: TObject);
+    procedure Delete1Click(Sender: TObject);
   private
     { Private declarations }
     // variabili
@@ -62,6 +68,20 @@ begin
   _flvPayee.SetFocus;
 end;
 
+procedure TPayeeFRM.Delete1Click(Sender: TObject);
+begin
+  _deletePayee;
+  _cleanFormNewRecord;
+end;
+// -------------------------------------------------------------------------------------------------------------//
+
+procedure TPayeeFRM.EditPayee1Click(Sender: TObject);
+begin
+  _loadRecord;
+  _fName.SetFocus;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TPayeeFRM.FormActivate(Sender: TObject);
 begin
   _flvPayee.SetFocus;
@@ -96,6 +116,13 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
+procedure TPayeeFRM.NewPayee1Click(Sender: TObject);
+begin
+  _cleanFormNewRecord;
+  _fName.SetFocus;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TPayeeFRM._cleanFormNewRecord;
 begin
   _fID.Text   := '';
@@ -106,9 +133,32 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TPayeeFRM._deletePayee;
 begin
-  { TODO :
-    definire procedura cancellazione record
-    NB: effettuare check se ci sono record correlati nelle transazioni }
+  _SQLString := 'SELECT * FROM LedgerView WHERE PAYNAME = ' + _flvPayee.Selected.Caption;
+
+  MainFRM.sqlQry.SQL.Clear;
+  MainFRM.sqlQry.SQL.Add(_SQLString);
+  try
+    MainFRM.sqlite_conn.StartTransaction;
+    MainFRM.sqlQry.Open;
+    if MainFRM.sqlQry.RecordCount > 0 then
+      MessageDlg('Data alreay used in application. Impossible to delete.', mtInformation, [mbOk], 0)
+    else
+      if MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    begin
+      _SQLString := 'DELETE FROM DBPAYEE WHERE PAYNAME = ' + _flvPayee.Selected.Caption;
+      // esecuzione della query di cancellazione
+      MainFRM.sqlQry.ExecSQL(_SQLString);
+      MainFRM.sqlite_conn.Commit;
+    end;
+    MainFRM.sqlQry.Close;
+
+  except
+    begin
+      raise Exception.Create('Error in deleting data. Operation Aborted');
+      MainFRM.sqlite_conn.Rollback;
+    end;
+  end;
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

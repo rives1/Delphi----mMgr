@@ -40,7 +40,7 @@ type
 
     // local function
     function _openDB(_pDBFname: string): boolean;
-    function _SeekNode(pvSkString: string): TTreeNode;
+    // function _SeekNode(pvSkString: string): TTreeNode;
     function _chkOpenForm(_frmCaption: string): boolean;
     procedure _closeDB;
     procedure _treeMenuCreate;
@@ -62,15 +62,17 @@ implementation
 
 
 uses
-  frmLedger, frmAccount, frmChartAnalisys, frmPayee;
+  frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmPayee, frmCategory;
 
 { TForm1 }
 
+// -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   _closeDB;
 end;
 
+// -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM.FormCreate(Sender: TObject);
 begin
   // apro il db
@@ -274,23 +276,24 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-function TMainFRM._SeekNode(pvSkString: string): TTreeNode;
-var
+{
+  function TMainFRM._SeekNode(pvSkString: string): TTreeNode;
+  var
   i: integer;
-begin
+  begin
   // ricerco nell'albero il valore della stringa su tutti i nodi di primo livello
   Result := nil;
   for i  := 0 to treeMenu.Items.Count - 1 do
   begin
-    // Controllo il valore
-    if treeMenu.Items[i].Text = pvSkString then
-    begin
-      Result := treeMenu.Items[i];
-      Break;
-    end;
+  // Controllo il valore
+  if treeMenu.Items[i].Text = pvSkString then
+  begin
+  Result := treeMenu.Items[i];
+  Break;
   end;
-end;
-
+  end;
+  end;
+}
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM._treeMenuCreate;
 // creazione di tutto l'albero del menù
@@ -355,7 +358,9 @@ begin
   // area chart
   vNodeGroup            := treeMenu.Items.Add(nil, 'Chart');
   vNodeGroup.ImageIndex := 3;
-  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Analisys');
+  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Analisys1');
+  vNode.ImageIndex      := 13;
+  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Analisys2');
   vNode.ImageIndex      := 13;
 
   // area report
@@ -371,6 +376,8 @@ begin
   vNode.ImageIndex      := 14;
   vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Payee');
   vNode.ImageIndex      := 15;
+  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Category');
+  vNode.ImageIndex      := 17;
 
   treeMenu.FullExpand;
 end;
@@ -380,15 +387,16 @@ procedure TMainFRM._treeSelectOpen;
 var
   _LedgerChildFRM:  TLedgerFrm;
   _AccountChildFRM: TAccountFrm;
-  _AnalisysFRM:     TAnalisysFrm;
+  _Analisys1FRM:    TAnalisysFrm1;
+  _Analisys2FRM:    TAnalisysFrm2;
   _PayeeFRM:        TPayeeFRM;
+  _CategoryFRM:     TCategoryFrm;
 begin
   // apro la child form del ledger. se il nodo superiore è account si tratta sicuramente di un ledger da aprire
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
     and not _chkOpenForm(treeMenu.Selected.Text) then
   begin
     _LedgerChildFRM := TLedgerFrm.Create(nil);
-
     _LedgerChildFRM.WindowState := wsMaximized;
   end;
 
@@ -397,21 +405,39 @@ begin
     if treeMenu.Selected.Text = 'Balance YTD-Monthly' then
       _reportBalanceYTD;
 
-  // apro chart
+  // apro chart1
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART'))
-    and not _chkOpenForm(treeMenu.Selected.Text) then
+    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Analisys1') then
   begin
-    _AnalisysFRM             := TAnalisysFrm.Create(nil);
-    _AnalisysFRM.WindowState := wsMaximized;
+    _Analisys1FRM             := TAnalisysFrm1.Create(nil);
+    _Analisys1FRM.WindowState := wsMaximized;
+  end;
+  // apro chart2
+  if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART'))
+    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Analisys2') then
+  begin
+    _Analisys2FRM             := TAnalisysFrm2.Create(nil);
+    _Analisys2FRM.WindowState := wsMaximized;
   end;
 
   // Config
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CONFIG')) then
   begin
     if (treeMenu.Selected.Text = 'Account') and not _chkOpenForm(treeMenu.Selected.Text) then
-      _AccountChildFRM := TAccountFrm.Create(nil);
+    begin
+      _AccountChildFRM             := TAccountFrm.Create(nil);
+      _AccountChildFRM.WindowState := wsMaximized;
+    end;
     if (treeMenu.Selected.Text = 'Payee') and not _chkOpenForm(treeMenu.Selected.Text) then
-      _PayeeFRM := TPayeeFRM.Create(nil);
+    begin
+      _PayeeFRM             := TPayeeFRM.Create(nil);
+      _PayeeFRM.WindowState := wsMaximized;
+    end;
+    if (treeMenu.Selected.Text = 'Category') and not _chkOpenForm(treeMenu.Selected.Text) then
+    begin
+      _CategoryFRM             := TCategoryFrm.Create(nil);
+      _CategoryFRM.WindowState := wsMaximized;
+    end;
   end;
 
 end;

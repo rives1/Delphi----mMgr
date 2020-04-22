@@ -34,10 +34,11 @@ object PayeeFRM: TPayeeFRM
     Top = 448
     Width = 520
     Height = 19
-    Panels = <>
-    ExplicitLeft = 310
-    ExplicitTop = 245
-    ExplicitWidth = 0
+    Panels = <
+      item
+        Text = 'Double click to edit Payee'
+        Width = 50
+      end>
   end
   object Panel3: TPanel
     Left = 231
@@ -47,9 +48,6 @@ object PayeeFRM: TPayeeFRM
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = 237
-    ExplicitWidth = 264
-    ExplicitHeight = 256
     object Name: TLabel
       Left = 7
       Top = 48
@@ -79,42 +77,13 @@ object PayeeFRM: TPayeeFRM
       BorderStyle = bsNone
       TabOrder = 1
     end
-    object JvBitBtn1: TJvBitBtn
-      Left = 15
-      Top = 116
-      Width = 75
-      Height = 25
-      Caption = '&New'
-      TabOrder = 2
-      TabStop = False
-    end
-    object JvBitBtn2: TJvBitBtn
-      Left = 15
-      Top = 147
-      Width = 75
-      Height = 25
-      Caption = '&Delete'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clRed
-      Font.Height = -11
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 3
-      TabStop = False
-      HotTrackFont.Charset = DEFAULT_CHARSET
-      HotTrackFont.Color = clWindowText
-      HotTrackFont.Height = -11
-      HotTrackFont.Name = 'Tahoma'
-      HotTrackFont.Style = []
-    end
     object btnOK: TJvBitBtn
       Left = 165
       Top = 162
       Width = 75
       Height = 25
       Caption = '&Save'
-      TabOrder = 4
+      TabOrder = 2
       OnClick = btnOKClick
     end
   end
@@ -137,8 +106,24 @@ object PayeeFRM: TPayeeFRM
     TabOrder = 2
     ViewStyle = vsReport
     OnDblClick = _flvPayeeDblClick
-    ExplicitLeft = 8
-    ExplicitTop = 8
-    ExplicitHeight = 408
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 95
+    Top = 330
+    object NewPayee1: TMenuItem
+      Caption = 'New Payee'
+      OnClick = NewPayee1Click
+    end
+    object EditPayee1: TMenuItem
+      Caption = 'Edit Payee'
+      OnClick = EditPayee1Click
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object Delete1: TMenuItem
+      Caption = 'Delete Payee'
+      OnClick = Delete1Click
+    end
   end
 end
