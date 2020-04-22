@@ -144,7 +144,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TAccountFrm._deleteAccount;
 begin
-  _SQLString := 'SELECT * FROM LedgerView WHERE ACCNAME = ' + _fLvAccount.Selected.Caption;
+  _SQLString := 'SELECT * FROM LedgerView WHERE ACCNAME = ''' + _fLvAccount.Selected.Caption +''' ';
 
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
@@ -156,19 +156,22 @@ begin
     else
     if MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
     begin
-      _SQLString := 'DELETE FROM DBACCOUNT WHERE ACCNAME = ' + _fLvAccount.Selected.Caption;
+      _SQLString := 'DELETE FROM DBACCOUNT WHERE ACCNAME = ''' + _fLvAccount.Selected.Caption + ''' ';
       // esecuzione della query di cancellazione
       MainFRM.sqlQry.ExecSQL(_SQLString);
       MainFRM.sqlite_conn.Commit;
     end;
     MainFRM.sqlQry.Close;
+    MessageDlg(_fLvAccount.Selected.Caption + ' Deleted!!', mtInformation, [mbOk], 0);
 
   except
     begin
-      raise Exception.Create('Error in deleting data. Operation Aborted');
+      raise Exception.Create('Error in deleting ->'+ _fLvAccount.Selected.Caption  + '. Operation Aborted');
       MainFRM.sqlite_conn.Rollback;
     end;
   end;
+  _loadLvAccount;
+  _cleanFormNewRecord;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

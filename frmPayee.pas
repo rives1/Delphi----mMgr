@@ -133,7 +133,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TPayeeFRM._deletePayee;
 begin
-  _SQLString := 'SELECT * FROM LedgerView WHERE PAYNAME = ' + _flvPayee.Selected.Caption;
+  _SQLString := 'SELECT * FROM LedgerView WHERE PAYNAME = ''' + _flvPayee.Selected.Caption + ''' ';
 
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
@@ -145,16 +145,15 @@ begin
     else
       if MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
     begin
-      _SQLString := 'DELETE FROM DBPAYEE WHERE PAYNAME = ' + _flvPayee.Selected.Caption;
+      _SQLString := 'DELETE FROM DBPAYEE WHERE PAYNAME = ''' + _flvPayee.Selected.Caption + ''' ';
       // esecuzione della query di cancellazione
       MainFRM.sqlQry.ExecSQL(_SQLString);
       MainFRM.sqlite_conn.Commit;
     end;
     MainFRM.sqlQry.Close;
-
   except
     begin
-      raise Exception.Create('Error in deleting data. Operation Aborted');
+      raise Exception.Create('Error in deleting -> ' + _flvPayee.Selected.Caption + '. Operation Aborted');
       MainFRM.sqlite_conn.Rollback;
     end;
   end;

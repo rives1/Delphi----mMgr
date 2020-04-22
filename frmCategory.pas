@@ -161,7 +161,7 @@ begin
   if (_treeCategory.Selected.SelectedIndex = 1) then // procedura cancellazione categoria
   begin
     _SQLString := 'Select * From DBCATEGORY Inner Join DBSUBCATEGORY On DBSUBCATEGORY.SUBCATID = DBCATEGORY.CATID '
-      + ' Where DBCATEGORY.CATDES = ' + _treeCategory.Selected.Text;
+      + ' Where DBCATEGORY.CATDES = ''' + _treeCategory.Selected.Text +''' ';
     MainFRM.sqlQry.SQL.Clear;
     MainFRM.sqlQry.SQL.Add(_SQLString);
     try
@@ -172,16 +172,16 @@ begin
       else
         if MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
       begin
-        _SQLString := 'DELETE FROM DBCATEGORY WHERE CATDES  = ' + _treeCategory.Selected.Text;
+        _SQLString := 'DELETE FROM DBCATEGORY WHERE CATDES  = ''' + _treeCategory.Selected.Text + ''' ';;
         // esecuzione della query di cancellazione
         MainFRM.sqlQry.ExecSQL(_SQLString);
         MainFRM.sqlite_conn.Commit;
       end;
       MainFRM.sqlQry.Close;
-
+    MessageDlg(_treeCategory.Selected.Text  + ' Deleted!!',mtInformation, [mbOk], 0);
     except
       begin
-        raise Exception.Create('Error in deleting data. Operation Aborted');
+        raise Exception.Create('Error in deleting -> ' + _treeCategory.Selected.Text + '. Operation Aborted');
         MainFRM.sqlite_conn.Rollback;
       end;
     end;
@@ -189,7 +189,7 @@ begin
   end
   else // cancellazione sottocategoria
   begin
-    _SQLString := 'SELECT * FROM LedgerView WHERE SUBCDES = ' + _treeCategory.Selected.Text;
+    _SQLString := 'SELECT * FROM LedgerView WHERE SUBCDES = ''' + _treeCategory.Selected.Text + ''' ';
 
     MainFRM.sqlQry.SQL.Clear;
     MainFRM.sqlQry.SQL.Add(_SQLString);
@@ -201,22 +201,23 @@ begin
       else
         if MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
       begin
-        _SQLString := 'DELETE FROM DBSUBCATEGORY WHERE SUBCDES = ' + _treeCategory.Selected.Text;
+        _SQLString := 'DELETE FROM DBSUBCATEGORY WHERE SUBCDES = ''' + _treeCategory.Selected.Text +''' ';
         // esecuzione della query di cancellazione
         MainFRM.sqlQry.ExecSQL(_SQLString);
         MainFRM.sqlite_conn.Commit;
       end;
       MainFRM.sqlQry.Close;
-
+    MessageDlg(_treeCategory.Selected.Text  + ' Deleted!!',mtInformation, [mbOk], 0);
     except
       begin
-        raise Exception.Create('Error in deleting data. Operation Aborted');
+        raise Exception.Create('Error in deleting -> '+ _treeCategory.Selected.Text +'. Operation Aborted');
         MainFRM.sqlite_conn.Rollback;
       end;
     end;
-
   end;
 
+    _treeCategoryFill;
+    _cleanFormNewRecord;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -274,6 +275,7 @@ begin
   begin
     _recordWrite;
     _treeCategoryFill;
+    _cleanFormNewRecord;
   end;
 end;
 
@@ -439,7 +441,6 @@ begin
         _SQLString := 'UPDATE DBSUBCATEGORY SET ' // aggiorno solo la descrizione
           + ' SUBCDES = ''' + _fName.Text + ''' '
           + ' WHERE SUBCID = ''' + _fID.Text + ''' ';
-
     end;
 
     MainFRM.sqlQry.ExecSQL(_SQLString);
