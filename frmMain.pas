@@ -30,6 +30,10 @@ type
     rptDset: TfrxDBDataset;
     fdMemBalYTD: TFDMemTable;
     sqlQry2: TFDQuery;
+    New1: TMenuItem;
+    Open1: TMenuItem;
+    N1: TMenuItem;
+    Quit1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure treeMenuDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -37,7 +41,8 @@ type
     { Private declarations }
     // var
     _SQLString: string;
-
+    _DbName:    string;
+    _iniFName:  string;
     // local function
     function _openDB(_pDBFname: string): boolean;
     // function _SeekNode(pvSkString: string): TTreeNode;
@@ -50,7 +55,6 @@ type
   public
     { Public declarations }
     procedure _fillBalanceChart;
-
   end;
 
 var
@@ -62,7 +66,7 @@ implementation
 
 
 uses
-  frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmPayee, frmCategory;
+  frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmPayee, frmCategory, pasCommon;
 
 { TForm1 }
 
@@ -70,17 +74,24 @@ uses
 procedure TMainFRM.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   _closeDB;
+  //salvataggio delle impostazioni -- salvo il nome dell'ultimo db utilizzato
+  _iniRW(_iniFName, 'W', 'LASTDB', 'DBNAME', _DbName);
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM.FormCreate(Sender: TObject);
 begin
-  // apro il db
-  _openDB(ExtractFilePath(Application.ExeName) + '\db\dbone.db');
-  // riempio il menu
-  _treeMenuCreate;
-  // riempimento chart saldi
-  _fillBalanceChart;
+  // leggeimpostazioni da file INI
+  _iniFName := ExtractFilePath(Application.ExeName) + 'mMgr.ini';
+  _DbName   := _iniRW(_iniFName, 'R', 'LASTDB', 'DBNAME', 'x');
+  // apro il db -- se non apro il db non ha senso aprire il menu
+  if (_openDB(ExtractFilePath(Application.ExeName) + _DbName)) then
+  begin
+    // riempio il menu
+    _treeMenuCreate;
+    // riempimento chart saldi
+    _fillBalanceChart;
+  end;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -160,13 +171,18 @@ function TMainFRM._openDB(_pDBFname: string): boolean;
 begin
   Result := true;
   // apro la connesione al db
-  sqlite_conn.Params.Database := _pDBFname;
-  try
-    sqlite_conn.Connected := true;
-  except
+  if FileExists(_pDBFname) then
+  begin
+    sqlite_conn.Params.Database := _pDBFname;
+    try
+      sqlite_conn.Connected := true;
+    except
+      MessageDlg('Impossible to open the database' + _pDBFname, mtError, [mbOK], 0);
+      Result := false;
+    end;
+  end
+  else
     MessageDlg('Impossible to open the database' + _pDBFname, mtError, [mbOK], 0);
-    Result := false;
-  end;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -396,7 +412,7 @@ begin
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
     and not _chkOpenForm(treeMenu.Selected.Text) then
   begin
-    _LedgerChildFRM := TLedgerFrm.Create(nil);
+    _LedgerChildFRM             := TLedgerFrm.Create(nil);
     _LedgerChildFRM.WindowState := wsMaximized;
   end;
 

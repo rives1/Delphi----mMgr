@@ -118,6 +118,18 @@ object MainFRM: TMainFRM
     Top = 18
     object File1: TMenuItem
       Caption = '&File'
+      object New1: TMenuItem
+        Caption = 'New'
+      end
+      object Open1: TMenuItem
+        Caption = 'Open'
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
+      object Quit1: TMenuItem
+        Caption = 'Quit'
+      end
     end
   end
   object sqlite_conn: TFDConnection

@@ -3,11 +3,11 @@ unit pasCommon;
 interface
 
 uses
-  System.AnsiStrings, Classes, INIFiles, Forms, frmMain;
+  System.AnsiStrings, Classes, INIFiles, Forms, frmMain, SysUtils;
 
 function _UpCase(_pString: string): string;
 function _getDBField(_pTBL: string; _pIDfld: string; _pDESfld: string; _pParam: string): string;
-function _iniRW(_pFName: string; _pOperation: char): Boolean;
+function _iniRW(_pFName: string; _pOperation: char; _pSection: string; _Pkey: string; _pValue: string): string;
 
 implementation
 
@@ -15,14 +15,14 @@ var
   _SQLString: string;
   _iniFName:  TiniFile;
 
-  // -------------------------------------------------------------------------------------------------------------//
+  /// -------------------------------------------------------------------------------------------------------------//
   /// ritorno la stringa passata come prima lettera maiuscola e poi tutto minuscolo
 function _UpCase(_pString: string): string;
 begin
   Result := Uppercase(Copy(_pString, 1, 1)) + Lowercase(Copy(_pString, 2, Length(_pString)));
 end;
 
-// -------------------------------------------------------------------------------------------------------------//
+/// -------------------------------------------------------------------------------------------------------------//
 /// decodifico un campo (solitamente l'ID) di una tabella dato un campo
 /// attn la richiesta non è molto sicura dipende molto dal fatto che non passino nella richiesta
 /// dei campi che potrebbero contenere campi duplicati
@@ -42,28 +42,26 @@ begin
   end;
 end;
 
-// -------------------------------------------------------------------------------------------------------------//
+/// -------------------------------------------------------------------------------------------------------------//
 /// lettura/scrittura del file ini
-{ TODO : sistemare la parametrizzazione della funzione per gestire megli la scrittura/recupero dei parametri }
-function _iniRW(_pFName: string; _pOperation: char): Boolean;
+function _iniRW(_pFName: string; _pOperation: char; _pSection: string; _Pkey: string; _pValue: string): string;
 begin
-  Result := False;
-  // Load INI settings
-  if _pOperation = 'R' then
+  Result := 'Negative';
+  // check if file exists
+  if FileExists(_pFName) then
   begin
-    _iniFName := TiniFile.Create(ExtractFilePath(Application.ExeName) + _pFName);
-    // vDBName := _iniFName.ReadString('FILE','LastFile','X');
-    _iniFName.Free;
-    Result := True;
-  end;
-  // write ini file
-  if _pOperation = 'W' then
-  begin
-    _iniFName := TiniFile.Create(ExtractFilePath(Application.ExeName) + _pFName);
-    // _iniFName.WriteString('FILE','LastFile',vDBName);
-    _iniFName.Free;
-    Result := True;
-  end;
+    // Read INI
+    _iniFName := TiniFile.Create(_pFName);
+    if _pOperation = 'R' then
+      Result := _iniFName.ReadString(_pSection, _Pkey, '');
+
+    // write ini file
+    if _pOperation = 'W' then
+      _iniFName.WriteString(_pSection, _Pkey, _pValue);
+
+  _iniFName.Free;
+  end; // file exists
 end;
 
+/// -------------------------------------------------------------------------------------------------------------//
 end.
