@@ -115,7 +115,7 @@ object MainFRM: TMainFRM
   end
   object MainMenu1: TMainMenu
     Left = 244
-    Top = 13
+    Top = 18
     object File1: TMenuItem
       Caption = '&File'
     end
