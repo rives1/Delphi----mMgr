@@ -98,12 +98,9 @@ object MainFRM: TMainFRM
       TabOrder = 1
       OnDblClick = treeMenuDblClick
       Items.NodeData = {
-        0303000000260000000000000001000000FFFFFFFFFFFFFFFF00000000000000
-        0000000000010472006F006F007400240000000100000000000000FFFFFFFFFF
-        FFFFFF2100000000000000010000000103650065006500240000000000000000
-        000000FFFFFFFFFFFFFFFF00000000000000000000000001037400740074002E
-        0000000500000000000000FFFFFFFFFFFFFFFF00000000000000000000000001
-        0865007700720074007700650072007400}
+        0302000000260000000500000000000000FFFFFFFFFFFFFFFF00000000000000
+        0000000000010452006F006F0074001E0000000000000000000000FFFFFFFFFF
+        FFFFFF0000000000000000000000000100}
     end
   end
   object StatusBar1: TStatusBar
@@ -119,16 +116,15 @@ object MainFRM: TMainFRM
     object File1: TMenuItem
       Caption = '&File'
       object New1: TMenuItem
-        Caption = 'New'
-      end
-      object Open1: TMenuItem
-        Caption = 'Open'
+        Caption = 'New/Open'
+        OnClick = New1Click
       end
       object N1: TMenuItem
         Caption = '-'
       end
       object Quit1: TMenuItem
         Caption = 'Quit'
+        OnClick = Quit1Click
       end
     end
   end
@@ -7461,5 +7457,11 @@ object MainFRM: TMainFRM
     Connection = sqlite_conn
     Left = 364
     Top = 443
+  end
+  object dlgSave: TSaveDialog
+    DefaultExt = '.sqlite'
+    Filter = 'sqlite|*.sqlite'
+    Left = 245
+    Top = 85
   end
 end

@@ -155,7 +155,7 @@ object AccountFrm: TAccountFrm
       Text = ''
       Items.Strings = (
         'Cash'
-        'Cheching'
+        'Checking'
         'CreditCard'
         'Online')
     end

@@ -95,6 +95,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TAccountFrm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
+  MainFRM._treeMenuCreate;
   Action := caFree;
   Release;
 end;
@@ -245,6 +246,7 @@ begin
   begin
     _writeRecord;
     _loadLvAccount;
+    _cleanFormNewRecord;
   end;
 end;
 

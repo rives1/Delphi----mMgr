@@ -31,12 +31,14 @@ type
     fdMemBalYTD: TFDMemTable;
     sqlQry2: TFDQuery;
     New1: TMenuItem;
-    Open1: TMenuItem;
     N1: TMenuItem;
     Quit1: TMenuItem;
+    dlgSave: TSaveDialog;
     procedure FormCreate(Sender: TObject);
     procedure treeMenuDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Quit1Click(Sender: TObject);
+    procedure New1Click(Sender: TObject);
   private
     { Private declarations }
     // var
@@ -48,12 +50,13 @@ type
     // function _SeekNode(pvSkString: string): TTreeNode;
     function _chkOpenForm(_frmCaption: string): boolean;
     procedure _closeDB;
-    procedure _treeMenuCreate;
     procedure _treeSelectOpen;
     procedure _reportBalanceYTD;
+    procedure _createNewDB;
 
   public
     { Public declarations }
+    procedure _treeMenuCreate;
     procedure _fillBalanceChart;
   end;
 
@@ -74,8 +77,8 @@ uses
 procedure TMainFRM.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   _closeDB;
-  //salvataggio delle impostazioni -- salvo il nome dell'ultimo db utilizzato
-  _iniRW(_iniFName, 'W', 'LASTDB', 'DBNAME', _DbName);
+  // salvataggio delle impostazioni -- salvo il nome dell'ultimo db utilizzato
+  _iniRW(_iniFName, 'W', 'LASTDB', 'DBNAME', ExtractFileName(_DbName));
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -83,21 +86,34 @@ procedure TMainFRM.FormCreate(Sender: TObject);
 begin
   // leggeimpostazioni da file INI
   _iniFName := ExtractFilePath(Application.ExeName) + 'mMgr.ini';
-  _DbName   := _iniRW(_iniFName, 'R', 'LASTDB', 'DBNAME', 'x');
+  _DbName   := ExtractFilePath(Application.ExeName) + 'db\' + _iniRW(_iniFName, 'R', 'LASTDB', 'DBNAME', 'x');
   // apro il db -- se non apro il db non ha senso aprire il menu
-  if (_openDB(ExtractFilePath(Application.ExeName) + _DbName)) then
+  if (_openDB(_DbName)) then
   begin
-    // riempio il menu
-    _treeMenuCreate;
-    // riempimento chart saldi
-    _fillBalanceChart;
+    _treeMenuCreate;   // riempio il menu
+    _fillBalanceChart; // riempimento chart saldi
   end;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TMainFRM.New1Click(Sender: TObject);
+begin
+  /// Creazione del nuovo db
+  /// apro il db in base al nome selezionato nella dialog
+  _createNewDB;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TMainFRM.Quit1Click(Sender: TObject);
+begin
+  Application.Terminate;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM.treeMenuDblClick(Sender: TObject);
 begin
   _treeSelectOpen; // apro le form in base alla selezione del nodo
+  _treeMenuCreate; // ripopolo il menu
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -124,6 +140,94 @@ procedure TMainFRM._closeDB;
 begin
   // chisura del db
   sqlite_conn.Close;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TMainFRM._createNewDB;
+begin
+  // esecuzione delle query per la cerazione del nuovo db
+  sqlite_conn.StartTransaction;
+
+  try
+    _SQLString := ' CREATE TABLE IF NOT EXISTS ''TRANSACTIONS'' ( '
+      + ' ''TRNID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
+      + ' ''TRNTYPE''	STRING(10) NOT NULL, '
+      + ' ''TRNDATE''	DATE(10) NOT NULL, '
+      + ' ''TRNPAYEE''	INTEGER NOT NULL, '
+      + ' ''TRNCATEGORY''	INTEGER NOT NULL, '
+      + ' ''TRNSUBCATEGORY''	INTEGER, '
+      + ' ''TRNAMOUNT''	DOUBLE NOT NULL, '
+      + ' ''TRNACCOUNT''	INTEGER NOT NULL, '
+      + ' ''TRNDESCRIPTION''	STRING(100), '
+      + ' ''TRNTRANSFERID''	INTEGER, '
+      + ' FOREIGN KEY(''TRNPAYEE'') REFERENCES ''DBPAYEE''(''PAYID''), '
+      + ' FOREIGN KEY(''TRNSUBCATEGORY'') REFERENCES ''DBSUBCATEGORY''(''SUBCID''), '
+      + ' FOREIGN KEY(''TRNCATEGORY'') REFERENCES ''DBCATEGORY''(''CATID''), '
+      + ' FOREIGN KEY(''TRNACCOUNT'') REFERENCES ''DBACCOUNT''(''ACCID''));';
+    sqlQry.ExecSQL(_SQLString);
+
+    _SQLString := 'CREATE TABLE IF NOT EXISTS ''DBSUBCATEGORY'' ( '
+      + '''SUBCID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
+      + '''SUBCATID''	INTEGER NOT NULL, '
+      + '''SUBCDES''	STRING(50) NOT NULL UNIQUE, '
+      + 'FOREIGN KEY(''SUBCATID'') REFERENCES ''DBCATEGORY''(''CATID'') ON DELETE CASCADE);';
+    sqlQry.ExecSQL(_SQLString);
+
+    _SQLString := ' CREATE TABLE IF NOT EXISTS ''DBPAYEE'' ( '
+      + '''PAYID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
+      + '''PAYNAME''	STRING(50) NOT NULL UNIQUE);';
+    sqlQry.ExecSQL(_SQLString);
+
+    _SQLString := ' CREATE TABLE IF NOT EXISTS ''DBCATEGORY'' ( '
+      + '''CATID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
+      + '''CATDES''	STRING(50) NOT NULL UNIQUE, '
+      + '''CATTYPE''	STRING NOT NULL ); ';
+    sqlQry.ExecSQL(_SQLString);
+
+    _SQLString := ' CREATE TABLE IF NOT EXISTS ''DBACCOUNT'' ( '
+      + '''ACCID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
+      + '''ACCNAME''	STRING(50) NOT NULL UNIQUE, '
+      + '''ACCTYPE''	STRING(15 , 0) NOT NULL); ';
+    sqlQry.ExecSQL(_SQLString);
+
+    _SQLString := ' CREATE UNIQUE INDEX IF NOT EXISTS ''DBSUBCATEGORY_Index01'' ON ''DBSUBCATEGORY'' (''SUBCDES''); ';
+    sqlQry.ExecSQL(_SQLString);
+
+    _SQLString := ' CREATE UNIQUE INDEX IF NOT EXISTS ''DBPAYEE_Index01'' ON ''DBPAYEE'' (''PAYNAME''); ';
+    sqlQry.ExecSQL(_SQLString);
+
+    _SQLString := ' CREATE UNIQUE INDEX IF NOT EXISTS ''DBCATEGORY_Index01'' ON ''DBCATEGORY'' (''CATDES'');';
+    sqlQry.ExecSQL(_SQLString);
+
+    _SQLString := ' CREATE UNIQUE INDEX IF NOT EXISTS ''DBACCOUNT_Index01'' ON ''DBACCOUNT'' (''ACCNAME'');';
+    sqlQry.ExecSQL(_SQLString);
+
+    _SQLString := ' CREATE VIEW LedgerView AS Select '
+      + ' TRANSACTIONS.TRNID, '
+      + ' TRANSACTIONS.TRNTYPE, '
+      + ' TRANSACTIONS.TRNDATE, '
+      + ' TRANSACTIONS.TRNAMOUNT, '
+      + ' TRANSACTIONS.TRNDESCRIPTION, '
+      + ' TRANSACTIONS.TRNTRANSFERID, '
+      + ' DBACCOUNT.ACCNAME, '
+      + ' DBPAYEE.PAYNAME, '
+      + ' DBCATEGORY.CATDES, '
+      + ' DBSUBCATEGORY.SUBCDES '
+      + ' From '
+      + ' TRANSACTIONS Left Join '
+      + ' DBACCOUNT On DBACCOUNT.ACCID = TRANSACTIONS.TRNACCOUNT Left Join '
+      + ' DBCATEGORY On DBCATEGORY.CATID = TRANSACTIONS.TRNCATEGORY Left Join '
+      + ' DBPAYEE On DBPAYEE.PAYID = TRANSACTIONS.TRNPAYEE Left Join '
+      + ' DBSUBCATEGORY On DBSUBCATEGORY.SUBCID = TRANSACTIONS.TRNSUBCATEGORY '
+      + ' And DBCATEGORY.CATID = DBSUBCATEGORY.SUBCATID;';
+    sqlQry.ExecSQL(_SQLString);
+
+    sqlite_conn.Commit;
+  except
+    exception.Create('Error populationg DB');
+    sqlite_conn.Rollback;
+  end;
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -170,7 +274,7 @@ end;
 function TMainFRM._openDB(_pDBFname: string): boolean;
 begin
   Result := true;
-  // apro la connesione al db
+  // apro la connesione al db oppure ne creo uno nuovo se il nome passato non è un file esistente
   if FileExists(_pDBFname) then
   begin
     sqlite_conn.Params.Database := _pDBFname;
@@ -182,7 +286,32 @@ begin
     end;
   end
   else
-    MessageDlg('Impossible to open the database' + _pDBFname, mtError, [mbOK], 0);
+    if (MessageDlg('Database ->' + _pDBFname + ' not found. Create a new one?', mtConfirmation, [mbYes, mbNo], 0)
+    = mrYes) then
+  begin
+    // imposto i parmetri per la richiesta del nome del nuovo db.
+    dlgSave.InitialDir := ExtractFilePath(Application.ExeName) + 'db\';
+    if ((dlgSave.Execute) and (dlgSave.FileName <> '')) then
+    begin
+      _DbName   := dlgSave.FileName;
+      _pDBFname := _DbName;
+      try
+        sqlite_conn.Params.Database := _pDBFname;
+        sqlite_conn.Connected       := true;
+        _createNewDB;
+      except
+        MessageDlg('Impossible to open the database' + _pDBFname, mtError, [mbOK], 0);
+        Result := false;
+      end;
+    end
+    else
+    begin
+      MessageDlg('Operation aborted', mtInformation, [mbOK], 0);
+      Result := false;
+    end;
+  end
+  else
+    Result := false;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
