@@ -39,6 +39,7 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Quit1Click(Sender: TObject);
     procedure New1Click(Sender: TObject);
+
   private
     { Private declarations }
     // var
@@ -74,6 +75,7 @@ uses
 { TForm1 }
 
 // -------------------------------------------------------------------------------------------------------------//
+
 procedure TMainFRM.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   _closeDB;
@@ -146,87 +148,96 @@ end;
 procedure TMainFRM._createNewDB;
 begin
   // esecuzione delle query per la cerazione del nuovo db
-  sqlite_conn.StartTransaction;
+  dlgSave.InitialDir := ExtractFilePath(Application.ExeName) + 'db\';
+  if ((dlgSave.Execute) and (dlgSave.FileName <> '')) then
+  begin
+    _DbName := dlgSave.FileName;
+    try
+      sqlite_conn.Params.Database := _DbName;
+      sqlite_conn.Connected       := true;
+      sqlite_conn.StartTransaction;
 
-  try
-    _SQLString := ' CREATE TABLE IF NOT EXISTS ''TRANSACTIONS'' ( '
-      + ' ''TRNID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
-      + ' ''TRNTYPE''	STRING(10) NOT NULL, '
-      + ' ''TRNDATE''	DATE(10) NOT NULL, '
-      + ' ''TRNPAYEE''	INTEGER NOT NULL, '
-      + ' ''TRNCATEGORY''	INTEGER NOT NULL, '
-      + ' ''TRNSUBCATEGORY''	INTEGER, '
-      + ' ''TRNAMOUNT''	DOUBLE NOT NULL, '
-      + ' ''TRNACCOUNT''	INTEGER NOT NULL, '
-      + ' ''TRNDESCRIPTION''	STRING(100), '
-      + ' ''TRNTRANSFERID''	INTEGER, '
-      + ' FOREIGN KEY(''TRNPAYEE'') REFERENCES ''DBPAYEE''(''PAYID''), '
-      + ' FOREIGN KEY(''TRNSUBCATEGORY'') REFERENCES ''DBSUBCATEGORY''(''SUBCID''), '
-      + ' FOREIGN KEY(''TRNCATEGORY'') REFERENCES ''DBCATEGORY''(''CATID''), '
-      + ' FOREIGN KEY(''TRNACCOUNT'') REFERENCES ''DBACCOUNT''(''ACCID''));';
-    sqlQry.ExecSQL(_SQLString);
+      _SQLString := ' CREATE TABLE IF NOT EXISTS ''TRANSACTIONS'' ( '
+        + ' ''TRNID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
+        + ' ''TRNTYPE''	STRING(10) NOT NULL, '
+        + ' ''TRNDATE''	DATE(10) NOT NULL, '
+        + ' ''TRNPAYEE''	INTEGER NOT NULL, '
+        + ' ''TRNCATEGORY''	INTEGER NOT NULL, '
+        + ' ''TRNSUBCATEGORY''	INTEGER, '
+        + ' ''TRNAMOUNT''	DOUBLE NOT NULL, '
+        + ' ''TRNACCOUNT''	INTEGER NOT NULL, '
+        + ' ''TRNDESCRIPTION''	STRING(100), '
+        + ' ''TRNTRANSFERID''	INTEGER, '
+        + ' FOREIGN KEY(''TRNPAYEE'') REFERENCES ''DBPAYEE''(''PAYID''), '
+        + ' FOREIGN KEY(''TRNSUBCATEGORY'') REFERENCES ''DBSUBCATEGORY''(''SUBCID''), '
+        + ' FOREIGN KEY(''TRNCATEGORY'') REFERENCES ''DBCATEGORY''(''CATID''), '
+        + ' FOREIGN KEY(''TRNACCOUNT'') REFERENCES ''DBACCOUNT''(''ACCID''));';
+      sqlQry.ExecSQL(_SQLString);
 
-    _SQLString := 'CREATE TABLE IF NOT EXISTS ''DBSUBCATEGORY'' ( '
-      + '''SUBCID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
-      + '''SUBCATID''	INTEGER NOT NULL, '
-      + '''SUBCDES''	STRING(50) NOT NULL UNIQUE, '
-      + 'FOREIGN KEY(''SUBCATID'') REFERENCES ''DBCATEGORY''(''CATID'') ON DELETE CASCADE);';
-    sqlQry.ExecSQL(_SQLString);
+      _SQLString := 'CREATE TABLE IF NOT EXISTS ''DBSUBCATEGORY'' ( '
+        + '''SUBCID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
+        + '''SUBCATID''	INTEGER NOT NULL, '
+        + '''SUBCDES''	STRING(50) NOT NULL UNIQUE, '
+        + 'FOREIGN KEY(''SUBCATID'') REFERENCES ''DBCATEGORY''(''CATID'') ON DELETE CASCADE);';
+      sqlQry.ExecSQL(_SQLString);
 
-    _SQLString := ' CREATE TABLE IF NOT EXISTS ''DBPAYEE'' ( '
-      + '''PAYID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
-      + '''PAYNAME''	STRING(50) NOT NULL UNIQUE);';
-    sqlQry.ExecSQL(_SQLString);
+      _SQLString := ' CREATE TABLE IF NOT EXISTS ''DBPAYEE'' ( '
+        + '''PAYID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
+        + '''PAYNAME''	STRING(50) NOT NULL UNIQUE);';
+      sqlQry.ExecSQL(_SQLString);
 
-    _SQLString := ' CREATE TABLE IF NOT EXISTS ''DBCATEGORY'' ( '
-      + '''CATID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
-      + '''CATDES''	STRING(50) NOT NULL UNIQUE, '
-      + '''CATTYPE''	STRING NOT NULL ); ';
-    sqlQry.ExecSQL(_SQLString);
+      _SQLString := ' CREATE TABLE IF NOT EXISTS ''DBCATEGORY'' ( '
+        + '''CATID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
+        + '''CATDES''	STRING(50) NOT NULL UNIQUE, '
+        + '''CATTYPE''	STRING NOT NULL ); ';
+      sqlQry.ExecSQL(_SQLString);
 
-    _SQLString := ' CREATE TABLE IF NOT EXISTS ''DBACCOUNT'' ( '
-      + '''ACCID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
-      + '''ACCNAME''	STRING(50) NOT NULL UNIQUE, '
-      + '''ACCTYPE''	STRING(15 , 0) NOT NULL); ';
-    sqlQry.ExecSQL(_SQLString);
+      _SQLString := ' CREATE TABLE IF NOT EXISTS ''DBACCOUNT'' ( '
+        + '''ACCID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
+        + '''ACCNAME''	STRING(50) NOT NULL UNIQUE, '
+        + '''ACCTYPE''	STRING(15 , 0) NOT NULL); ';
+      sqlQry.ExecSQL(_SQLString);
 
-    _SQLString := ' CREATE UNIQUE INDEX IF NOT EXISTS ''DBSUBCATEGORY_Index01'' ON ''DBSUBCATEGORY'' (''SUBCDES''); ';
-    sqlQry.ExecSQL(_SQLString);
+      _SQLString := ' CREATE UNIQUE INDEX IF NOT EXISTS ''DBSUBCATEGORY_Index01'' ON ''DBSUBCATEGORY'' (''SUBCDES''); ';
+      sqlQry.ExecSQL(_SQLString);
 
-    _SQLString := ' CREATE UNIQUE INDEX IF NOT EXISTS ''DBPAYEE_Index01'' ON ''DBPAYEE'' (''PAYNAME''); ';
-    sqlQry.ExecSQL(_SQLString);
+      _SQLString := ' CREATE UNIQUE INDEX IF NOT EXISTS ''DBPAYEE_Index01'' ON ''DBPAYEE'' (''PAYNAME''); ';
+      sqlQry.ExecSQL(_SQLString);
 
-    _SQLString := ' CREATE UNIQUE INDEX IF NOT EXISTS ''DBCATEGORY_Index01'' ON ''DBCATEGORY'' (''CATDES'');';
-    sqlQry.ExecSQL(_SQLString);
+      _SQLString := ' CREATE UNIQUE INDEX IF NOT EXISTS ''DBCATEGORY_Index01'' ON ''DBCATEGORY'' (''CATDES'');';
+      sqlQry.ExecSQL(_SQLString);
 
-    _SQLString := ' CREATE UNIQUE INDEX IF NOT EXISTS ''DBACCOUNT_Index01'' ON ''DBACCOUNT'' (''ACCNAME'');';
-    sqlQry.ExecSQL(_SQLString);
+      _SQLString := ' CREATE UNIQUE INDEX IF NOT EXISTS ''DBACCOUNT_Index01'' ON ''DBACCOUNT'' (''ACCNAME'');';
+      sqlQry.ExecSQL(_SQLString);
 
-    _SQLString := ' CREATE VIEW LedgerView AS Select '
-      + ' TRANSACTIONS.TRNID, '
-      + ' TRANSACTIONS.TRNTYPE, '
-      + ' TRANSACTIONS.TRNDATE, '
-      + ' TRANSACTIONS.TRNAMOUNT, '
-      + ' TRANSACTIONS.TRNDESCRIPTION, '
-      + ' TRANSACTIONS.TRNTRANSFERID, '
-      + ' DBACCOUNT.ACCNAME, '
-      + ' DBPAYEE.PAYNAME, '
-      + ' DBCATEGORY.CATDES, '
-      + ' DBSUBCATEGORY.SUBCDES '
-      + ' From '
-      + ' TRANSACTIONS Left Join '
-      + ' DBACCOUNT On DBACCOUNT.ACCID = TRANSACTIONS.TRNACCOUNT Left Join '
-      + ' DBCATEGORY On DBCATEGORY.CATID = TRANSACTIONS.TRNCATEGORY Left Join '
-      + ' DBPAYEE On DBPAYEE.PAYID = TRANSACTIONS.TRNPAYEE Left Join '
-      + ' DBSUBCATEGORY On DBSUBCATEGORY.SUBCID = TRANSACTIONS.TRNSUBCATEGORY '
-      + ' And DBCATEGORY.CATID = DBSUBCATEGORY.SUBCATID;';
-    sqlQry.ExecSQL(_SQLString);
+      _SQLString := ' CREATE VIEW LedgerView AS Select '
+        + ' TRANSACTIONS.TRNID, '
+        + ' TRANSACTIONS.TRNTYPE, '
+        + ' TRANSACTIONS.TRNDATE, '
+        + ' TRANSACTIONS.TRNAMOUNT, '
+        + ' TRANSACTIONS.TRNDESCRIPTION, '
+        + ' TRANSACTIONS.TRNTRANSFERID, '
+        + ' DBACCOUNT.ACCNAME, '
+        + ' DBPAYEE.PAYNAME, '
+        + ' DBCATEGORY.CATDES, '
+        + ' DBSUBCATEGORY.SUBCDES '
+        + ' From '
+        + ' TRANSACTIONS Left Join '
+        + ' DBACCOUNT On DBACCOUNT.ACCID = TRANSACTIONS.TRNACCOUNT Left Join '
+        + ' DBCATEGORY On DBCATEGORY.CATID = TRANSACTIONS.TRNCATEGORY Left Join '
+        + ' DBPAYEE On DBPAYEE.PAYID = TRANSACTIONS.TRNPAYEE Left Join '
+        + ' DBSUBCATEGORY On DBSUBCATEGORY.SUBCID = TRANSACTIONS.TRNSUBCATEGORY '
+        + ' And DBCATEGORY.CATID = DBSUBCATEGORY.SUBCATID;';
+      sqlQry.ExecSQL(_SQLString);
 
-    sqlite_conn.Commit;
-  except
-    exception.Create('Error populationg DB');
-    sqlite_conn.Rollback;
-  end;
+      sqlite_conn.Commit;
+
+    except
+      MessageDlg('Impossible to create the database' + _DbName, mtError, [mbOK], 0);
+    end;
+  end
+  else
+    MessageDlg('Operation aborted', mtInformation, [mbOK], 0);
 
 end;
 
@@ -286,32 +297,14 @@ begin
     end;
   end
   else
-    if (MessageDlg('Database ->' + _pDBFname + ' not found. Create a new one?', mtConfirmation, [mbYes, mbNo], 0)
-    = mrYes) then
-  begin
-    // imposto i parmetri per la richiesta del nome del nuovo db.
-    dlgSave.InitialDir := ExtractFilePath(Application.ExeName) + 'db\';
-    if ((dlgSave.Execute) and (dlgSave.FileName <> '')) then
-    begin
-      _DbName   := dlgSave.FileName;
-      _pDBFname := _DbName;
-      try
-        sqlite_conn.Params.Database := _pDBFname;
-        sqlite_conn.Connected       := true;
-        _createNewDB;
-      except
-        MessageDlg('Impossible to open the database' + _pDBFname, mtError, [mbOK], 0);
-        Result := false;
-      end;
-    end
-    else
-    begin
-      MessageDlg('Operation aborted', mtInformation, [mbOK], 0);
-      Result := false;
-    end;
-  end
+    if (MessageDlg('Database ->' + _pDBFname + ' not found. Create a new one?', mtConfirmation,
+    [mbYes, mbNo], 0) = mrYes) then
+    _createNewDB
   else
+  begin
+    MessageDlg('Operation aborted', mtInformation, [mbOK], 0);
     Result := false;
+  end;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

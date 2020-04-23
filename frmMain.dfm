@@ -7461,6 +7461,7 @@ object MainFRM: TMainFRM
   object dlgSave: TSaveDialog
     DefaultExt = '.sqlite'
     Filter = 'sqlite|*.sqlite'
+    Options = [ofHideReadOnly, ofNoChangeDir, ofEnableSizing]
     Left = 245
     Top = 85
   end
