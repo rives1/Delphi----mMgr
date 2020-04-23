@@ -231,7 +231,7 @@ begin
       sqlQry.ExecSQL(_SQLString);
 
       sqlite_conn.Commit;
-
+      MainFRM.caption := MainFRM.caption + '    --  ' + ExtractFileName(_DbName);
     except
       MessageDlg('Impossible to create the database' + _DbName, mtError, [mbOK], 0);
     end;
@@ -291,6 +291,7 @@ begin
     sqlite_conn.Params.Database := _pDBFname;
     try
       sqlite_conn.Connected := true;
+      MainFRM.caption := MainFRM.caption + '    --  ' + ExtractFileName(_pDBFname);
     except
       MessageDlg('Impossible to open the database' + _pDBFname, mtError, [mbOK], 0);
       Result := false;
