@@ -111,7 +111,10 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM.Open1Click(Sender: TObject);
 begin
-
+  // aprol adialog per la selezione del DB da aprire
+  dlgOpen.InitialDir := ExtractFilePath(Application.ExeName) + 'db\';
+  if ((dlgOpen.Execute) and (dlgOpen.FileName <> '')) then
+    _openDB(dlgOpen.FileName);
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -240,7 +243,7 @@ begin
       sqlQry.ExecSQL(_SQLString);
 
       sqlite_conn.Commit;
-      MainFRM.caption := MainFRM.caption + '    --  ' + ExtractFileName(_DbName);
+      MainFRM.caption := 'mMgr -> ' + ExtractFileName(_DbName);
     except
       MessageDlg('Impossible to create the database' + _DbName, mtError, [mbOK], 0);
     end;
@@ -248,6 +251,7 @@ begin
   else
     MessageDlg('Operation aborted', mtInformation, [mbOK], 0);
 
+    _treeMenuCreate;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -300,7 +304,8 @@ begin
     sqlite_conn.Params.Database := _pDBFname;
     try
       sqlite_conn.Connected := true;
-      MainFRM.caption       := MainFRM.caption + '    --  ' + ExtractFileName(_pDBFname);
+      MainFRM.caption       := 'mMgr -> ' + ExtractFileName(_pDBFname);
+      _treeMenuCreate;
     except
       MessageDlg('Impossible to open the database -> ' + _pDBFname, mtError, [mbOK], 0);
       Result := false;
@@ -453,7 +458,7 @@ begin
         while not sqlQry.EOF do // ciclo recupero dati
         begin
           vNodeText := sqlQry.FieldValues['ACCNAME'];
-          vNode := treeMenu.Items.AddChild(vNodeGroup, vNodeText); // aggiungo il nodo
+          vNode     := treeMenu.Items.AddChild(vNodeGroup, vNodeText); // aggiungo il nodo
           // selezione quale immagine impostare sul nodo
           if (sqlQry.FieldValues['ACCTYPE'] = 'Cash') then
           begin
