@@ -305,6 +305,7 @@ begin
     try
       sqlite_conn.Connected := true;
       MainFRM.caption       := 'mMgr -> ' + ExtractFileName(_pDBFname);
+      _DbName := _pDBFname;
       _treeMenuCreate;
     except
       MessageDlg('Impossible to open the database -> ' + _pDBFname, mtError, [mbOK], 0);

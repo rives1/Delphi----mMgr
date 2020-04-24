@@ -102,9 +102,13 @@ begin
     + ' Avg(TRNAMOUNT) As Avg_TRNAMOUNT, '
     + ' Count(TRNID) As Count_TRNID '
     + ' From '
-    + ' TRANSACTIONS Left Join '
-    + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
-    + ' DBACCOUNT On ACCID = TRNACCOUNT '
+    + ' TRANSACTIONS Inner Join '
+    + ' DBACCOUNT On ACCID = TRNACCOUNT Inner Join '
+    + ' DBSUBCATEGORY On SUBCID = TRNSUBCATEGORY Inner Join '
+    + ' DBCATEGORY On CATID = SUBCATID '
+  // + ' TRANSACTIONS Left Join '
+  // + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
+  // + ' DBACCOUNT On ACCID = TRNACCOUNT '
     + ' Where '
     + ' CATDES <> ''_Transfer'' ';
   if (_fAccount.Text <> 'ALL') then
@@ -133,17 +137,17 @@ begin
         begin
           chartCategoryAvg.Axes.Bottom.Items.Add(_i, MainFRM.sqlQry.FieldValues['CATDES']);
           _Cat := MainFRM.sqlQry.FieldValues['CATDES'];
-          _i  := _i + 1;
+          _i   := _i + 1;
         end;
 
         // inserimento dati nelle due serie in base alla tipologia della categoria
         _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Avg_TRNAMOUNT']));
         // in base al tipo di spesa imputo su quale serie aggiungere il dato
-//        if (UpperCase(MainFRM.sqlQry.FieldValues['CATTYPE']) = 'EXPENSE') then
-          chartCategoryAvg.SeriesList[0].Add(_lTotal)
-//        else
-          // chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY']);
-//          chartCategoryAvg.SeriesList[1].Add(_lTotal);
+        // if (UpperCase(MainFRM.sqlQry.FieldValues['CATTYPE']) = 'EXPENSE') then
+        chartCategoryAvg.SeriesList[0].Add(_lTotal)
+        // else
+        // chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY']);
+        // chartCategoryAvg.SeriesList[1].Add(_lTotal);
       end;
 
       MainFRM.sqlQry.Next;
@@ -166,22 +170,31 @@ begin
   chartExpByCat.Series[0].Clear(); // pulisco il grafico
   _SQLString := 'Select CATDES, Sum(TRANSACTIONS.TRNAMOUNT) As Sum_TRNAMOUNT '
     + ' From TRANSACTIONS Inner Join '
-    + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
-    + ' DBACCOUNT On ACCID = TRNACCOUNT '
+    + ' DBACCOUNT On ACCID = TRNACCOUNT Inner Join '
+    + ' DBSUBCATEGORY On SUBCID = TRNSUBCATEGORY Inner Join '
+    + ' DBCATEGORY On CATID = SUBCATID '
+  // + ' From TRANSACTIONS Inner Join '
+  // + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
+  // + ' DBACCOUNT On ACCID = TRNACCOUNT '
     + ' Where '
     + ' CATDES <> ''_Transfer'' And '
     + ' CATTYPE = ''Expense'' And';
 
-    if (_fAccount.Text <> 'ALL') then
-      _SQLString := _SQLString + ' ACCNAME = ''' + trim(_fAccount.Text) + ''' and ';
+  if (_fAccount.Text <> 'ALL') then
+    _SQLString := _SQLString + ' ACCNAME = ''' + Trim(_fAccount.Text) + ''' and ';
 
-    _SQLString := _SQLString
+  _SQLString := _SQLString
     + ' TRNDATE Between '''
     + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
     + ''' and '''
     + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
-    + ''' Group By CATDES, ACCNAME '
-    + ' Order By Sum_TRNAMOUNT Desc';
+    + ''' Group By CATDES';
+
+    //non necessario effettuare raggruppamento il campo serve solo per filtrare
+    //  if (_fAccount.Text <> 'ALL') then
+//    _SQLString := _SQLString + ', ACCNAME ';
+
+  _SQLString := _SQLString + ' Order By Sum_TRNAMOUNT Desc';
 
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
@@ -234,25 +247,29 @@ begin
     _tempTable.Post;
   end;
 
-  _SQLString := ' SELECT StrfTime(''%m'', TRANSACTIONS.TRNDATE) As MM, CATTYPE, '
-    + ' Sum(TRANSACTIONS.TRNAMOUNT) As Sum_TRNAMOUNT '
+  _SQLString := ' SELECT StrfTime(''%m'', TRNDATE) As MM, CATTYPE, '
+    + ' Sum(TRNAMOUNT) As Sum_TRNAMOUNT '
     + ' From '
-    + ' TRANSACTIONS Left Join '
-    + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
-    + ' DBACCOUNT On ACCID = TRNACCOUNT '
+    + ' TRANSACTIONS Inner Join '
+    + ' DBACCOUNT On ACCID = TRNACCOUNT Inner Join '
+    + ' DBSUBCATEGORY On SUBCID = TRNSUBCATEGORY Inner Join '
+    + ' DBCATEGORY On CATID = SUBCATID '
+//    + ' TRANSACTIONS Left Join '
+//    + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
+//    + ' DBACCOUNT On ACCID = TRNACCOUNT '
     + ' Where CATDES <> ''_Transfer'' ';
-    if (_fAccount.Text <> 'ALL') then
-      _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
+  if (_fAccount.Text <> 'ALL') then
+    _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
 
-    _SQLString := _SQLString
+  _SQLString := _SQLString
     + ' and TRNDATE Between '''
     + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
     + ''' and '''
     + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
     + ''' Group By '
-    + ' StrfTime(''%m'', TRANSACTIONS.TRNDATE), CATTYPE '
+    + ' StrfTime(''%m'', TRNDATE), CATTYPE '
     + ' Order By '
-    + ' StrfTime(''%m'', TRANSACTIONS.TRNDATE), CATTYPE ';
+    + ' StrfTime(''%m'', TRNDATE), CATTYPE ';
 
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
@@ -324,25 +341,29 @@ begin
   chartInOutYY.Series[0].Clear(); // pulisco il grafico
   chartInOutYY.Series[1].Clear(); // pulisco il grafico
 
-  _SQLString := ' SELECT StrfTime(''%Y'', TRANSACTIONS.TRNDATE) As YY, CATTYPE, '
-    + ' Sum(TRANSACTIONS.TRNAMOUNT) As Sum_TRNAMOUNT '
+  _SQLString := ' SELECT StrfTime(''%Y'', TRNDATE) As YY, CATTYPE, '
+    + ' Sum(TRNAMOUNT) As Sum_TRNAMOUNT '
     + ' From '
-    + ' TRANSACTIONS Left Join '
-    + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
-    + ' DBACCOUNT On ACCID = TRNACCOUNT '
+    + ' TRANSACTIONS Inner Join '
+    + ' DBACCOUNT On ACCID = TRNACCOUNT Inner Join '
+    + ' DBSUBCATEGORY On SUBCID = TRNSUBCATEGORY Inner Join '
+    + ' DBCATEGORY On CATID = SUBCATID '
+    //    + ' TRANSACTIONS Left Join '
+//    + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
+//    + ' DBACCOUNT On ACCID = TRNACCOUNT '
     + ' Where CATDES <> ''_Transfer'' ';
-    if (_fAccount.Text <> 'ALL') then
-      _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
+  if (_fAccount.Text <> 'ALL') then
+    _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
 
-    _SQLString := _SQLString
+  _SQLString := _SQLString
     + ' And TRNDATE Between '''
     + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
     + ''' and '''
     + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
     + ''' Group By '
-    + ' StrfTime(''%Y'', TRANSACTIONS.TRNDATE), CATTYPE '
+    + ' StrfTime(''%Y'', TRNDATE), CATTYPE '
     + ' Order By '
-    + ' StrfTime(''%Y'', TRANSACTIONS.TRNDATE), CATTYPE ';
+    + ' StrfTime(''%Y'', TRNDATE), CATTYPE ';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   chartInOutYY.Axes.Bottom.Items.Clear;
@@ -424,7 +445,7 @@ begin
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
     begin
       // aggiungo solo gli account che non sono quelli del ledger aperto per evitare autotrasferimenti
-//      if (MainFRM.sqlQry.FieldValues['ACCNAME'] <> _plLedgerName) then
+      // if (MainFRM.sqlQry.FieldValues['ACCNAME'] <> _plLedgerName) then
       _fAccount.Items.Add(MainFRM.sqlQry.FieldValues['ACCNAME']);
       MainFRM.sqlQry.Next;
     end;
@@ -433,7 +454,7 @@ begin
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
   end;
-  _fAccount.Text:='ALL';
+  _fAccount.Text := 'ALL';
 
 end;
 
@@ -442,7 +463,7 @@ procedure TAnalisysFrm1._setDefaultDate;
 begin
   // imposto le date nella configurazionae YTD
   _fdtFrom.Date := EncodeDate(CurrentYear, 1, 1);
-  _fdtTo.Date := Now();
+  _fdtTo.Date   := Now();
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

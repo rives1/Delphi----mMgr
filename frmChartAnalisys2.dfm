@@ -109,6 +109,16 @@ object AnalisysFrm2: TAnalisysFrm2
         Column = 1
         Control = chartInOutMM
         Row = 1
+      end
+      item
+        Column = 0
+        Control = chartCategoryAvg
+        Row = 0
+      end
+      item
+        Column = 0
+        Control = _lvAvgCategory
+        Row = 1
       end>
     RowCollection = <
       item
@@ -191,6 +201,75 @@ object AnalisysFrm2: TAnalisysFrm2
           CCCCCD7040CCCCCCCC4C127140FEFFFFFFFFE56C40}
         Detail = {0000000000}
       end
+    end
+    object chartCategoryAvg: TChart
+      Left = 0
+      Top = 0
+      Width = 432
+      Height = 235
+      Legend.Alignment = laTop
+      Legend.Visible = False
+      Title.Text.Strings = (
+        'Average per Category')
+      BottomAxis.LabelsAlternate = True
+      Align = alClient
+      BevelOuter = bvNone
+      TabOrder = 2
+      ExplicitLeft = 5
+      ExplicitTop = 5
+      DefaultCanvas = 'TGDIPlusCanvas'
+      PrintMargins = (
+        15
+        24
+        15
+        24)
+      ColorPaletteIndex = 19
+      object BarSeries3: TBarSeries
+        BarBrush.Gradient.EndColor = 13408512
+        BarBrush.Gradient.Visible = True
+        ColorEachPoint = True
+        Marks.Frame.Visible = False
+        Title = 'In'
+        ValueFormat = '#,##0;(#,##0)'
+        BarStyle = bsRectGradient
+        Gradient.EndColor = 13408512
+        Gradient.Visible = True
+        XValues.Name = 'X'
+        XValues.Order = loAscending
+        YValues.Name = 'Bar'
+        YValues.Order = loNone
+      end
+    end
+    object _lvAvgCategory: TListView
+      Left = 0
+      Top = 235
+      Width = 432
+      Height = 235
+      Align = alClient
+      BorderStyle = bsNone
+      Color = clBtnFace
+      Columns = <
+        item
+          Caption = 'Category'
+        end
+        item
+          Alignment = taRightJustify
+          Caption = 'Avg'
+        end
+        item
+          Alignment = taRightJustify
+          Caption = 'Count'
+        end>
+      GridLines = True
+      Items.ItemData = {
+        052E0000000100000000000000FFFFFFFFFFFFFFFF02000000FFFFFFFF000000
+        00013100013200185F5D27013300F05A5D27FFFFFFFF}
+      ReadOnly = True
+      RowSelect = True
+      SortType = stText
+      TabOrder = 3
+      ViewStyle = vsReport
+      ExplicitWidth = 344
     end
   end
 end
