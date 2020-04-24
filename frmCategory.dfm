@@ -1,16 +1,16 @@
 object CategoryFrm: TCategoryFrm
   Left = 0
   Top = 0
+  BorderStyle = bsSingle
   Caption = 'Category'
-  ClientHeight = 446
-  ClientWidth = 449
+  ClientHeight = 599
+  ClientWidth = 459
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  FormStyle = fsMDIChild
   OldCreateOrder = False
   Position = poMainFormCenter
   Visible = True
@@ -24,14 +24,14 @@ object CategoryFrm: TCategoryFrm
     Left = 176
     Top = 0
     Width = 8
-    Height = 427
+    Height = 580
     ExplicitLeft = 243
     ExplicitHeight = 493
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 427
-    Width = 449
+    Top = 580
+    Width = 459
     Height = 19
     Panels = <
       item
@@ -40,16 +40,20 @@ object CategoryFrm: TCategoryFrm
           'ons'
         Width = 50
       end>
+    ExplicitTop = 427
+    ExplicitWidth = 449
   end
   object Panel3: TPanel
     Left = 184
     Top = 0
-    Width = 265
-    Height = 427
+    Width = 275
+    Height = 580
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
     ExplicitLeft = 182
+    ExplicitWidth = 265
+    ExplicitHeight = 427
     object _lblName: TLabel
       Left = 14
       Top = 38
@@ -113,7 +117,7 @@ object CategoryFrm: TCategoryFrm
     Left = 0
     Top = 0
     Width = 176
-    Height = 427
+    Height = 580
     Align = alLeft
     BevelInner = bvNone
     BevelOuter = bvNone
@@ -125,6 +129,7 @@ object CategoryFrm: TCategoryFrm
     RowSelect = True
     SortType = stBoth
     TabOrder = 2
+    OnCollapsed = _treeCategoryCollapsed
     OnDblClick = _treeCategoryDblClick
     OnDragDrop = _treeCategoryDragDrop
     OnDragOver = _treeCategoryDragOver
@@ -134,6 +139,7 @@ object CategoryFrm: TCategoryFrm
       000000000000000000FFFFFFFFFFFFFFFF000000000000000000000000010636
       0035003400360034003600300000000000000000000000FFFFFFFFFFFFFFFF00
       00000000000000000000000109650068006700670064006400680068006600}
+    ExplicitHeight = 427
   end
   object PopupMenu1: TPopupMenu
     Left = 50

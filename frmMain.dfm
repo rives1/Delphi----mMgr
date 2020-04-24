@@ -98,9 +98,8 @@ object MainFRM: TMainFRM
       TabOrder = 1
       OnDblClick = treeMenuDblClick
       Items.NodeData = {
-        0302000000260000000500000000000000FFFFFFFFFFFFFFFF00000000000000
-        0000000000010452006F006F0074001E0000000000000000000000FFFFFFFFFF
-        FFFFFF0000000000000000000000000100}
+        0301000000260000000500000000000000FFFFFFFFFFFFFFFF00000000000000
+        0000000000010452006F006F007400}
     end
   end
   object StatusBar1: TStatusBar
@@ -116,8 +115,12 @@ object MainFRM: TMainFRM
     object File1: TMenuItem
       Caption = '&File'
       object New1: TMenuItem
-        Caption = 'New/Open'
+        Caption = 'New'
         OnClick = New1Click
+      end
+      object Open1: TMenuItem
+        Caption = 'Open'
+        OnClick = Open1Click
       end
       object N1: TMenuItem
         Caption = '-'
@@ -7463,6 +7466,11 @@ object MainFRM: TMainFRM
     Filter = 'sqlite|*.sqlite'
     Options = [ofHideReadOnly, ofNoChangeDir, ofEnableSizing]
     Left = 245
+    Top = 85
+  end
+  object dlgOpen: TOpenDialog
+    Options = [ofHideReadOnly, ofNoChangeDir, ofEnableSizing]
+    Left = 315
     Top = 85
   end
 end

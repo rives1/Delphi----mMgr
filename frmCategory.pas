@@ -38,6 +38,7 @@ type
     procedure NewSubcategory1Click(Sender: TObject);
     procedure Edit1Click(Sender: TObject);
     procedure Delete1Click(Sender: TObject);
+    procedure _treeCategoryCollapsed(Sender: TObject; Node: TTreeNode);
   private
     { Private declarations }
     // variabili
@@ -172,9 +173,6 @@ begin
       _lblName.Caption := 'Subcategory Description';
     end;
 
-
-
-
   _fName.SetFocus;
 end;
 
@@ -303,6 +301,12 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
+procedure TCategoryFrm._treeCategoryCollapsed(Sender: TObject; Node: TTreeNode);
+begin
+  _treeCategory.FullExpand;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TCategoryFrm._treeCategoryDblClick(Sender: TObject);
 begin
   _recordLoad;
@@ -370,9 +374,9 @@ begin
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
     MainFRM.sqlQry.SQL.Add('Select * From DBCATEGORY Left Join '
-      + ' DBSUBCATEGORY On DBCATEGORY.CATID = DBSUBCATEGORY.SUBCATID '
+      + ' DBSUBCATEGORY On CATID = SUBCATID '
       + ' where UCASE(CATDES) <> ''_TRANSFER'' '
-      + ' order By DBCATEGORY.CATDES, DBSUBCATEGORY.SUBCDES');
+      + ' order By CATDES, SUBCDES');
     try
       MainFRM.sqlQry.Active := True;
       if (MainFRM.sqlQry.RecordCount <> 0) then
@@ -398,7 +402,9 @@ begin
   end;   // if
 
   _treeCategory.FullExpand;
-  _treeCategory.Items[0].Selected := True;
+
+  if (_treeCategory.Items.Count > 0) then  //seleziono il primo nodo
+    _treeCategory.Items[0].Selected := True;
 
 end;
 

@@ -95,7 +95,8 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TAccountFrm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  MainFRM._treeMenuCreate;
+//  MainFRM._treeMenuCreate;
+// disabilitato per la trasformazione della form in modale
   Action := caFree;
   Release;
 end;

@@ -458,9 +458,11 @@ var
 begin
   // il valore deve essere ngativo se la il tipo di transazione è pay
   if UpperCase(_fType.Text) = 'DEPOSIT' then
-    _lAmount := VarToStr((_fAmount.Value))
+//    _lAmount := VarToStr((_fAmount.Value))
+    _lAmount := StringReplace(VarToStr((_fAmount.Value)), ',', '.',[rfReplaceAll])
   else
-    _lAmount := VarToStr((_fAmount.Value) * -1);
+    _lAmount := StringReplace(VarToStr((_fAmount.Value) * -1), ',','.',[rfReplaceAll]);
+//    _lAmount := VarToStr((_fAmount.Value) * -1);
 
   // salvataggio del record in base alla tipologia di editing
   try
