@@ -250,14 +250,17 @@ object AnalisysFrm2: TAnalisysFrm2
       Color = clBtnFace
       Columns = <
         item
+          AutoSize = True
           Caption = 'Category'
         end
         item
           Alignment = taRightJustify
+          AutoSize = True
           Caption = 'Avg'
         end
         item
           Alignment = taRightJustify
+          AutoSize = True
           Caption = 'Count'
         end>
       GridLines = True

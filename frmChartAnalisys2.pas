@@ -123,9 +123,9 @@ begin
     + ' DBACCOUNT On ACCID = TRNACCOUNT Inner Join '
     + ' DBSUBCATEGORY On SUBCID = TRNSUBCATEGORY Inner Join '
     + ' DBCATEGORY On CATID = SUBCATID '
-//    + ' TRANSACTIONS Left Join '
-//    + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
-//    + ' DBACCOUNT On ACCID = TRNACCOUNT '
+  // + ' TRANSACTIONS Left Join '
+  // + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
+  // + ' DBACCOUNT On ACCID = TRNACCOUNT '
     + ' Where CATDES <> ''_Transfer'' ';
   if (_fAccount.Text <> 'ALL') then
     _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
@@ -202,10 +202,10 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TAnalisysFrm2._chartCategoryAvg;
 var
-  _lTotal: Double;  // calcolo totale da imputare nella serie
-  _i:      integer; // ciclo per asse x elementi da inserire
-  _Cat:    string;  // categoria da valutare per inserimento
-  _lvItem: TListItem; // item per inserire i dati nella list view
+  _lTotal: Double;    // calcolo totale da imputare nella serie
+  _i:      integer;   // ciclo per asse x elementi da inserire
+  _Cat:    string;    // categoria da valutare per inserimento
+  _lvItem: TListItem; // item per inserire i dati nelle colonne secondarie
 begin
   // chart torta per totale spese categoria
   chartCategoryAvg.Series[0].Clear(); // pulisco il grafico
@@ -237,6 +237,7 @@ begin
   // inizializzo var
   _i   := 0;
   _Cat := '';
+  _lvAvgCategory.Items.Clear;
   // eseguo ciclo sui dati
   try
     MainFRM.sqlQry.Open;
@@ -261,11 +262,14 @@ begin
         // chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY']);
         // chartCategoryAvg.SeriesList[1].Add(_lTotal);
 
-        //25.04.20 - fill della listview con i dati della tabella x mostrare il dettaglio della
-        //    tabella soprastante
-        _lvAvgCategory.Items.AddItem(MainFRM.sqlQry.FieldValues['CATDES'])
-
-
+        // 25.04.20 - fill della listview con i dati della tabella x mostrare il dettaglio della
+        // tabella soprastante
+        _lvItem         := _lvAvgCategory.Items.Add;
+        _lvItem.Caption := VarToStr(MainFRM.sqlQry.FieldValues['CATDES']);
+        _lvItem.SubItems.Add(
+          FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Avg_TRNAMOUNT'] * -1)
+          );
+        _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Count_TRNID']));
 
       end;
 

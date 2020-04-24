@@ -280,7 +280,7 @@ object AnalisysFrm1: TAnalisysFrm1
       Legend.Alignment = laTop
       Legend.Visible = False
       Title.Text.Strings = (
-        'Average per Category')
+        'Monthly Average per Category')
       BottomAxis.LabelsAlternate = True
       Align = alClient
       BevelOuter = bvNone
