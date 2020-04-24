@@ -129,6 +129,7 @@ object CategoryFrm: TCategoryFrm
     RowSelect = True
     SortType = stBoth
     TabOrder = 2
+    OnCollapsed = _treeCategoryCollapsed
     OnDblClick = _treeCategoryDblClick
     OnDragDrop = _treeCategoryDragDrop
     OnDragOver = _treeCategoryDragOver

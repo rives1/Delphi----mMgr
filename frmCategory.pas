@@ -38,6 +38,7 @@ type
     procedure NewSubcategory1Click(Sender: TObject);
     procedure Edit1Click(Sender: TObject);
     procedure Delete1Click(Sender: TObject);
+    procedure _treeCategoryCollapsed(Sender: TObject; Node: TTreeNode);
   private
     { Private declarations }
     // variabili
@@ -297,6 +298,12 @@ begin
     _treeCategoryFill;
     _cleanFormNewRecord('newCat');
   end;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TCategoryFrm._treeCategoryCollapsed(Sender: TObject; Node: TTreeNode);
+begin
+  _treeCategory.FullExpand;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

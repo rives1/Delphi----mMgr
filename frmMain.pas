@@ -453,8 +453,7 @@ begin
         while not sqlQry.EOF do // ciclo recupero dati
         begin
           vNodeText := sqlQry.FieldValues['ACCNAME'];
-          // aggiungo il nodo
-          vNode := treeMenu.Items.AddChild(vNodeGroup, vNodeText);
+          vNode := treeMenu.Items.AddChild(vNodeGroup, vNodeText); // aggiungo il nodo
           // selezione quale immagine impostare sul nodo
           if (sqlQry.FieldValues['ACCTYPE'] = 'Cash') then
           begin
