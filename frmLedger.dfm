@@ -10,7 +10,6 @@ object LedgerFrm: TLedgerFrm
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  FormStyle = fsMDIChild
   KeyPreview = True
   OldCreateOrder = False
   Visible = True

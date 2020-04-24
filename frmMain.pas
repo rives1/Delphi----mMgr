@@ -324,25 +324,25 @@ begin
   end;
 
   _SQLString := 'Select CATTYPE, CATDES, SUBCDES, '
-    + ' StrfTime(''%Y'', TRANSACTIONS.TRNDATE) As YY, '
-    + ' StrfTime(''%m'', TRANSACTIONS.TRNDATE) As MM, '
-    + ' Sum(TRANSACTIONS.TRNAMOUNT) As Sum_TRNAMOUNT '
+    + ' StrfTime(''%Y'', TRNDATE) As YY, '
+    + ' StrfTime(''%m'', TRNDATE) As MM, '
+    + ' Sum(TRNAMOUNT) As Sum_TRNAMOUNT '
     + ' From '
     + ' TRANSACTIONS Left Join '
-    + ' DBCATEGORY On DBCATEGORY.CATID = TRANSACTIONS.TRNCATEGORY Left Join '
-    + ' DBSUBCATEGORY On DBSUBCATEGORY.SUBCID = TRANSACTIONS.TRNSUBCATEGORY '
+    + ' DBCATEGORY On DBCATEGORY.CATID = TRNCATEGORY Left Join '
+    + ' DBSUBCATEGORY On DBSUBCATEGORY.SUBCID = TRNSUBCATEGORY '
     + ' Where CATDES <> ''_Transfer'' '
     + ' and StrfTime(''%Y'', TRNDATE) = '''
     + InputBox('ReferenceYear', 'Insert Year for Report', FormatDateTime('yyyy', now)) + ''' '
     + ' Group By '
-    + ' DBCATEGORY.CATTYPE, '
-    + ' DBCATEGORY.CATDES, '
-    + ' DBSUBCATEGORY.SUBCDES, '
-    + ' StrfTime(''%Y'', TRANSACTIONS.TRNDATE), '
-    + ' StrfTime(''%m'', TRANSACTIONS.TRNDATE) '
+    + ' CATTYPE, '
+    + ' CATDES, '
+    + ' SUBCDES, '
+    + ' StrfTime(''%Y'', TRNDATE), '
+    + ' StrfTime(''%m'', TRNDATE) '
     + ' Order By '
-    + ' DBCATEGORY.CATTYPE, '
-    + ' DBCATEGORY.CATDES ';
+    + ' CATTYPE, '
+    + ' CATDES ';
 
   sqlQry.Close;
   sqlQry.SQL.Clear;
@@ -565,17 +565,23 @@ begin
     if (treeMenu.Selected.Text = 'Account') and not _chkOpenForm(treeMenu.Selected.Text) then
     begin
       _AccountChildFRM             := TAccountFrm.Create(nil);
-      _AccountChildFRM.WindowState := wsMaximized;
+      _AccountChildFRM.Hide;
+      _AccountChildFRM.ShowModal;
+//      _AccountChildFRM.WindowState := wsMaximized;
     end;
     if (treeMenu.Selected.Text = 'Payee') and not _chkOpenForm(treeMenu.Selected.Text) then
     begin
       _PayeeFRM             := TPayeeFRM.Create(nil);
-      _PayeeFRM.WindowState := wsMaximized;
+      _PayeeFRM.Hide;
+      _PayeeFRM.ShowModal;
+//      _PayeeFRM.WindowState := wsMaximized;
     end;
     if (treeMenu.Selected.Text = 'Category') and not _chkOpenForm(treeMenu.Selected.Text) then
     begin
       _CategoryFRM             := TCategoryFrm.Create(nil);
-      _CategoryFRM.WindowState := wsMaximized;
+      _CategoryFRM.Hide;
+      _CategoryFRM.ShowModal;
+//      _CategoryFRM.WindowState := wsMaximized;
     end;
   end;
 

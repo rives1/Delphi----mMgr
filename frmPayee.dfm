@@ -1,16 +1,16 @@
 object PayeeFRM: TPayeeFRM
   Left = 0
   Top = 0
+  BorderStyle = bsSingle
   Caption = 'Payee'
-  ClientHeight = 467
-  ClientWidth = 520
+  ClientHeight = 477
+  ClientWidth = 530
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  FormStyle = fsMDIChild
   KeyPreview = True
   OldCreateOrder = False
   Position = poMainFormCenter
@@ -24,30 +24,34 @@ object PayeeFRM: TPayeeFRM
   object Splitter1: TSplitter
     Left = 228
     Top = 0
-    Height = 448
+    Height = 458
     ExplicitLeft = 250
     ExplicitTop = 200
     ExplicitHeight = 100
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 448
-    Width = 520
+    Top = 458
+    Width = 530
     Height = 19
     Panels = <
       item
         Text = 'Double click to edit Payee'
         Width = 50
       end>
+    ExplicitTop = 448
+    ExplicitWidth = 520
   end
   object Panel3: TPanel
     Left = 231
     Top = 0
-    Width = 289
-    Height = 448
+    Width = 299
+    Height = 458
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitWidth = 289
+    ExplicitHeight = 448
     object Name: TLabel
       Left = 7
       Top = 48
@@ -74,7 +78,6 @@ object PayeeFRM: TPayeeFRM
       Top = 67
       Width = 228
       Height = 21
-      BorderStyle = bsNone
       TabOrder = 1
     end
     object btnOK: TJvBitBtn
@@ -91,7 +94,7 @@ object PayeeFRM: TPayeeFRM
     Left = 0
     Top = 0
     Width = 228
-    Height = 448
+    Height = 458
     Align = alLeft
     BorderStyle = bsNone
     Columns = <
@@ -107,6 +110,7 @@ object PayeeFRM: TPayeeFRM
     TabOrder = 2
     ViewStyle = vsReport
     OnDblClick = _flvPayeeDblClick
+    ExplicitHeight = 448
   end
   object PopupMenu1: TPopupMenu
     Left = 95

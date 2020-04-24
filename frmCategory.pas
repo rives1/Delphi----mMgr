@@ -370,9 +370,9 @@ begin
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
     MainFRM.sqlQry.SQL.Add('Select * From DBCATEGORY Left Join '
-      + ' DBSUBCATEGORY On DBCATEGORY.CATID = DBSUBCATEGORY.SUBCATID '
+      + ' DBSUBCATEGORY On CATID = SUBCATID '
       + ' where UCASE(CATDES) <> ''_TRANSFER'' '
-      + ' order By DBCATEGORY.CATDES, DBSUBCATEGORY.SUBCDES');
+      + ' order By CATDES, SUBCDES');
     try
       MainFRM.sqlQry.Active := True;
       if (MainFRM.sqlQry.RecordCount <> 0) then

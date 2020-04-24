@@ -1,16 +1,16 @@
 object AccountFrm: TAccountFrm
   Left = 0
   Top = 0
+  BorderStyle = bsSingle
   Caption = 'Account'
-  ClientHeight = 285
-  ClientWidth = 475
+  ClientHeight = 536
+  ClientWidth = 485
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  FormStyle = fsMDIChild
   KeyPreview = True
   OldCreateOrder = False
   Position = poMainFormCenter
@@ -25,14 +25,14 @@ object AccountFrm: TAccountFrm
     Left = 211
     Top = 0
     Width = 5
-    Height = 266
+    Height = 517
     ExplicitHeight = 493
   end
   object _fLvAccount: TListView
     Left = 0
     Top = 0
     Width = 211
-    Height = 266
+    Height = 517
     Align = alLeft
     BorderStyle = bsNone
     Columns = <
@@ -89,26 +89,31 @@ object AccountFrm: TAccountFrm
     ViewStyle = vsReport
     OnDblClick = _fLvAccountDblClick
     ExplicitLeft = -1
+    ExplicitHeight = 266
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 266
-    Width = 475
+    Top = 517
+    Width = 485
     Height = 19
     Panels = <
       item
         Text = 'Double click to edit Account'
         Width = 50
       end>
+    ExplicitTop = 266
+    ExplicitWidth = 475
   end
   object Panel3: TPanel
     Left = 216
     Top = 0
-    Width = 259
-    Height = 266
+    Width = 269
+    Height = 517
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitWidth = 259
+    ExplicitHeight = 266
     object Name: TLabel
       Left = 10
       Top = 48
@@ -128,7 +133,6 @@ object AccountFrm: TAccountFrm
       Top = 67
       Width = 228
       Height = 21
-      BorderStyle = bsNone
       TabOrder = 0
     end
     object _fID: TEdit
