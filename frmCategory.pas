@@ -172,9 +172,6 @@ begin
       _lblName.Caption := 'Subcategory Description';
     end;
 
-
-
-
   _fName.SetFocus;
 end;
 
@@ -398,7 +395,9 @@ begin
   end;   // if
 
   _treeCategory.FullExpand;
-  _treeCategory.Items[0].Selected := True;
+
+  if (_treeCategory.Items.Count > 0) then  //seleziono il primo nodo
+    _treeCategory.Items[0].Selected := True;
 
 end;
 

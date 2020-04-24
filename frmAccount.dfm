@@ -101,8 +101,6 @@ object AccountFrm: TAccountFrm
         Text = 'Double click to edit Account'
         Width = 50
       end>
-    ExplicitTop = 266
-    ExplicitWidth = 475
   end
   object Panel3: TPanel
     Left = 216

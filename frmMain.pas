@@ -34,11 +34,14 @@ type
     N1: TMenuItem;
     Quit1: TMenuItem;
     dlgSave: TSaveDialog;
+    dlgOpen: TOpenDialog;
+    Open1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure treeMenuDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Quit1Click(Sender: TObject);
     procedure New1Click(Sender: TObject);
+    procedure Open1Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -103,6 +106,12 @@ begin
   /// Creazione del nuovo db
   /// apro il db in base al nome selezionato nella dialog
   _createNewDB;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TMainFRM.Open1Click(Sender: TObject);
+begin
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -244,7 +253,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM._fillBalanceChart;
 var
-  _lTotal: Double;  // totale x
+  _lTotal: Double;  // totale x serie nel grafico
   i:       integer; // counter x colonne grafioo
 begin
   // riempimento chart con i totale x account
@@ -253,10 +262,10 @@ begin
     // area accounts
     sqlQry.Close;
     sqlQry.SQL.Clear;
-    sqlQry.SQL.Add('SELECT DBACCOUNT.ACCNAME, Sum(TRANSACTIONS.TRNAMOUNT) AS Sum_TRNAMOUNT ' +
-      ' FROM DBACCOUNT INNER JOIN TRANSACTIONS ON DBACCOUNT.ACCID = TRANSACTIONS.TRNACCOUNT ' +
-      ' GROUP BY DBACCOUNT.ACCNAME ' +
-      ' ORDER BY DBACCOUNT.ACCNAME ');
+    sqlQry.SQL.Add('SELECT ACCNAME, Sum(TRNAMOUNT) AS Sum_TRNAMOUNT ' +
+      ' FROM DBACCOUNT INNER JOIN TRANSACTIONS ON ACCID = TRNACCOUNT ' +
+      ' GROUP BY ACCNAME ' +
+      ' ORDER BY ACCNAME ');
     try
       sqlQry.Open;
       i := 0;
@@ -291,14 +300,14 @@ begin
     sqlite_conn.Params.Database := _pDBFname;
     try
       sqlite_conn.Connected := true;
-      MainFRM.caption := MainFRM.caption + '    --  ' + ExtractFileName(_pDBFname);
+      MainFRM.caption       := MainFRM.caption + '    --  ' + ExtractFileName(_pDBFname);
     except
-      MessageDlg('Impossible to open the database' + _pDBFname, mtError, [mbOK], 0);
+      MessageDlg('Impossible to open the database -> ' + _pDBFname, mtError, [mbOK], 0);
       Result := false;
     end;
   end
   else
-    if (MessageDlg('Database ->' + _pDBFname + ' not found. Create a new one?', mtConfirmation,
+    if (MessageDlg('Database -> ' + _pDBFname + ' not found. Create a new one?', mtConfirmation,
     [mbYes, mbNo], 0) = mrYes) then
     _createNewDB
   else
@@ -328,9 +337,13 @@ begin
     + ' StrfTime(''%m'', TRNDATE) As MM, '
     + ' Sum(TRNAMOUNT) As Sum_TRNAMOUNT '
     + ' From '
-    + ' TRANSACTIONS Left Join '
-    + ' DBCATEGORY On DBCATEGORY.CATID = TRNCATEGORY Left Join '
-    + ' DBSUBCATEGORY On DBSUBCATEGORY.SUBCID = TRNSUBCATEGORY '
+    + ' TRANSACTIONS Inner Join '
+    + ' DBSUBCATEGORY On SUBCID = TRNSUBCATEGORY Inner Join '
+    + ' DBCATEGORY On CATID = SUBCATID '
+  // per la rimozione della categoria dalle transazioni
+  // + ' TRANSACTIONS Left Join '
+  // + ' DBCATEGORY On DBCATEGORY.CATID = TRNCATEGORY Left Join '
+  // + ' DBSUBCATEGORY On DBSUBCATEGORY.SUBCID = TRNSUBCATEGORY '
     + ' Where CATDES <> ''_Transfer'' '
     + ' and StrfTime(''%Y'', TRNDATE) = '''
     + InputBox('ReferenceYear', 'Insert Year for Report', FormatDateTime('yyyy', now)) + ''' '
@@ -414,25 +427,6 @@ begin
   rptStandard.ShowReport();
 end;
 
-// -------------------------------------------------------------------------------------------------------------//
-{
-  function TMainFRM._SeekNode(pvSkString: string): TTreeNode;
-  var
-  i: integer;
-  begin
-  // ricerco nell'albero il valore della stringa su tutti i nodi di primo livello
-  Result := nil;
-  for i  := 0 to treeMenu.Items.Count - 1 do
-  begin
-  // Controllo il valore
-  if treeMenu.Items[i].Text = pvSkString then
-  begin
-  Result := treeMenu.Items[i];
-  Break;
-  end;
-  end;
-  end;
-}
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM._treeMenuCreate;
 // creazione di tutto l'albero del menù
@@ -519,6 +513,7 @@ begin
   vNode.ImageIndex      := 17;
 
   treeMenu.FullExpand;
+  treeMenu.Items[0].Selected := true;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -564,24 +559,25 @@ begin
   begin
     if (treeMenu.Selected.Text = 'Account') and not _chkOpenForm(treeMenu.Selected.Text) then
     begin
-      _AccountChildFRM             := TAccountFrm.Create(nil);
+      _AccountChildFRM := TAccountFrm.Create(nil);
       _AccountChildFRM.Hide;
       _AccountChildFRM.ShowModal;
-//      _AccountChildFRM.WindowState := wsMaximized;
+      _treeMenuCreate;
+      // _AccountChildFRM.WindowState := wsMaximized;
     end;
     if (treeMenu.Selected.Text = 'Payee') and not _chkOpenForm(treeMenu.Selected.Text) then
     begin
-      _PayeeFRM             := TPayeeFRM.Create(nil);
+      _PayeeFRM := TPayeeFRM.Create(nil);
       _PayeeFRM.Hide;
       _PayeeFRM.ShowModal;
-//      _PayeeFRM.WindowState := wsMaximized;
+      // _PayeeFRM.WindowState := wsMaximized;
     end;
     if (treeMenu.Selected.Text = 'Category') and not _chkOpenForm(treeMenu.Selected.Text) then
     begin
-      _CategoryFRM             := TCategoryFrm.Create(nil);
+      _CategoryFRM := TCategoryFrm.Create(nil);
       _CategoryFRM.Hide;
       _CategoryFRM.ShowModal;
-//      _CategoryFRM.WindowState := wsMaximized;
+      // _CategoryFRM.WindowState := wsMaximized;
     end;
   end;
 
