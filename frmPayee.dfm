@@ -102,6 +102,7 @@ object PayeeFRM: TPayeeFRM
     GridLines = True
     ReadOnly = True
     RowSelect = True
+    PopupMenu = PopupMenu1
     SortType = stText
     TabOrder = 2
     ViewStyle = vsReport
