@@ -14,7 +14,7 @@ type
     _fName: TEdit;
     _fID: TEdit;
     _fType: TJvComboBox;
-    Name: TLabel;
+    _lblName: TLabel;
     _lblType: TLabel;
     btnOK: TJvBitBtn;
     _treeCategory: TTreeView;
@@ -48,7 +48,7 @@ type
     procedure _recordLoad;
     procedure _recordSave;
     procedure _recordWrite;
-    procedure _cleanFormNewRecord;
+    procedure _cleanFormNewRecord(_pAction : string);
     procedure _treeCategoryFill;
 
   public
@@ -122,36 +122,59 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TCategoryFrm.NewCategory1Click(Sender: TObject);
 begin
-  _cleanFormNewRecord;
+  _cleanFormNewRecord('edit');
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TCategoryFrm.NewSubcategory1Click(Sender: TObject);
 begin
-  if (_treeCategory.Selected.SelectedIndex = 0) then
-    _cleanFormNewRecord
+  if (_treeCategory.Selected.SelectedIndex = 1) then
+    _cleanFormNewRecord('newSubcat')
   else
     MessageDlg('Category Node not selected!', mtInformation, [mbOk], 0);
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TCategoryFrm._cleanFormNewRecord;
+procedure TCategoryFrm._cleanFormNewRecord(_pAction : string);
 begin
-  //
+  //se arrivo da un editing
   _fID.Text   := '';
   _fName.Text := '';
   _fType.Text := '';
 
-  if (_treeCategory.Selected.SelectedIndex = 1) then // se categoria visualizzo il campo tipo
+  if (UpperCase(_pAction) = 'NEWCAT') then
   begin
-    _fType.Visible   := True;
-    _lblType.Visible := True
-  end
-  else
-  begin
-    _fType.Visible   := False;
-    _lblType.Visible := False;
+      _fType.Visible   := True;
+      _lblType.Caption := 'Type';
+      _lblName.Caption := 'Category Description';
   end;
+
+
+  if (UpperCase(_pAction) = 'NEWSUBCAT') then
+  begin
+      _fType.Visible   := False;
+      _lblType.Caption := 'Category -> ' + _treeCategory.Selected.Text;
+      _lblName.Caption := 'Subcategory Description';
+
+  end;
+
+  if (UpperCase(_pAction) = 'EDIT') then
+    if (_treeCategory.Selected.SelectedIndex = 1) then // se categoria visualizzo il campo tipo
+    begin
+      _fType.Visible   := True;
+      _lblType.Caption := 'Type';
+      _lblName.Caption := 'Category Description';
+    end
+    else
+    begin
+      _fType.Visible   := False;
+      _lblType.Caption := 'Category -> ' + _treeCategory.Selected.Parent.Text;
+      _lblName.Caption := 'Subcategory Description';
+    end;
+
+
+
+
   _fName.SetFocus;
 end;
 
@@ -217,14 +240,14 @@ begin
   end;
 
     _treeCategoryFill;
-    _cleanFormNewRecord;
+    _cleanFormNewRecord('newCat');
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TCategoryFrm._recordLoad;
 begin
   // Carico i dati nei campi della form
-  _cleanFormNewRecord;
+  _cleanFormNewRecord('edit');
 
   if (_treeCategory.Selected.SelectedIndex = 1) then // se categoria
   begin
@@ -275,7 +298,7 @@ begin
   begin
     _recordWrite;
     _treeCategoryFill;
-    _cleanFormNewRecord;
+    _cleanFormNewRecord('newCat');
   end;
 end;
 

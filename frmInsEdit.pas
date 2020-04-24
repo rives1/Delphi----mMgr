@@ -445,9 +445,6 @@ begin
       _cleanFormNewRecord;
       _changeType;
     end;
-    //aggiorno la lista nella form ledger
-    //LedgerFrm._fillGrid;
-
   end;
 
 end;

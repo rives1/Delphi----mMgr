@@ -49,7 +49,8 @@ object CategoryFrm: TCategoryFrm
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    object Name: TLabel
+    ExplicitLeft = 182
+    object _lblName: TLabel
       Left = 14
       Top = 38
       Width = 53
@@ -68,7 +69,6 @@ object CategoryFrm: TCategoryFrm
       Top = 60
       Width = 226
       Height = 21
-      BorderStyle = bsNone
       Ctl3D = True
       ParentCtl3D = False
       TabOrder = 0
