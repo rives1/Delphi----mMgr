@@ -125,6 +125,7 @@ object InsEditFrm: TInsEditFrm
     Width = 248
     Height = 21
     AutoDropDown = True
+    Sorted = True
     TabOrder = 5
     Text = ''
     OnCloseUp = _fPayeeCloseUp
@@ -135,6 +136,7 @@ object InsEditFrm: TInsEditFrm
     Width = 169
     Height = 21
     AutoDropDown = True
+    Sorted = True
     TabOrder = 6
     Text = ''
     OnExit = _fCategoryExit
@@ -144,6 +146,7 @@ object InsEditFrm: TInsEditFrm
     Top = 131
     Width = 164
     Height = 21
+    Sorted = True
     TabOrder = 7
     Text = ''
     OnExit = _fSubCategoryExit

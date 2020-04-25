@@ -291,7 +291,7 @@ procedure TInsEditFrm._loadCmbPayee;
 begin
   // carico i dati nella compo dei payee
   _fPayee.Items.Clear;
-  _SQLString := 'SELECT * FROM DBPAYEE';
+  _SQLString := 'SELECT * FROM DBPAYEE WHERE PAYNAME <> ''_TRANSFER'' ';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
@@ -339,7 +339,7 @@ begin
   // carico i dati nella combo categorie
   _fCategory.Items.Clear;
   _fCategory.Text := '';
-  _SQLString      := 'SELECT * FROM DBCATEGORY';
+  _SQLString      := 'SELECT * FROM DBCATEGORY WHERE UCASE(CATDES) <> ''_TRANSFER'' ';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
@@ -361,8 +361,8 @@ begin
   // carico i dati nella subcategory in base alla selezione della categoria
   _fSubCategory.Items.Clear;
   // _fSubCategory.Text := '';
-  _SQLString := 'SELECT DBSUBCATEGORY.* FROM DBCATEGORY INNER JOIN DBSUBCATEGORY ON DBCATEGORY.CATID = '
-    + ' DBSUBCATEGORY.SUBCATID WHERE DBCATEGORY.CATDES = '''
+  _SQLString := 'SELECT * FROM DBCATEGORY INNER JOIN DBSUBCATEGORY ON DBCATEGORY.CATID = '
+    + ' DBSUBCATEGORY.SUBCATID WHERE UCASE(SUBCDES) <> ''_TRANSFER''  and DBCATEGORY.CATDES = '''
     + _fCategory.Text + ''' ;';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
