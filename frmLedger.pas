@@ -170,8 +170,8 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.grdLedgerDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
 var
-  _dx:   Integer;
-  _Text: string;
+  _dx:    Integer;
+  _Text:  string;
   _Float: Double;
 begin
 
@@ -185,12 +185,19 @@ begin
     end
     else
     begin
-      //rosso se il val è negativo
-      TryStrToFloat(grdLedger.cells[ACol, ARow], _Float);
+      // rosso se il val è negativo
+      if ACol = 7 then
+      begin
+      _Text := grdLedger.cells[7, ARow];
+      TryStrToFloat(_Text.Replace('''',''), _Float);
       if (_Float < 0) then
-        Canvas.Font.Color := clRed;
+        Canvas.Font.Color := clRed
       else
         Canvas.Font.Color := clBlack;
+
+      Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, cells[7, ARow]);
+      Canvas.FrameRect(Rect);
+      end;
 
       // Draw the Band except on current highlighted row
       if (ARow <> Row) then

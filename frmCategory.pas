@@ -201,9 +201,10 @@ begin
         // esecuzione della query di cancellazione
         MainFRM.sqlQry.ExecSQL(_SQLString);
         MainFRM.sqlite_conn.Commit;
+        MessageDlg(_treeCategory.Selected.Text + ' Deleted!!', mtInformation, [mbOk], 0);
       end;
       MainFRM.sqlQry.Close;
-      MessageDlg(_treeCategory.Selected.Text + ' Deleted!!', mtInformation, [mbOk], 0);
+
     except
       begin
         raise Exception.Create('Error in deleting -> ' + _treeCategory.Selected.Text + '. Operation Aborted');
@@ -230,9 +231,9 @@ begin
         // esecuzione della query di cancellazione
         MainFRM.sqlQry.ExecSQL(_SQLString);
         MainFRM.sqlite_conn.Commit;
+        MessageDlg(_treeCategory.Selected.Text + ' Deleted!!', mtInformation, [mbOk], 0);
       end;
       MainFRM.sqlQry.Close;
-      MessageDlg(_treeCategory.Selected.Text + ' Deleted!!', mtInformation, [mbOk], 0);
     except
       begin
         raise Exception.Create('Error in deleting -> ' + _treeCategory.Selected.Text + '. Operation Aborted');

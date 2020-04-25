@@ -146,12 +146,12 @@ begin
   // ESC - chiudo la form
   // F12 - salvo il record
   case Key of
-    27: // ESC
+    vkEscape: // ESC
       begin
         if (MessageDlg('Close Form?', mtConfirmation, [mbOk, mbCancel], 0) = mrOk) then
           self.Close;
       end;
-    127: // F12
+    vkF12: // F12
       _recordSave;
   end;
 end;
@@ -446,7 +446,6 @@ begin
       _changeType;
     end;
   end;
-
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
