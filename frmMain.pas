@@ -174,7 +174,6 @@ begin
         + ' ''TRNTYPE''	STRING(10) NOT NULL, '
         + ' ''TRNDATE''	DATE(10) NOT NULL, '
         + ' ''TRNPAYEE''	INTEGER NOT NULL, '
-        + ' ''TRNCATEGORY''	INTEGER NOT NULL, '
         + ' ''TRNSUBCATEGORY''	INTEGER, '
         + ' ''TRNAMOUNT''	DOUBLE NOT NULL, '
         + ' ''TRNACCOUNT''	INTEGER NOT NULL, '
@@ -182,7 +181,6 @@ begin
         + ' ''TRNTRANSFERID''	INTEGER, '
         + ' FOREIGN KEY(''TRNPAYEE'') REFERENCES ''DBPAYEE''(''PAYID''), '
         + ' FOREIGN KEY(''TRNSUBCATEGORY'') REFERENCES ''DBSUBCATEGORY''(''SUBCID''), '
-        + ' FOREIGN KEY(''TRNCATEGORY'') REFERENCES ''DBCATEGORY''(''CATID''), '
         + ' FOREIGN KEY(''TRNACCOUNT'') REFERENCES ''DBACCOUNT''(''ACCID''));';
       sqlQry.ExecSQL(_SQLString);
 
@@ -232,14 +230,20 @@ begin
         + ' DBACCOUNT.ACCNAME, '
         + ' DBPAYEE.PAYNAME, '
         + ' DBCATEGORY.CATDES, '
-        + ' DBSUBCATEGORY.SUBCDES '
+        + ' DBSUBCATEGORY.SUBCDES, '
+        + ' DBCATEGORY.CATTYPE '
         + ' From '
         + ' TRANSACTIONS Left Join '
         + ' DBACCOUNT On DBACCOUNT.ACCID = TRANSACTIONS.TRNACCOUNT Left Join '
-        + ' DBCATEGORY On DBCATEGORY.CATID = TRANSACTIONS.TRNCATEGORY Left Join '
         + ' DBPAYEE On DBPAYEE.PAYID = TRANSACTIONS.TRNPAYEE Left Join '
-        + ' DBSUBCATEGORY On DBSUBCATEGORY.SUBCID = TRANSACTIONS.TRNSUBCATEGORY '
-        + ' And DBCATEGORY.CATID = DBSUBCATEGORY.SUBCATID;';
+        + ' DBSUBCATEGORY On DBSUBCATEGORY.SUBCID = TRANSACTIONS.TRNSUBCATEGORY Left Join '
+        + ' DBCATEGORY On DBCATEGORY.CATID = DBSUBCATEGORY.SUBCATID;';
+
+      // + ' DBACCOUNT On DBACCOUNT.ACCID = TRANSACTIONS.TRNACCOUNT Left Join '
+      // + ' DBCATEGORY On DBCATEGORY.CATID = TRANSACTIONS.TRNCATEGORY Left Join '
+      // + ' DBPAYEE On DBPAYEE.PAYID = TRANSACTIONS.TRNPAYEE Left Join '
+      // + ' DBSUBCATEGORY On DBSUBCATEGORY.SUBCID = TRANSACTIONS.TRNSUBCATEGORY '
+      // + ' And DBCATEGORY.CATID = DBSUBCATEGORY.SUBCATID;';
       sqlQry.ExecSQL(_SQLString);
 
       sqlite_conn.Commit;
@@ -251,7 +255,7 @@ begin
   else
     MessageDlg('Operation aborted', mtInformation, [mbOK], 0);
 
-    _treeMenuCreate;
+  _treeMenuCreate;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -305,7 +309,7 @@ begin
     try
       sqlite_conn.Connected := true;
       MainFRM.caption       := 'mMgr -> ' + ExtractFileName(_pDBFname);
-      _DbName := _pDBFname;
+      _DbName               := _pDBFname;
       _treeMenuCreate;
     except
       MessageDlg('Impossible to open the database -> ' + _pDBFname, mtError, [mbOK], 0);
