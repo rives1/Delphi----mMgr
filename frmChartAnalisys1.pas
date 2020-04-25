@@ -27,8 +27,6 @@ type
     BarSeries2: TBarSeries;
     _fAccount: TJvComboBox;
     Label7: TLabel;
-    chartCategoryAvg: TChart;
-    BarSeries3: TBarSeries;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure _fdtFromChange(Sender: TObject);
@@ -46,7 +44,6 @@ type
     procedure _chartExpByCategories;
     procedure _chartInOutYY;
     procedure _chartInOutMM;
-    procedure _chartMMCategoryAvg;
 
   public
     { Public declarations }
@@ -86,80 +83,6 @@ begin
   _setDefaultDate;
   _loadCmbAccount;
   _fillChart;
-end;
-
-// -------------------------------------------------------------------------------------------------------------//
-procedure TAnalisysFrm1._chartMMCategoryAvg;
-var
-  _lTotal: Double;  // calcolo totale da imputare nella serie
-  _i:      integer; // ciclo per asse x elementi da inserire
-  _Cat:    string;  // categoria da valutare per inserimento
-  _mmPeriod: integer; //nr di mesi del periodo selezionato x effettuare la media sui mesi
-begin
-  // chart torta per totale spese categoria
-  chartCategoryAvg.Series[0].Clear(); // pulisco il grafico
-
-  _SQLString := ' Select CATDES, '
-    + ' Sum(TRNAMOUNT) As Sum_TRNAMOUNT, '
-    + ' Count(TRNID) As Count_TRNID '
-    + ' From '
-    + ' TRANSACTIONS Inner Join '
-    + ' DBACCOUNT On ACCID = TRNACCOUNT Inner Join '
-    + ' DBSUBCATEGORY On SUBCID = TRNSUBCATEGORY Inner Join '
-    + ' DBCATEGORY On CATID = SUBCATID '
-  // + ' TRANSACTIONS Left Join '
-  // + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
-  // + ' DBACCOUNT On ACCID = TRNACCOUNT '
-    + ' Where '
-    + ' CATDES <> ''_Transfer'' ';
-  if (_fAccount.Text <> 'ALL') then
-    _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
-  _SQLString   := _SQLString
-    + ' And TRNDATE Between ''' + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
-    + ''' and ''' + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
-    + ''' Group By CATDES ';
-
-  MainFRM.sqlQry.SQL.Clear;
-  MainFRM.sqlQry.SQL.Add(_SQLString);
-  chartCategoryAvg.Axes.Bottom.Items.Clear;
-
-  // inizializzo var
-  _i   := 0;
-  _Cat := '';
-  _mmPeriod:=MonthsBetween(_fdtTo.DateTime, _fdtFrom.DateTime)+1;
-  // eseguo ciclo sui dati
-  try
-    MainFRM.sqlQry.Open;
-    while not MainFRM.sqlQry.EOF do // ciclo recupero dati
-    begin
-      if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
-      begin
-        // impostazione descrizione asse X
-        if (_Cat <> MainFRM.sqlQry.FieldValues['CATDES']) then
-        begin
-          chartCategoryAvg.Axes.Bottom.Items.Add(_i, MainFRM.sqlQry.FieldValues['CATDES']);
-          _Cat := MainFRM.sqlQry.FieldValues['CATDES'];
-          _i   := _i + 1;
-        end;
-
-        // inserimento dati nelle due serie in base alla tipologia della categoria
-        _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']))/_mmPeriod;
-
-        // in base al tipo di spesa imputo su quale serie aggiungere il dato
-        // if (UpperCase(MainFRM.sqlQry.FieldValues['CATTYPE']) = 'EXPENSE') then
-        chartCategoryAvg.SeriesList[0].Add(_lTotal)
-        // else
-        // chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY']);
-        // chartCategoryAvg.SeriesList[1].Add(_lTotal);
-      end;
-
-      MainFRM.sqlQry.Next;
-    end;
-  finally
-    MainFRM.sqlQry.Close;
-    MainFRM.sqlQry.SQL.Clear;
-  end;
-
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -429,7 +352,6 @@ end;
 procedure TAnalisysFrm1._fillChart;
 begin
   _chartExpByCategories;
-  _chartMMCategoryAvg;
   _chartInOutYY;
   _chartInOutMM;
 end;

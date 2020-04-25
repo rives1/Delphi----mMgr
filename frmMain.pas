@@ -500,9 +500,9 @@ begin
   // area chart
   vNodeGroup            := treeMenu.Items.Add(nil, 'Chart');
   vNodeGroup.ImageIndex := 3;
-  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Analisys1');
+  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Analisys Amt');
   vNode.ImageIndex      := 13;
-  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Analisys2');
+  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Analisys Avg');
   vNode.ImageIndex      := 13;
 
   // area report
@@ -550,14 +550,14 @@ begin
 
   // apro chart1
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART'))
-    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Analisys1') then
+    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Analisys Amt') then
   begin
     _Analisys1FRM             := TAnalisysFrm1.Create(nil);
     _Analisys1FRM.WindowState := wsMaximized;
   end;
   // apro chart2
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART'))
-    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Analisys2') then
+    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Analisys Avg') then
   begin
     _Analisys2FRM             := TAnalisysFrm2.Create(nil);
     _Analisys2FRM.WindowState := wsMaximized;

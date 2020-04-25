@@ -17,16 +17,14 @@ type
     Label1: TLabel;
     Label2: TLabel;
     GridPanel1: TGridPanel;
-    Chart2: TChart;
-    Series2: TLineSeries;
-    chartInOutMM: TChart;
-    BarSeries1: TBarSeries;
-    BarSeries2: TBarSeries;
     _fAccount: TJvComboBox;
     Label7: TLabel;
     chartCategoryAvg: TChart;
     BarSeries3: TBarSeries;
     _lvAvgCategory: TListView;
+    chartCategoryAvgMM: TChart;
+    BarSeries1: TBarSeries;
+    _lvAverageMM: TListView;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure _fdtFromChange(Sender: TObject);
@@ -41,8 +39,8 @@ type
     procedure _setDefaultDate;
     procedure _loadCmbAccount;
     procedure _fillChart;
-    procedure _chartInOutMM;
     procedure _chartCategoryAvg;
+    procedure _chartMMCategoryAvg;
 
   public
     { Public declarations }
@@ -57,7 +55,7 @@ implementation
 
 
 uses
-  frmMain;
+  frmMain, System.dateUtils;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TAnalisysFrm2.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -85,39 +83,21 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAnalisysFrm2._chartInOutMM;
+procedure TAnalisysFrm2._chartMMCategoryAvg;
 var
-  _lTotal:    Double;      // calcolo totale da imputare nella serie
-  _i:         integer;     // ciclo for
-  _tempTable: TFDMemTable; // tabella appogio per report
-begin
-  // pulisco il grafico
-  chartInOutMM.Series[0].Clear();
-  chartInOutMM.Series[1].Clear();
-  // inizializzo la struttura della tabella
-  _tempTable := TFDMemTable.Create(nil);
-  _tempTable.FieldDefs.Add('fPeriod', ftInteger);
-  _tempTable.FieldDefs.Add('fType', ftString, 10);
-  _tempTable.FieldDefs.Add('fValue', ftFloat);
-  _tempTable.CreateDataSet;
-  _tempTable.Open;
-  // impostazione valori default della tabella
-  for _i := 1 to 12 do
-  begin
-    _tempTable.Append;
-    _tempTable.FieldByName('fPeriod').AsInteger := _i;
-    _tempTable.FieldByName('fType').AsString    := 'EXPENSE';
-    _tempTable.FieldByName('fValue').AsFloat    := 0;
-    _tempTable.Post;
-    _tempTable.Append;
-    _tempTable.FieldByName('fPeriod').AsInteger := _i;
-    _tempTable.FieldByName('fType').AsString    := 'INCOME';
-    _tempTable.FieldByName('fValue').AsFloat    := 0;
-    _tempTable.Post;
-  end;
+  _lTotal:   Double;    // calcolo totale da imputare nella serie
+  _i:        integer;   // ciclo per asse x elementi da inserire
+  _Cat:      string;    // categoria da valutare per inserimento
+  _mmPeriod: integer;   // nr di mesi del periodo selezionato x effettuare la media sui mesi
+  _lvItem:   TListItem; // item per inserire i dati nelle colonne secondarie
 
-  _SQLString := ' SELECT StrfTime(''%m'', TRNDATE) As MM, CATTYPE, '
-    + ' Sum(TRNAMOUNT) As Sum_TRNAMOUNT '
+begin
+  // chart torta per totale spese categoria
+  chartCategoryAvgMM.Series[0].Clear(); // pulisco il grafico
+
+  _SQLString := ' Select CATDES, '
+    + ' Sum(TRNAMOUNT) As Sum_TRNAMOUNT, '
+    + ' Count(TRNID) As Count_TRNID '
     + ' From '
     + ' TRANSACTIONS Inner Join '
     + ' DBACCOUNT On ACCID = TRNACCOUNT Inner Join '
@@ -126,76 +106,66 @@ begin
   // + ' TRANSACTIONS Left Join '
   // + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
   // + ' DBACCOUNT On ACCID = TRNACCOUNT '
-    + ' Where CATDES <> ''_Transfer'' ';
+    + ' Where '
+    + ' CATDES <> ''_Transfer'' ';
   if (_fAccount.Text <> 'ALL') then
     _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
 
-  _SQLString := _SQLString
-    + ' and TRNDATE Between '''
-    + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
-    + ''' and '''
-    + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
-    + ''' Group By '
-    + ' StrfTime(''%m'', TRNDATE), CATTYPE '
-    + ' Order By '
-    + ' StrfTime(''%m'', TRNDATE), CATTYPE ';
+  _SQLString   := _SQLString
+    + ' And TRNDATE Between ''' + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
+    + ''' and ''' + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
+    + ''' Group By CATDES ';
 
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
-  chartInOutMM.Axes.Bottom.Items.Clear;
+  chartCategoryAvgMM.Axes.Bottom.Items.Clear;
 
-  // eseguo ciclo sui dati inserendo i dati nella tabella
+  // inizializzo var
+  _i        := 0;
+  _Cat      := '';
+  _mmPeriod := MonthsBetween(_fdtTo.DateTime, _fdtFrom.DateTime) + 1;
+  _lvAverageMM.Items.Clear;
+
+  // eseguo ciclo sui dati
   try
     MainFRM.sqlQry.Open;
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
     begin
-      // cerco nella tabella il record del periodo e del tipo di movimento
-      _tempTable.First;
-      while not _tempTable.EOF do
+      if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
       begin
-        if (StrToInt(MainFRM.sqlQry.FieldValues['MM']) = _tempTable.FieldByName('fPeriod').AsInteger)
-          and (UpperCase(MainFRM.sqlQry.FieldValues['CATTYPE']) = _tempTable.FieldByName('fType').AsString) then
+        // impostazione descrizione asse X
+        if (_Cat <> MainFRM.sqlQry.FieldValues['CATDES']) then
         begin
-          _tempTable.Edit;
-          _tempTable.FieldByName('fValue').AsFloat := MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'];
-          _tempTable.Post
+          chartCategoryAvgMM.Axes.Bottom.Items.Add(_i, MainFRM.sqlQry.FieldValues['CATDES']);
+          _Cat := MainFRM.sqlQry.FieldValues['CATDES'];
+          _i   := _i + 1;
         end;
-        _tempTable.Next;
+
+        // inserimento dati nelle due serie in base alla tipologia della categoria
+        _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'])) / _mmPeriod;
+
+        // in base al tipo di spesa imputo su quale serie aggiungere il dato
+        // if (UpperCase(MainFRM.sqlQry.FieldValues['CATTYPE']) = 'EXPENSE') then
+        chartCategoryAvgMM.SeriesList[0].Add(_lTotal);
+        // else
+        // chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY']);
+        // chartCategoryAvg.SeriesList[1].Add(_lTotal);
+
+        // 25.04.20 - fill della listview con i dati della tabella x mostrare il dettaglio della
+        // tabella soprastante
+        _lvItem         := _lvAverageMM.Items.Add;
+        _lvItem.Caption := VarToStr(MainFRM.sqlQry.FieldValues['CATDES']);
+        _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] * -1));
+        _lvItem.SubItems.Add(FormatFloat('#,##0.00', _mmPeriod));
+        // MainFRM.sqlQry.FieldValues['Count_TRNID']));
       end;
+
       MainFRM.sqlQry.Next;
     end;
-
-    _lTotal := 0; // totale dei singoli record da imputare nel grafico
-    // ciclo di riempimento del chart
-    _tempTable.First;
-    while not _tempTable.EOF do
-    begin
-      _lTotal := Abs(_tempTable.FieldByName('fValue').AsFloat);
-      if UpperCase(_tempTable.FieldByName('fType').AsString) = 'EXPENSE' then
-        if _lTotal = 0 then
-          chartInOutMM.SeriesList[0].AddNull(0)
-        else
-          chartInOutMM.SeriesList[0].Add(_lTotal)
-      else
-      begin
-        if _lTotal = 0 then
-          chartInOutMM.SeriesList[1].AddNull(0)
-        else
-          chartInOutMM.SeriesList[1].Add(_lTotal)
-      end;
-      // etichetta dell'asse x
-      chartInOutMM.Axes.Bottom.Items.Add(_tempTable.FieldByName('fPeriod').AsInteger - 1,
-        _tempTable.FieldByName('fPeriod').AsString);
-
-      _tempTable.Next; // next record
-    end;
-
   finally
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
   end;
-
-  _tempTable.Close;
 
 end;
 
@@ -303,8 +273,8 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TAnalisysFrm2._fillChart;
 begin
-  _chartInOutMM;
   _chartCategoryAvg;
+  _chartMMCategoryAvg;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

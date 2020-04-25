@@ -170,8 +170,9 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.grdLedgerDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
 var
-  dx:   Integer;
-  Text: string;
+  _dx:   Integer;
+  _Text: string;
+  _Float: Double;
 begin
 
   with (Sender as TStringGrid) do
@@ -184,6 +185,13 @@ begin
     end
     else
     begin
+      //rosso se il val è negativo
+      TryStrToFloat(grdLedger.cells[ACol, ARow], _Float);
+      if (_Float < 0) then
+        Canvas.Font.Color := clRed;
+      else
+        Canvas.Font.Color := clBlack;
+
       // Draw the Band except on current highlighted row
       if (ARow <> Row) then
       begin
@@ -204,9 +212,9 @@ begin
     begin
       // bold per la prima linea delle caption
       FillRect(Rect);
-      Text := grdLedger.cells[ACol, ARow];
-      dx   := TextWidth(Text) + 2;
-      TextOut(Rect.Right - dx, Rect.Top, Text);
+      _Text := grdLedger.cells[ACol, ARow];
+      _dx   := TextWidth(_Text) + 2;
+      TextOut(Rect.Right - _dx, Rect.Top, _Text);
     end;
 
 end;

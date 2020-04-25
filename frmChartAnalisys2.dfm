@@ -101,16 +101,6 @@ object AnalisysFrm2: TAnalisysFrm2
       end>
     ControlCollection = <
       item
-        Column = 1
-        Control = Chart2
-        Row = 0
-      end
-      item
-        Column = 1
-        Control = chartInOutMM
-        Row = 1
-      end
-      item
         Column = 0
         Control = chartCategoryAvg
         Row = 0
@@ -118,6 +108,16 @@ object AnalisysFrm2: TAnalisysFrm2
       item
         Column = 0
         Control = _lvAvgCategory
+        Row = 1
+      end
+      item
+        Column = 1
+        Control = chartCategoryAvgMM
+        Row = 0
+      end
+      item
+        Column = 1
+        Control = _lvAverageMM
         Row = 1
       end>
     RowCollection = <
@@ -128,80 +128,8 @@ object AnalisysFrm2: TAnalisysFrm2
         Value = 50.000000000000000000
       end>
     TabOrder = 2
-    object Chart2: TChart
-      Left = 432
-      Top = 0
-      Width = 432
-      Height = 235
-      Title.Text.Strings = (
-        'TChart')
-      Align = alClient
-      BevelOuter = bvNone
-      TabOrder = 0
-      Visible = False
-      DefaultCanvas = 'TGDIPlusCanvas'
-      ColorPaletteIndex = 19
-      object Series2: TLineSeries
-        ColorEachPoint = True
-        Shadow.Visible = False
-        ValueFormat = '#,##0;(#,##0)'
-        Brush.BackColor = clDefault
-        LinePen.Color = 16777164
-        Pointer.InflateMargins = True
-        Pointer.Style = psRectangle
-        XValues.Name = 'X'
-        XValues.Order = loAscending
-        YValues.Name = 'Y'
-        YValues.Order = loNone
-      end
-    end
-    object chartInOutMM: TChart
-      Left = 432
-      Top = 235
-      Width = 432
-      Height = 235
-      Legend.Alignment = laTop
-      Title.Text.Strings = (
-        'In Out per Month')
-      Align = alClient
-      BevelOuter = bvNone
-      TabOrder = 1
-      DefaultCanvas = 'TGDIPlusCanvas'
-      PrintMargins = (
-        15
-        24
-        15
-        24)
-      ColorPaletteIndex = 19
-      object BarSeries1: TBarSeries
-        BarBrush.Gradient.EndColor = 15054131
-        BarBrush.Gradient.Visible = True
-        Marks.Angle = 90
-        Title = 'In'
-        ValueFormat = '#,##0;(#,##0)'
-        BarStyle = bsRectGradient
-        Gradient.EndColor = 15054131
-        Gradient.Visible = True
-        Sides = 23
-        XValues.Name = 'X'
-        XValues.Order = loAscending
-        YValues.Name = 'Bar'
-        YValues.Order = loNone
-      end
-      object BarSeries2: TBarSeries
-        Marks.Angle = 90
-        Title = 'Out'
-        ValueFormat = '#,##0;(#,##0)'
-        XValues.Name = 'X'
-        XValues.Order = loAscending
-        YValues.Name = 'Bar'
-        YValues.Order = loNone
-        Data = {
-          00060000000000000000E66C403333333333146B409999999999536D40CCCCCC
-          CCCCCD7040CCCCCCCC4C127140FEFFFFFFFFE56C40}
-        Detail = {0000000000}
-      end
-    end
+    ExplicitLeft = 20
+    ExplicitTop = 32
     object chartCategoryAvg: TChart
       Left = 0
       Top = 0
@@ -210,13 +138,11 @@ object AnalisysFrm2: TAnalisysFrm2
       Legend.Alignment = laTop
       Legend.Visible = False
       Title.Text.Strings = (
-        'Average per Category')
+        'Transactions  Average per Category')
       BottomAxis.LabelsAlternate = True
       Align = alClient
       BevelOuter = bvNone
-      TabOrder = 2
-      ExplicitLeft = 5
-      ExplicitTop = 5
+      TabOrder = 0
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15
@@ -245,6 +171,10 @@ object AnalisysFrm2: TAnalisysFrm2
       Top = 235
       Width = 432
       Height = 235
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
       Align = alClient
       BorderStyle = bsNone
       Color = clBtnFace
@@ -270,7 +200,84 @@ object AnalisysFrm2: TAnalisysFrm2
       ReadOnly = True
       RowSelect = True
       SortType = stText
+      TabOrder = 2
+      ViewStyle = vsReport
+      ExplicitWidth = 344
+    end
+    object chartCategoryAvgMM: TChart
+      Left = 432
+      Top = 0
+      Width = 432
+      Height = 235
+      Legend.Alignment = laTop
+      Legend.Visible = False
+      Title.Text.Strings = (
+        'Monthly Average per Category')
+      BottomAxis.LabelsAlternate = True
+      Align = alClient
+      BevelOuter = bvNone
       TabOrder = 3
+      ExplicitLeft = 464
+      ExplicitTop = 180
+      ExplicitWidth = 400
+      DefaultCanvas = 'TGDIPlusCanvas'
+      PrintMargins = (
+        15
+        24
+        15
+        24)
+      ColorPaletteIndex = 19
+      object BarSeries1: TBarSeries
+        BarBrush.Gradient.EndColor = 13408512
+        BarBrush.Gradient.Visible = True
+        ColorEachPoint = True
+        Marks.Frame.Visible = False
+        Title = 'In'
+        ValueFormat = '#,##0;(#,##0)'
+        BarStyle = bsRectGradient
+        Gradient.EndColor = 13408512
+        Gradient.Visible = True
+        XValues.Name = 'X'
+        XValues.Order = loAscending
+        YValues.Name = 'Bar'
+        YValues.Order = loNone
+      end
+    end
+    object _lvAverageMM: TListView
+      Left = 432
+      Top = 235
+      Width = 432
+      Height = 235
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
+      Align = alClient
+      BorderStyle = bsNone
+      Color = clBtnFace
+      Columns = <
+        item
+          AutoSize = True
+          Caption = 'Category'
+        end
+        item
+          Alignment = taRightJustify
+          AutoSize = True
+          Caption = 'Totale'
+        end
+        item
+          AutoSize = True
+          Caption = 'MM Periodo'
+        end>
+      Ctl3D = True
+      GridLines = True
+      Items.ItemData = {
+        052E0000000100000000000000FFFFFFFFFFFFFFFF02000000FFFFFFFF000000
+        00013100013200185F5D27013300F05A5D27FFFFFFFF}
+      ReadOnly = True
+      RowSelect = True
+      SortType = stText
+      TabOrder = 1
       ViewStyle = vsReport
       ExplicitWidth = 344
     end

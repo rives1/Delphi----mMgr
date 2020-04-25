@@ -114,11 +114,6 @@ object AnalisysFrm1: TAnalisysFrm1
         Column = 1
         Control = chartInOutMM
         Row = 1
-      end
-      item
-        Column = 1
-        Control = chartCategoryAvg
-        Row = 0
       end>
     RowCollection = <
       item
@@ -270,42 +265,6 @@ object AnalisysFrm1: TAnalisysFrm1
           00060000000000000000E66C403333333333146B409999999999536D40CCCCCC
           CCCCCD7040CCCCCCCC4C127140FEFFFFFFFFE56C40}
         Detail = {0000000000}
-      end
-    end
-    object chartCategoryAvg: TChart
-      Left = 432
-      Top = 0
-      Width = 432
-      Height = 235
-      Legend.Alignment = laTop
-      Legend.Visible = False
-      Title.Text.Strings = (
-        'Monthly Average per Category')
-      BottomAxis.LabelsAlternate = True
-      Align = alClient
-      BevelOuter = bvNone
-      TabOrder = 3
-      DefaultCanvas = 'TGDIPlusCanvas'
-      PrintMargins = (
-        15
-        24
-        15
-        24)
-      ColorPaletteIndex = 19
-      object BarSeries3: TBarSeries
-        BarBrush.Gradient.EndColor = 13408512
-        BarBrush.Gradient.Visible = True
-        ColorEachPoint = True
-        Marks.Frame.Visible = False
-        Title = 'In'
-        ValueFormat = '#,##0;(#,##0)'
-        BarStyle = bsRectGradient
-        Gradient.EndColor = 13408512
-        Gradient.Visible = True
-        XValues.Name = 'X'
-        XValues.Order = loAscending
-        YValues.Name = 'Bar'
-        YValues.Order = loNone
       end
     end
   end

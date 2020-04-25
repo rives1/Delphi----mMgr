@@ -182,9 +182,9 @@ object LedgerFrm: TLedgerFrm
       end
     end
     object chHistory: TChart
-      Left = 410
+      Left = 377
       Top = 0
-      Width = 400
+      Width = 433
       Height = 156
       Legend.Visible = False
       MarginRight = 8
@@ -198,9 +198,11 @@ object LedgerFrm: TLedgerFrm
       Chart3DPercent = 1
       View3D = False
       View3DOptions.Orthogonal = False
-      Align = alRight
+      Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
+      ExplicitLeft = 410
+      ExplicitWidth = 400
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 13
       object Series2: TAreaSeries
