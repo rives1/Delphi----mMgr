@@ -40,8 +40,6 @@ object CategoryFrm: TCategoryFrm
           'ons'
         Width = 50
       end>
-    ExplicitTop = 427
-    ExplicitWidth = 449
   end
   object Panel3: TPanel
     Left = 184
@@ -51,9 +49,6 @@ object CategoryFrm: TCategoryFrm
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = 182
-    ExplicitWidth = 265
-    ExplicitHeight = 427
     object _lblName: TLabel
       Left = 14
       Top = 38
@@ -139,7 +134,6 @@ object CategoryFrm: TCategoryFrm
       000000000000000000FFFFFFFFFFFFFFFF000000000000000000000000010636
       0035003400360034003600300000000000000000000000FFFFFFFFFFFFFFFF00
       00000000000000000000000109650068006700670064006400680068006600}
-    ExplicitHeight = 427
   end
   object PopupMenu1: TPopupMenu
     Left = 50
