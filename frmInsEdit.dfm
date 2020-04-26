@@ -128,7 +128,7 @@ object InsEditFrm: TInsEditFrm
     Sorted = True
     TabOrder = 5
     Text = ''
-    OnCloseUp = _fPayeeCloseUp
+    OnExit = _fPayeeExit
   end
   object _fCategory: TJvComboBox
     Left = 88

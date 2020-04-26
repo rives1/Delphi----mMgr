@@ -196,13 +196,12 @@ object LedgerFrm: TLedgerFrm
       BottomAxis.Axis.Width = 0
       BottomAxis.StartPosition = 1.000000000000000000
       Chart3DPercent = 1
+      Pages.MaxPointsPerPage = 13
       View3D = False
       View3DOptions.Orthogonal = False
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitLeft = 410
-      ExplicitWidth = 400
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 13
       object Series2: TAreaSeries

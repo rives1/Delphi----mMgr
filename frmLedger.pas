@@ -263,7 +263,9 @@ begin
     frmInsEdit._pEditID := 0; // mando un generico valore da caricare nella form utile x alcuni check
 
   frmInsEdit._pLedgerName := _pAccountName; // passo il nome del ledger di riferimento del record
-  frmInsEdit.ShowModal;                     // nostro la form modale
+  frmInsEdit.Show;
+  frmInsEdit.SetFocus;
+  //  frmInsEdit.ShowModal;                     // nostro la form modale
 
   // aggiorno i datidella grid
   _fillGrid;
@@ -318,7 +320,8 @@ begin
 
   _lTotal := 0; // totale dei singoli record da imputare nel grafico
 
-  chTotals.Series[0].Clear(); // pulisco il grafico
+  chTotals.Series[0].Clear; // pulisco il grafico
+  chHistory.Axes.Bottom.Items.Clear;
   // query totalizzazione depositi
   _SQLString := 'SELECT Sum(TRNAMOUNT) AS Sum_TRNAMOUNT ' +
     ' FROM LedgerView ' +
@@ -429,7 +432,8 @@ begin
   //
   // Chart Storico
   //
-  chHistory.Series[0].Clear(); // pulisco il grafico
+  chHistory.Series[0].Clear; // pulisco il grafico
+  chHistory.Axes.Bottom.Items.Clear;
   _lTotal := 0;                // resetto il conteggio
   i       := 0;                // azzero il counter delle colonne
   // query totalizzazione spese

@@ -128,8 +128,6 @@ object AnalisysFrm2: TAnalisysFrm2
         Value = 50.000000000000000000
       end>
     TabOrder = 2
-    ExplicitLeft = 20
-    ExplicitTop = 32
     object chartCategoryAvg: TChart
       Left = 0
       Top = 0
@@ -217,9 +215,6 @@ object AnalisysFrm2: TAnalisysFrm2
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 3
-      ExplicitLeft = 464
-      ExplicitTop = 180
-      ExplicitWidth = 400
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15
@@ -269,7 +264,6 @@ object AnalisysFrm2: TAnalisysFrm2
           AutoSize = True
           Caption = 'MM Periodo'
         end>
-      Ctl3D = True
       GridLines = True
       Items.ItemData = {
         052E0000000100000000000000FFFFFFFFFFFFFFFF02000000FFFFFFFF000000

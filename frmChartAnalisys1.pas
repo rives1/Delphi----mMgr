@@ -27,6 +27,8 @@ type
     BarSeries2: TBarSeries;
     _fAccount: TJvComboBox;
     Label7: TLabel;
+    chHistory: TChart;
+    Series2: TLineSeries;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure _fdtFromChange(Sender: TObject);
@@ -44,6 +46,7 @@ type
     procedure _chartExpByCategories;
     procedure _chartInOutYY;
     procedure _chartInOutMM;
+    procedure _chartBalanceMM;
 
   public
     { Public declarations }
@@ -86,6 +89,67 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
+procedure TAnalisysFrm1._chartBalanceMM;
+var
+  _lTotal: Double;
+  _YY:     string; // riferimento anno per migliroare visualizzazione graph storico
+  _i:      Integer;
+begin
+  //
+  // Chart Storico
+  //
+  chHistory.Series[0].Clear; // pulisco il grafico
+  chHistory.Axes.Bottom.Items.Clear;
+  _lTotal := 0;                // resetto il conteggio
+  _i      := 0;                // azzero il counter delle colonne
+  // query totalizzazione spese
+  _SQLString := 'SELECT StrfTime(''%Y'', TRNDATE) || ''-'' || StrfTime(''%m'', TRNDATE) AS Period, '
+    + ' StrfTime(''%Y'', TRNDATE) AS YY,'
+    + ' StrfTime(''%m'', TRNDATE) AS MM, '
+    + ' Sum(TRNAMOUNT) AS Sum_TRNAMOUNT '
+    + ' FROM LedgerView '
+//    ' ACCNAME = ''' + _pAccountName + ''' ' +
+    + ' WHERE '
+    + ' TRNDATE Between '''
+    + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
+    + ''' and '''
+    + FormatDateTime('yyyy-mm-dd', _fdtTo.Date) + ''' ';
+    if (_fAccount.Text <> 'ALL') then
+    _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
+
+    _SQLString := _SQLString + ' GROUP BY Period ' +
+    ' ORDER BY Period ';
+
+  MainFRM.sqlQry.SQL.Clear;
+  MainFRM.sqlQry.SQL.Add(_SQLString);
+
+  try
+    MainFRM.sqlQry.Open;
+    if (MainFRM.sqlQry.RecordCount <> 0) then
+      while not MainFRM.sqlQry.EOF do // ciclo recupero dati
+      begin
+        if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
+        begin
+          _lTotal := _lTotal + (MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']);
+          chHistory.Series[0].Add(_lTotal);
+          // inserisco l'anno solo nella settimana iniziale
+          if (_YY = MainFRM.sqlQry.FieldValues['YY']) then
+            chHistory.Axes.Bottom.Items.Add(_i, MainFRM.sqlQry.FieldValues['MM'])
+          else
+            chHistory.Axes.Bottom.Items.Add(_i, MainFRM.sqlQry.FieldValues['YY']);
+
+          _YY := MainFRM.sqlQry.FieldValues['YY'];
+          _i  := _i + 1;
+        end;
+        MainFRM.sqlQry.Next;
+      end;
+  finally
+    MainFRM.sqlQry.Close;
+    MainFRM.sqlQry.SQL.Clear;
+  end;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TAnalisysFrm1._chartExpByCategories;
 var
   _lTotal: Double;
@@ -116,9 +180,9 @@ begin
     + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
     + ''' Group By CATDES';
 
-    //non necessario effettuare raggruppamento il campo serve solo per filtrare
-    //  if (_fAccount.Text <> 'ALL') then
-//    _SQLString := _SQLString + ', ACCNAME ';
+  // non necessario effettuare raggruppamento il campo serve solo per filtrare
+  // if (_fAccount.Text <> 'ALL') then
+  // _SQLString := _SQLString + ', ACCNAME ';
 
   _SQLString := _SQLString + ' Order By Sum_TRNAMOUNT Desc';
 
@@ -145,7 +209,7 @@ end;
 procedure TAnalisysFrm1._chartInOutMM;
 var
   _lTotal:    Double;      // calcolo totale da imputare nella serie
-  _i:         integer;     // ciclo for
+  _i:         Integer;     // ciclo for
   _tempTable: TFDMemTable; // tabella appogio per report
 begin
   // pulisco il grafico
@@ -180,9 +244,9 @@ begin
     + ' DBACCOUNT On ACCID = TRNACCOUNT Inner Join '
     + ' DBSUBCATEGORY On SUBCID = TRNSUBCATEGORY Inner Join '
     + ' DBCATEGORY On CATID = SUBCATID '
-//    + ' TRANSACTIONS Left Join '
-//    + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
-//    + ' DBACCOUNT On ACCID = TRNACCOUNT '
+  // + ' TRANSACTIONS Left Join '
+  // + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
+  // + ' DBACCOUNT On ACCID = TRNACCOUNT '
     + ' Where CATDES <> ''_Transfer'' ';
   if (_fAccount.Text <> 'ALL') then
     _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
@@ -260,8 +324,8 @@ end;
 procedure TAnalisysFrm1._chartInOutYY;
 var
   _lTotal: Double;  // calcolo totale da imputare nella serie
-  _i:      integer; // ciclo per asse x elementi da inserire
-  _YY:     integer; // anno da valutare per inserimento
+  _i:      Integer; // ciclo per asse x elementi da inserire
+  _YY:     Integer; // anno da valutare per inserimento
 begin
   // chart torta per totale spese categoria
   chartInOutYY.Series[0].Clear(); // pulisco il grafico
@@ -274,9 +338,9 @@ begin
     + ' DBACCOUNT On ACCID = TRNACCOUNT Inner Join '
     + ' DBSUBCATEGORY On SUBCID = TRNSUBCATEGORY Inner Join '
     + ' DBCATEGORY On CATID = SUBCATID '
-    //    + ' TRANSACTIONS Left Join '
-//    + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
-//    + ' DBACCOUNT On ACCID = TRNACCOUNT '
+  // + ' TRANSACTIONS Left Join '
+  // + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
+  // + ' DBACCOUNT On ACCID = TRNACCOUNT '
     + ' Where CATDES <> ''_Transfer'' ';
   if (_fAccount.Text <> 'ALL') then
     _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
@@ -354,6 +418,7 @@ begin
   _chartExpByCategories;
   _chartInOutYY;
   _chartInOutMM;
+  _chartBalanceMM;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

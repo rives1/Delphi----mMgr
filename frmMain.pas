@@ -278,6 +278,8 @@ begin
       sqlQry.Open;
       i := 0;
       chartBalance.SeriesList[0].Clear;
+      chartBalance.Axes.Bottom.Items.Clear;
+
       if (MainFRM.sqlQry.RecordCount <> 0) then
         while (not MainFRM.sqlQry.EOF) do // ciclo recupero dati
         begin

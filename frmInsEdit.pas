@@ -3,7 +3,8 @@ unit frmInsEdit;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, System.UITypes, Vcl.Graphics, Vcl.Controls,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, System.UITypes, Vcl.Graphics,
+  Vcl.Controls,
   Vcl.Forms, Vcl.Dialogs, Vcl.Mask, JvExMask, JvToolEdit, JvMaskEdit, JvExStdCtrls, JvEdit, JvValidateEdit,
   Vcl.ComCtrls, JvExComCtrls, JvDateTimePicker, Vcl.StdCtrls, Vcl.Buttons, JvExButtons, JvBitBtn, JvCombobox;
 
@@ -33,10 +34,10 @@ type
     procedure FormActivate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
-    procedure _fPayeeCloseUp(Sender: TObject);
     procedure _fSubCategoryExit(Sender: TObject);
     procedure _fCategoryExit(Sender: TObject);
     procedure _fTypeExit(Sender: TObject);
+    procedure _fPayeeExit(Sender: TObject);
 
   private
     { Private declarations }
@@ -217,8 +218,7 @@ begin
   _newCategory;
 end;
 
-// -------------------------------------------------------------------------------------------------------------//
-procedure TInsEditFrm._fPayeeCloseUp(Sender: TObject);
+procedure TInsEditFrm._fPayeeExit(Sender: TObject);
 begin
   // verfico che il valore sia selezionato fra quelli presenti e recupero le info dei dati + recenti
   if (_fPayee.Items.IndexOf(UpperCase(_fPayee.Text)) <> -1)
@@ -238,7 +238,10 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TInsEditFrm._fTypeExit(Sender: TObject);
 begin
-  _changeType;
+  if (_fType.Items.IndexOf(_fType.Text) = -1) or (_fType.Text = '') then
+    _fType.SetFocus
+  else
+    _changeType;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -435,7 +438,7 @@ procedure TInsEditFrm._recordSave;
 begin
   if _validateField then
   begin
-//    _newPayee; //il nuovo payee viene inserito all'atto dell'uscita dal campo del payee stesso
+    // _newPayee; //il nuovo payee viene inserito all'atto dell'uscita dal campo del payee stesso
     _writeRecord;
     // nel caso di editing di un record chiudo la form adesso
     if _pEditType = 'edit' then
@@ -457,11 +460,11 @@ var
 begin
   // il valore deve essere ngativo se la il tipo di transazione è pay
   if UpperCase(_fType.Text) = 'DEPOSIT' then
-//    _lAmount := VarToStr((_fAmount.Value))
-    _lAmount := StringReplace(VarToStr((_fAmount.Value)), ',', '.',[rfReplaceAll])
+    // _lAmount := VarToStr((_fAmount.Value))
+    _lAmount := StringReplace(VarToStr((_fAmount.Value)), ',', '.', [rfReplaceAll])
   else
-    _lAmount := StringReplace(VarToStr((_fAmount.Value) * -1), ',','.',[rfReplaceAll]);
-//    _lAmount := VarToStr((_fAmount.Value) * -1);
+    _lAmount := StringReplace(VarToStr((_fAmount.Value) * -1), ',', '.', [rfReplaceAll]);
+  // _lAmount := VarToStr((_fAmount.Value) * -1);
 
   // salvataggio del record in base alla tipologia di editing
   try
@@ -469,13 +472,13 @@ begin
     if (_pEditID = 0) then
       _SQLString := ' INSERT INTO TRANSACTIONS (TRNTYPE, TRNDATE, TRNPAYEE, TRNSUBCATEGORY, '
         + ' TRNAMOUNT, TRNACCOUNT, TRNDESCRIPTION) ' +
-//      _SQLString := ' INSERT INTO TRANSACTIONS (TRNTYPE, TRNDATE, TRNPAYEE, TRNCATEGORY, TRNSUBCATEGORY, '
-//        + ' TRNAMOUNT, TRNACCOUNT, TRNDESCRIPTION) ' +
+      // _SQLString := ' INSERT INTO TRANSACTIONS (TRNTYPE, TRNDATE, TRNPAYEE, TRNCATEGORY, TRNSUBCATEGORY, '
+      // + ' TRNAMOUNT, TRNACCOUNT, TRNDESCRIPTION) ' +
       // ' VALUES (:pType, :pDate, :pPayee, :pCategory, :pSubcat, :pAmount, :pAccount, :pDes)'
         ' VALUES ( ''' + _fType.Text + ''' '
         + ', ''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''' '
         + ', ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
-//        + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
+      // + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
         + ', ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
         + ', ''' + _lAmount + ''' '
         + ', ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _plLedgerName) + ''' '
@@ -484,7 +487,7 @@ begin
       _SQLString := 'UPDATE TRANSACTIONS SET ' + '  TRNTYPE = ''' + _fType.Text + ''' '
         + ', TRNDATE = datetime(''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''') '
         + ', TRNPAYEE = ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
-//        + ', TRNCATEGORY =  ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
+      // + ', TRNCATEGORY =  ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
         + ', TRNSUBCATEGORY = ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
         + ', TRNAMOUNT = ''' + _lAmount + ''' '
         + ', TRNACCOUNT = ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _plLedgerName) + ''' '
@@ -501,14 +504,14 @@ begin
       // try
       begin
         // inserisco il movimento con valore inverso su conto definito in mask
-//        _SQLString := ' INSERT INTO TRANSACTIONS (TRNTYPE, TRNDATE, TRNPAYEE, TRNCATEGORY, TRNSUBCATEGORY, TRNAMOUNT, '
-//          + ' TRNACCOUNT, TRNDESCRIPTION) '
+        // _SQLString := ' INSERT INTO TRANSACTIONS (TRNTYPE, TRNDATE, TRNPAYEE, TRNCATEGORY, TRNSUBCATEGORY, TRNAMOUNT, '
+        // + ' TRNACCOUNT, TRNDESCRIPTION) '
         _SQLString := ' INSERT INTO TRANSACTIONS (TRNTYPE, TRNDATE, TRNPAYEE, TRNSUBCATEGORY, TRNAMOUNT, '
           + ' TRNACCOUNT, TRNDESCRIPTION) '
           + ' VALUES ( ''' + _fType.Text + ''' '
           + ', ''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''' '
           + ', ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
-//          + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
+        // + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
           + ', ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
           + ', ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
           + ', ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' ' // conto di destinazione
@@ -527,8 +530,8 @@ begin
       end
       else
       begin
-{        //salvo il record che sto editando
-        _SQLString := 'UPDATE TRANSACTIONS SET ' + '  TRNTYPE = ''' + _fType.Text + ''' '
+        { //salvo il record che sto editando
+          _SQLString := 'UPDATE TRANSACTIONS SET ' + '  TRNTYPE = ''' + _fType.Text + ''' '
           + ', TRNDATE = datetime(''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''') '
           + ', TRNPAYEE = ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
           + ', TRNCATEGORY =  ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
@@ -537,13 +540,13 @@ begin
           + ', TRNACCOUNT = ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountFrom.Text) + ''' '
           + ', TRNDESCRIPTION = ''' + _fDescription.Text + ''' '
           + ' WHERE TRNID = ''' + IntToStr(_pEditID) + ''' ';
- }
+        }
 
         // aggiorno trasferimento -- aggiorno il movimento correlato
         _SQLString := 'UPDATE TRANSACTIONS SET ' + '  TRNTYPE = ''' + _fType.Text + ''' '
           + ', TRNDATE = datetime(''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''') '
           + ', TRNPAYEE = ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
-//          + ', TRNCATEGORY =  ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
+        // + ', TRNCATEGORY =  ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
           + ', TRNSUBCATEGORY = ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
           + ', TRNAMOUNT = ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
           + ', TRNACCOUNT = ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' '

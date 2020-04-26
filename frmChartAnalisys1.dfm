@@ -114,6 +114,11 @@ object AnalisysFrm1: TAnalisysFrm1
         Column = 1
         Control = chartInOutMM
         Row = 1
+      end
+      item
+        Column = 1
+        Control = chHistory
+        Row = 0
       end>
     RowCollection = <
       item
@@ -265,6 +270,50 @@ object AnalisysFrm1: TAnalisysFrm1
           00060000000000000000E66C403333333333146B409999999999536D40CCCCCC
           CCCCCD7040CCCCCCCC4C127140FEFFFFFFFFE56C40}
         Detail = {0000000000}
+      end
+    end
+    object chHistory: TChart
+      Left = 432
+      Top = 0
+      Width = 432
+      Height = 235
+      Legend.Visible = False
+      MarginRight = 8
+      MarginTop = 10
+      Title.Text.Strings = (
+        'TChart')
+      Title.Visible = False
+      BottomAxis.Axis.Color = clDefault
+      BottomAxis.Axis.Width = 0
+      BottomAxis.StartPosition = 1.000000000000000000
+      Chart3DPercent = 16
+      Pages.MaxPointsPerPage = 20
+      View3DOptions.OrthoAngle = 30
+      Align = alClient
+      BevelOuter = bvNone
+      TabOrder = 3
+      ExplicitLeft = 448
+      ExplicitWidth = 400
+      DefaultCanvas = 'TGDIPlusCanvas'
+      ColorPaletteIndex = 13
+      object Series2: TLineSeries
+        Marks.Frame.Visible = False
+        Marks.Visible = True
+        Marks.Callout.Length = 20
+        Title = 'Historical Value'
+        ValueFormat = '#,##0;(#,##0)'
+        Brush.BackColor = clDefault
+        LinePen.Fill.Gradient.StartColor = clRed
+        LinePen.Fill.Gradient.Visible = True
+        Pointer.HorizSize = 3
+        Pointer.InflateMargins = True
+        Pointer.Style = psDownTriangle
+        Pointer.VertSize = 3
+        Stairs = True
+        XValues.Name = 'X'
+        XValues.Order = loAscending
+        YValues.Name = 'Y'
+        YValues.Order = loNone
       end
     end
   end

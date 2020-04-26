@@ -156,7 +156,7 @@ begin
         _lvItem         := _lvAverageMM.Items.Add;
         _lvItem.Caption := VarToStr(MainFRM.sqlQry.FieldValues['CATDES']);
         _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] * -1));
-        _lvItem.SubItems.Add(FormatFloat('#,##0.00', _mmPeriod));
+        _lvItem.SubItems.Add(FormatFloat('#,##0.##', _mmPeriod));
         // MainFRM.sqlQry.FieldValues['Count_TRNID']));
       end;
 
