@@ -197,6 +197,7 @@ object LedgerFrm: TLedgerFrm
       BottomAxis.StartPosition = 1.000000000000000000
       Chart3DPercent = 1
       Pages.MaxPointsPerPage = 13
+      Pages.ScaleLastPage = False
       View3D = False
       View3DOptions.Orthogonal = False
       Align = alClient

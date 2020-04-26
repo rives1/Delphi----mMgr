@@ -111,7 +111,7 @@ begin
   if (_fAccount.Text <> 'ALL') then
     _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
 
-  _SQLString   := _SQLString
+  _SQLString := _SQLString
     + ' And TRNDATE Between ''' + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
     + ''' and ''' + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
     + ''' Group By CATDES ';
@@ -157,6 +157,7 @@ begin
         _lvItem.Caption := VarToStr(MainFRM.sqlQry.FieldValues['CATDES']);
         _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] * -1));
         _lvItem.SubItems.Add(FormatFloat('#,##0.##', _mmPeriod));
+        _lvItem.SubItems.Add(FormatFloat('#,##0.00', ((MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] * -1) / _mmPeriod)));
         // MainFRM.sqlQry.FieldValues['Count_TRNID']));
       end;
 
@@ -182,6 +183,7 @@ begin
 
   _SQLString := ' Select CATDES, '
     + ' Avg(TRNAMOUNT) As Avg_TRNAMOUNT, '
+    + ' Sum(TRNAMOUNT) As Sum_TRNAMOUNT, '
     + ' Count(TRNID) As Count_TRNID '
     + ' From '
     + ' TRANSACTIONS Inner Join '
@@ -236,11 +238,9 @@ begin
         // tabella soprastante
         _lvItem         := _lvAvgCategory.Items.Add;
         _lvItem.Caption := VarToStr(MainFRM.sqlQry.FieldValues['CATDES']);
-        _lvItem.SubItems.Add(
-          FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Avg_TRNAMOUNT'] * -1)
-          );
-        _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Count_TRNID']));
-
+        _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] * -1));
+        _lvItem.SubItems.Add(FormatFloat('#,##0.##', MainFRM.sqlQry.FieldValues['Count_TRNID']));
+        _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Avg_TRNAMOUNT'] * -1));
       end;
 
       MainFRM.sqlQry.Next;

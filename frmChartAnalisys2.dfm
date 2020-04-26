@@ -1,7 +1,7 @@
 object AnalisysFrm2: TAnalisysFrm2
   Left = 0
   Top = 0
-  Caption = 'AnalisysFrm2'
+  Caption = 'Analisys Avg'
   ClientHeight = 527
   ClientWidth = 864
   Color = clBtnFace
@@ -184,12 +184,17 @@ object AnalisysFrm2: TAnalisysFrm2
         item
           Alignment = taRightJustify
           AutoSize = True
-          Caption = 'Avg'
+          Caption = 'Amount'
         end
         item
           Alignment = taRightJustify
           AutoSize = True
           Caption = 'Count'
+        end
+        item
+          Alignment = taRightJustify
+          AutoSize = True
+          Caption = 'Avg'
         end>
       GridLines = True
       Items.ItemData = {
@@ -258,11 +263,17 @@ object AnalisysFrm2: TAnalisysFrm2
         item
           Alignment = taRightJustify
           AutoSize = True
-          Caption = 'Totale'
+          Caption = 'Amount'
         end
         item
+          Alignment = taRightJustify
           AutoSize = True
-          Caption = 'MM Periodo'
+          Caption = 'Months'
+        end
+        item
+          Alignment = taRightJustify
+          AutoSize = True
+          Caption = 'Avg'
         end>
       GridLines = True
       Items.ItemData = {

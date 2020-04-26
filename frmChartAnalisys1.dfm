@@ -1,7 +1,7 @@
 object AnalisysFrm1: TAnalisysFrm1
   Left = 0
   Top = 0
-  Caption = 'AnalisysFrm1'
+  Caption = 'Analisys Amt'
   ClientHeight = 527
   ClientWidth = 864
   Color = clBtnFace
@@ -281,35 +281,42 @@ object AnalisysFrm1: TAnalisysFrm1
       MarginRight = 8
       MarginTop = 10
       Title.Text.Strings = (
-        'TChart')
-      Title.Visible = False
+        'Monthly Balance')
       BottomAxis.Axis.Color = clDefault
       BottomAxis.Axis.Width = 0
       BottomAxis.StartPosition = 1.000000000000000000
       Chart3DPercent = 16
       Pages.MaxPointsPerPage = 20
+      View3D = False
       View3DOptions.OrthoAngle = 30
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 3
-      ExplicitLeft = 448
-      ExplicitWidth = 400
       DefaultCanvas = 'TGDIPlusCanvas'
-      ColorPaletteIndex = 13
+      PrintMargins = (
+        15
+        23
+        15
+        23)
+      ColorPaletteIndex = 19
       object Series2: TLineSeries
+        ColorEachPoint = True
         Marks.Frame.Visible = False
         Marks.Visible = True
         Marks.Callout.Length = 20
+        SeriesColor = clBlack
         Title = 'Historical Value'
         ValueFormat = '#,##0;(#,##0)'
         Brush.BackColor = clDefault
+        DrawStyle = dsCurve
+        InvertedStairs = True
         LinePen.Fill.Gradient.StartColor = clRed
         LinePen.Fill.Gradient.Visible = True
+        OutLine.Visible = True
         Pointer.HorizSize = 3
         Pointer.InflateMargins = True
         Pointer.Style = psDownTriangle
         Pointer.VertSize = 3
-        Stairs = True
         XValues.Name = 'X'
         XValues.Order = loAscending
         YValues.Name = 'Y'

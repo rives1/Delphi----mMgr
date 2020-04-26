@@ -254,10 +254,10 @@ begin
     MainFRM.sqlite_conn.StartTransaction;
     if (_fID.Text = '') then
       _SQLString := ' INSERT INTO DBPAYEE (PAYNAME) '
-        + ' VALUES ( ''' + _fName.Text + ''') '
+        + ' VALUES ( ''' + _UpCase(_fName.Text) + ''') '
     else
       _SQLString := 'UPDATE DBPAYEE SET '
-        + ' PAYNAME = ''' + _fName.Text + ''' '
+        + ' PAYNAME = ''' + _UpCase(_fName.Text) + ''' '
         + ' WHERE PAYID = ''' + _fID.Text + ''' ';
 
     MainFRM.sqlQry.ExecSQL(_SQLString);

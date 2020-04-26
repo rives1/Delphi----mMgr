@@ -100,24 +100,24 @@ begin
   //
   chHistory.Series[0].Clear; // pulisco il grafico
   chHistory.Axes.Bottom.Items.Clear;
-  _lTotal := 0;                // resetto il conteggio
-  _i      := 0;                // azzero il counter delle colonne
+  _lTotal := 0; // resetto il conteggio
+  _i      := 0; // azzero il counter delle colonne
   // query totalizzazione spese
   _SQLString := 'SELECT StrfTime(''%Y'', TRNDATE) || ''-'' || StrfTime(''%m'', TRNDATE) AS Period, '
     + ' StrfTime(''%Y'', TRNDATE) AS YY,'
     + ' StrfTime(''%m'', TRNDATE) AS MM, '
     + ' Sum(TRNAMOUNT) AS Sum_TRNAMOUNT '
     + ' FROM LedgerView '
-//    ' ACCNAME = ''' + _pAccountName + ''' ' +
+  // ' ACCNAME = ''' + _pAccountName + ''' ' +
     + ' WHERE '
     + ' TRNDATE Between '''
     + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
     + ''' and '''
     + FormatDateTime('yyyy-mm-dd', _fdtTo.Date) + ''' ';
-    if (_fAccount.Text <> 'ALL') then
+  if (_fAccount.Text <> 'ALL') then
     _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
 
-    _SQLString := _SQLString + ' GROUP BY Period ' +
+  _SQLString := _SQLString + ' GROUP BY Period ' +
     ' ORDER BY Period ';
 
   MainFRM.sqlQry.SQL.Clear;
@@ -130,7 +130,7 @@ begin
       begin
         if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
         begin
-          _lTotal := _lTotal + (MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']);
+          _lTotal := _lTotal + MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'];
           chHistory.Series[0].Add(_lTotal);
           // inserisco l'anno solo nella settimana iniziale
           if (_YY = MainFRM.sqlQry.FieldValues['YY']) then
@@ -194,7 +194,7 @@ begin
     begin
       if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
       begin
-        _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
+        _lTotal := Round(Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'])));
         chartExpByCat.SeriesList[0].Add(_lTotal, MainFRM.sqlQry.FieldValues['CATDES'] + ' - ' + FloatToStr(_lTotal));
       end;
       MainFRM.sqlQry.Next;

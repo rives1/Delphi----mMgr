@@ -188,15 +188,15 @@ begin
       // rosso se il val è negativo
       if ACol = 7 then
       begin
-      _Text := grdLedger.cells[7, ARow];
-      TryStrToFloat(_Text.Replace('''',''), _Float);
-      if (_Float < 0) then
-        Canvas.Font.Color := clRed
-      else
-        Canvas.Font.Color := clBlack;
+        _Text := grdLedger.cells[7, ARow];
+        TryStrToFloat(_Text.Replace('''', ''), _Float);
+        if (_Float < 0) then
+          Canvas.Font.Color := clRed
+        else
+          Canvas.Font.Color := clBlack;
 
-      Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, cells[7, ARow]);
-      Canvas.FrameRect(Rect);
+        Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, cells[7, ARow]);
+        Canvas.FrameRect(Rect);
       end;
 
       // Draw the Band except on current highlighted row
@@ -265,7 +265,7 @@ begin
   frmInsEdit._pLedgerName := _pAccountName; // passo il nome del ledger di riferimento del record
   frmInsEdit.Show;
   frmInsEdit.SetFocus;
-  //  frmInsEdit.ShowModal;                     // nostro la form modale
+  // frmInsEdit.ShowModal;                     // nostro la form modale
 
   // aggiorno i datidella grid
   _fillGrid;
@@ -434,8 +434,8 @@ begin
   //
   chHistory.Series[0].Clear; // pulisco il grafico
   chHistory.Axes.Bottom.Items.Clear;
-  _lTotal := 0;                // resetto il conteggio
-  i       := 0;                // azzero il counter delle colonne
+  _lTotal := 0; // resetto il conteggio
+  i       := 0; // azzero il counter delle colonne
   // query totalizzazione spese
   _SQLString := 'SELECT StrfTime(''%Y'', TRNDATE) || ''-'' || StrfTime(''%W'', TRNDATE) AS Period, ' +
     ' StrfTime(''%Y'', TRNDATE) AS YY,' +
@@ -473,6 +473,7 @@ begin
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
   end;
+  chHistory.Pages.Current := chHistory.Pages.Count;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

@@ -2,8 +2,8 @@ object InsEditFrm: TInsEditFrm
   Left = 0
   Top = 0
   Caption = 'Insert/Edit Record'
-  ClientHeight = 250
-  ClientWidth = 462
+  ClientHeight = 273
+  ClientWidth = 461
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -125,6 +125,7 @@ object InsEditFrm: TInsEditFrm
     Width = 248
     Height = 21
     AutoDropDown = True
+    DropDownCount = 20
     Sorted = True
     TabOrder = 5
     Text = ''
@@ -136,19 +137,24 @@ object InsEditFrm: TInsEditFrm
     Width = 169
     Height = 21
     AutoDropDown = True
+    DropDownCount = 20
     Sorted = True
     TabOrder = 6
     Text = ''
+    OnEnter = _fCategoryEnter
     OnExit = _fCategoryExit
+    OnSelect = _fCategorySelect
   end
   object _fSubCategory: TJvComboBox
     Left = 263
     Top = 131
     Width = 164
     Height = 21
+    DropDownCount = 14
     Sorted = True
     TabOrder = 7
     Text = ''
+    OnEnter = _fSubCategoryEnter
     OnExit = _fSubCategoryExit
   end
   object _fDate: TJvDateTimePicker
@@ -191,5 +197,21 @@ object InsEditFrm: TInsEditFrm
     TabOrder = 3
     Text = ''
     OnExit = _fSubCategoryExit
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 254
+    Width = 461
+    Height = 19
+    Panels = <
+      item
+        Text = 
+          'F12 - save record / ESC - Close Mask - Clik on ledger form to up' +
+          'date'
+        Width = 50
+      end>
+    ExplicitLeft = 200
+    ExplicitTop = 225
+    ExplicitWidth = 0
   end
 end
