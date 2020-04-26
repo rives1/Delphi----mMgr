@@ -95,8 +95,8 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TAccountFrm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-//  MainFRM._treeMenuCreate;
-// disabilitato per la trasformazione della form in modale
+  // MainFRM._treeMenuCreate;
+  // disabilitato per la trasformazione della form in modale
   Action := caFree;
   Release;
 end;
@@ -146,7 +146,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TAccountFrm._deleteAccount;
 begin
-  _SQLString := 'SELECT * FROM LedgerView WHERE ACCNAME = ''' + _fLvAccount.Selected.Caption +''' ';
+  _SQLString := 'SELECT * FROM LedgerView WHERE ACCNAME = ''' + _fLvAccount.Selected.Caption + ''' ';
 
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
@@ -156,7 +156,7 @@ begin
     if MainFRM.sqlQry.RecordCount > 0 then
       MessageDlg('Data alreay used in application. Impossible to delete.', mtInformation, [mbOk], 0)
     else
-    if MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+      if MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
     begin
       _SQLString := 'DELETE FROM DBACCOUNT WHERE ACCNAME = ''' + _fLvAccount.Selected.Caption + ''' ';
       // esecuzione della query di cancellazione
@@ -168,7 +168,7 @@ begin
 
   except
     begin
-      raise Exception.Create('Error in deleting ->'+ _fLvAccount.Selected.Caption  + '. Operation Aborted');
+      raise Exception.Create('Error in deleting ->' + _fLvAccount.Selected.Caption + '. Operation Aborted');
       MainFRM.sqlite_conn.Rollback;
     end;
   end;

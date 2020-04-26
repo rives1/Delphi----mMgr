@@ -42,14 +42,15 @@ type
   private
     { Private declarations }
     // variabili
-    _SQLString: string; // container x query string
+    _SQLString:    string; // container x query string
+    _ActionRecord: string; // tipo di operazione da eseguire sul record
 
     function _validateField: Boolean;
     procedure _recordDelete;
     procedure _recordLoad;
     procedure _recordSave;
     procedure _recordWrite;
-    procedure _cleanFormNewRecord(_pAction : string);
+    procedure _cleanFormNewRecord;
     procedure _treeCategoryFill;
 
   public
@@ -123,43 +124,46 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TCategoryFrm.NewCategory1Click(Sender: TObject);
 begin
-  _cleanFormNewRecord('edit');
+  _ActionRecord := 'edit';
+  _cleanFormNewRecord;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TCategoryFrm.NewSubcategory1Click(Sender: TObject);
 begin
   if (_treeCategory.Selected.SelectedIndex = 1) then
-    _cleanFormNewRecord('newSubcat')
+  begin
+    _ActionRecord := 'newSubcat';
+    _cleanFormNewRecord;
+  end
   else
     MessageDlg('Category Node not selected!', mtInformation, [mbOk], 0);
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TCategoryFrm._cleanFormNewRecord(_pAction : string);
+procedure TCategoryFrm._cleanFormNewRecord;
 begin
-  //se arrivo da un editing
+  // puliza dei campi e visualizzazione di quanto necessario
   _fID.Text   := '';
   _fName.Text := '';
   _fType.Text := '';
 
-  if (UpperCase(_pAction) = 'NEWCAT') then
+  if (UpperCase(_ActionRecord) = 'NEWCAT') then
   begin
-      _fType.Visible   := True;
-      _lblType.Caption := 'Type';
-      _lblName.Caption := 'Category Description';
+    _fType.Visible   := True;
+    _lblType.Caption := 'Type';
+    _lblName.Caption := 'Category Description';
   end;
 
-
-  if (UpperCase(_pAction) = 'NEWSUBCAT') then
+  if (UpperCase(_ActionRecord) = 'NEWSUBCAT') then
   begin
-      _fType.Visible   := False;
-      _lblType.Caption := 'Category -> ' + _treeCategory.Selected.Text;
-      _lblName.Caption := 'Subcategory Description';
+    _fType.Visible   := False;
+    _lblType.Caption := 'Category -> ' + _treeCategory.Selected.Text;
+    _lblName.Caption := 'Subcategory Description';
 
   end;
 
-  if (UpperCase(_pAction) = 'EDIT') then
+  if (UpperCase(_ActionRecord) = 'EDIT') then
     if (_treeCategory.Selected.SelectedIndex = 1) then // se categoria visualizzo il campo tipo
     begin
       _fType.Visible   := True;
@@ -181,8 +185,8 @@ procedure TCategoryFrm._recordDelete;
 begin
   if (_treeCategory.Selected.SelectedIndex = 1) then // procedura cancellazione categoria
   begin
-    _SQLString := 'Select * From DBCATEGORY Inner Join DBSUBCATEGORY On DBSUBCATEGORY.SUBCATID = DBCATEGORY.CATID '
-      + ' Where DBCATEGORY.CATDES = ''' + _treeCategory.Selected.Text +''' ';
+    _SQLString := 'Select * From DBCATEGORY Inner Join DBSUBCATEGORY On SUBCATID = CATID '
+      + ' Where CATDES = ''' + _treeCategory.Selected.Text + ''' ';
     MainFRM.sqlQry.SQL.Clear;
     MainFRM.sqlQry.SQL.Add(_SQLString);
     try
@@ -197,9 +201,10 @@ begin
         // esecuzione della query di cancellazione
         MainFRM.sqlQry.ExecSQL(_SQLString);
         MainFRM.sqlite_conn.Commit;
+        MessageDlg(_treeCategory.Selected.Text + ' Deleted!!', mtInformation, [mbOk], 0);
       end;
       MainFRM.sqlQry.Close;
-    MessageDlg(_treeCategory.Selected.Text  + ' Deleted!!',mtInformation, [mbOk], 0);
+
     except
       begin
         raise Exception.Create('Error in deleting -> ' + _treeCategory.Selected.Text + '. Operation Aborted');
@@ -222,30 +227,33 @@ begin
       else
         if MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
       begin
-        _SQLString := 'DELETE FROM DBSUBCATEGORY WHERE SUBCDES = ''' + _treeCategory.Selected.Text +''' ';
+        _SQLString := 'DELETE FROM DBSUBCATEGORY WHERE SUBCDES = ''' + _treeCategory.Selected.Text + ''' ';
         // esecuzione della query di cancellazione
         MainFRM.sqlQry.ExecSQL(_SQLString);
         MainFRM.sqlite_conn.Commit;
+        MessageDlg(_treeCategory.Selected.Text + ' Deleted!!', mtInformation, [mbOk], 0);
       end;
       MainFRM.sqlQry.Close;
-    MessageDlg(_treeCategory.Selected.Text  + ' Deleted!!',mtInformation, [mbOk], 0);
     except
       begin
-        raise Exception.Create('Error in deleting -> '+ _treeCategory.Selected.Text +'. Operation Aborted');
+        raise Exception.Create('Error in deleting -> ' + _treeCategory.Selected.Text + '. Operation Aborted');
         MainFRM.sqlite_conn.Rollback;
       end;
     end;
   end;
 
-    _treeCategoryFill;
-    _cleanFormNewRecord('newCat');
+  _treeCategoryFill;
+  _ActionRecord := 'newCat';
+  _cleanFormNewRecord;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TCategoryFrm._recordLoad;
 begin
   // Carico i dati nei campi della form
-  _cleanFormNewRecord('edit');
+  _ActionRecord := 'edit';
+
+  _cleanFormNewRecord;
 
   if (_treeCategory.Selected.SelectedIndex = 1) then // se categoria
   begin
@@ -296,7 +304,8 @@ begin
   begin
     _recordWrite;
     _treeCategoryFill;
-    _cleanFormNewRecord('newCat');
+    _ActionRecord := 'newCat';
+    _cleanFormNewRecord;
   end;
 end;
 
@@ -309,6 +318,8 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TCategoryFrm._treeCategoryDblClick(Sender: TObject);
 begin
+  _ActionRecord := 'edit';
+  _cleanFormNewRecord;
   _recordLoad;
 end;
 
@@ -403,7 +414,7 @@ begin
 
   _treeCategory.FullExpand;
 
-  if (_treeCategory.Items.Count > 0) then  //seleziono il primo nodo
+  if (_treeCategory.Items.Count > 0) then // seleziono il primo nodo
     _treeCategory.Items[0].Selected := True;
 
 end;
@@ -413,32 +424,80 @@ function TCategoryFrm._validateField: Boolean;
 begin
   // verifica che i campi della mask siano compilati
   Result := True;
-  if (_treeCategory.Selected.SelectedIndex = 1) then // se categoria
-  begin
+  // verifico che i campi visibili siano compilati
+  if (_fName.Text = '') and (_fName.Visible) then
+    Result := False;
+  if (_fType.Text = '') and (_fType.Visible) then
+    Result := False;
+
+  // verifico che il nome della cat o subcat non sia stato già usato
+
+  if (_lblName.Caption = 'Category Description') then // se categoria
+    _SQLString := 'SELECT CATID FROM DBCATEGORY where CATDES = ''' + _fName.Text + ''' '
+  else
+    _SQLString := 'SELECT SUBCID FROM DBSUBCATEGORY where SUBCDES = ''' + _fName.Text + ''' ';
+
+  MainFRM.sqlQry.SQL.Clear;
+  MainFRM.sqlQry.SQL.Add(_SQLString);
+  try
+    MainFRM.sqlQry.Open;
+    if MainFRM.sqlQry.RecordCount > 0 then
+    begin
+      MessageDlg('Name already used', mtInformation, [mbOk], 0);
+      Result := False;
+    end;
+  finally
+    MainFRM.sqlQry.Close;
+    MainFRM.sqlQry.SQL.Clear;
+  end;
+
+  if (Result) and (MessageDlg('Save Record?', mtConfirmation, [mbYes, mbNo], 0) = mrNo) then
+    Result := False;
+
+  { if UpperCase(_ActionRecord) = 'EDIT' then
+    if (_treeCategory.Selected.SelectedIndex = 1) then // se categoria
+    begin
     if (_fName.Text = '') or (_fType.Text = '') then
     begin
-      MessageDlg('Data field incomplete!!', mtInformation, [mbOk], 0);
-      Result := False;
+    MessageDlg('Data field incomplete!!', mtInformation, [mbOk], 0);
+    Result := False;
     end
     else
     begin
-      if MessageDlg('Save Record?', mtConfirmation, [mbYes, mbNo], 0) = mrNo then
-        Result := False;
+    if MessageDlg('Save Record?', mtConfirmation, [mbYes, mbNo], 0) = mrNo then
+    Result := False;
     end;
-  end
-  else // se sottocategoria
-  begin
+    end
+    else // se sottocategoria
+    begin
     if (_fName.Text = '') then
     begin
-      MessageDlg('Data field incomplete!!', mtInformation, [mbOk], 0);
-      Result := False;
+    MessageDlg('Data field incomplete!!', mtInformation, [mbOk], 0);
+    Result := False;
     end
     else
     begin
-      if MessageDlg('Save Record?', mtConfirmation, [mbYes, mbNo], 0) = mrNo then
-        Result := False;
+    if MessageDlg('Save Record?', mtConfirmation, [mbYes, mbNo], 0) = mrNo then
+    Result := False;
     end;
-  end
+    end;
+
+    if UpperCase(_ActionRecord) = 'NEWCAT' then
+    if (_fName.Text = '') or (_fType.Text = '') then
+    begin
+    MessageDlg('Data field incomplete!!', mtInformation, [mbOk], 0);
+    Result := False;
+    end
+    else
+    begin
+    if MessageDlg('Save Record?', mtConfirmation, [mbYes, mbNo], 0) = mrNo then
+    Result := False;
+    end;
+
+    if UpperCase(_ActionRecord) = 'NEWSUBCAT' then
+
+  }
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -447,31 +506,53 @@ begin
   // salvo il record
   try
     MainFRM.sqlite_conn.StartTransaction;
-    if (_treeCategory.Selected.SelectedIndex = 1) then // se categoria
-    begin
-      if (_fID.Text = '') then
-        _SQLString := ' INSERT INTO DBCATEGORY (CATTYPE, CATDES) '
-          + ' VALUES ( ''' + _fType.Text + ''' '
-          + ', ''' + _fName.Text + ''') '
-      else
+
+    if (UpperCase(_ActionRecord) = 'NEWCAT') then
+      _SQLString := ' INSERT INTO DBCATEGORY (CATTYPE, CATDES) '
+        + ' VALUES ( ''' + _fType.Text + ''' '
+        + ', ''' + _UpCase(_fName.Text) + ''') ';
+    if (UpperCase(_ActionRecord) = 'NEWSUBCAT') then
+      _SQLString := ' INSERT INTO DBSUBCATEGORY (SUBCDES, SUBCATID) '
+        + ' VALUES ( ''' + _UpCase(_fName.Text) + ''' '
+        + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _treeCategory.Selected.Text)
+        + ''') ';
+    if (UpperCase(_ActionRecord) = 'EDIT') then
+      if (_treeCategory.Selected.SelectedIndex = 1) then // se categoria
         _SQLString := 'UPDATE DBCATEGORY SET '
           + '  CATTYPE = ''' + _fType.Text + ''' '
-          + ', CATDES  = ''' + _fName.Text + ''' '
-          + ' WHERE CATID = ''' + _fID.Text + ''' ';
-    end
-    else // se sottocategoria
-    begin
-      if (_fID.Text = '') then
-        _SQLString := ' INSERT INTO DBSUBCATEGORY (SUBCDES, SUBCATID) '
-          + ' VALUES ( ''' + _fType.Text + ''' '
-          + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _treeCategory.Selected.Text)
-          + ''') '
-      else
+          + ', CATDES  = ''' + _UpCase(_fName.Text) + ''' '
+          + ' WHERE CATID = ''' + _fID.Text + ''' '
+      else                                        // se sottocategoria
         _SQLString := 'UPDATE DBSUBCATEGORY SET ' // aggiorno solo la descrizione
-          + ' SUBCDES = ''' + _fName.Text + ''' '
+          + ' SUBCDES = ''' + _UpCase(_fName.Text) + ''' '
           + ' WHERE SUBCID = ''' + _fID.Text + ''' ';
-    end;
 
+    {
+      if (_treeCategory.Selected.SelectedIndex = 1) then // se categoria
+      begin
+      if (_fID.Text = '') then
+      _SQLString := ' INSERT INTO DBCATEGORY (CATTYPE, CATDES) '
+      + ' VALUES ( ''' + _fType.Text + ''' '
+      + ', ''' + _fName.Text + ''') '
+      else
+      _SQLString := 'UPDATE DBCATEGORY SET '
+      + '  CATTYPE = ''' + _fType.Text + ''' '
+      + ', CATDES  = ''' + _fName.Text + ''' '
+      + ' WHERE CATID = ''' + _fID.Text + ''' ';
+      end
+      else // se sottocategoria
+      begin
+      if (_fID.Text = '') then
+      _SQLString := ' INSERT INTO DBSUBCATEGORY (SUBCDES, SUBCATID) '
+      + ' VALUES ( ''' + _fType.Text + ''' '
+      + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _treeCategory.Selected.Text)
+      + ''') '
+      else
+      _SQLString := 'UPDATE DBSUBCATEGORY SET ' // aggiorno solo la descrizione
+      + ' SUBCDES = ''' + _fName.Text + ''' '
+      + ' WHERE SUBCID = ''' + _fID.Text + ''' ';
+      end;
+    }
     MainFRM.sqlQry.ExecSQL(_SQLString);
     MainFRM.sqlite_conn.Commit;
 

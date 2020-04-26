@@ -39,8 +39,6 @@ object PayeeFRM: TPayeeFRM
         Text = 'Double click to edit Payee'
         Width = 50
       end>
-    ExplicitTop = 448
-    ExplicitWidth = 520
   end
   object Panel3: TPanel
     Left = 231
@@ -50,8 +48,6 @@ object PayeeFRM: TPayeeFRM
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 289
-    ExplicitHeight = 448
     object Name: TLabel
       Left = 7
       Top = 48
@@ -110,7 +106,6 @@ object PayeeFRM: TPayeeFRM
     TabOrder = 2
     ViewStyle = vsReport
     OnDblClick = _flvPayeeDblClick
-    ExplicitHeight = 448
   end
   object PopupMenu1: TPopupMenu
     Left = 95

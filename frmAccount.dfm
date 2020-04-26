@@ -110,8 +110,6 @@ object AccountFrm: TAccountFrm
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitWidth = 259
-    ExplicitHeight = 266
     object Name: TLabel
       Left = 10
       Top = 48

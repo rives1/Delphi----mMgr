@@ -7458,7 +7458,7 @@ object MainFRM: TMainFRM
   end
   object sqlQry2: TFDQuery
     Connection = sqlite_conn
-    Left = 364
+    Left = 374
     Top = 443
   end
   object dlgSave: TSaveDialog

@@ -170,8 +170,9 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.grdLedgerDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
 var
-  dx:   Integer;
-  Text: string;
+  _dx:    Integer;
+  _Text:  string;
+  _Float: Double;
 begin
 
   with (Sender as TStringGrid) do
@@ -184,6 +185,20 @@ begin
     end
     else
     begin
+      // rosso se il val è negativo
+      if ACol = 7 then
+      begin
+        _Text := grdLedger.cells[7, ARow];
+        TryStrToFloat(_Text.Replace('''', ''), _Float);
+        if (_Float < 0) then
+          Canvas.Font.Color := clRed
+        else
+          Canvas.Font.Color := clBlack;
+
+        Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, cells[7, ARow]);
+        Canvas.FrameRect(Rect);
+      end;
+
       // Draw the Band except on current highlighted row
       if (ARow <> Row) then
       begin
@@ -204,9 +219,9 @@ begin
     begin
       // bold per la prima linea delle caption
       FillRect(Rect);
-      Text := grdLedger.cells[ACol, ARow];
-      dx   := TextWidth(Text) + 2;
-      TextOut(Rect.Right - dx, Rect.Top, Text);
+      _Text := grdLedger.cells[ACol, ARow];
+      _dx   := TextWidth(_Text) + 2;
+      TextOut(Rect.Right - _dx, Rect.Top, _Text);
     end;
 
 end;
@@ -248,7 +263,9 @@ begin
     frmInsEdit._pEditID := 0; // mando un generico valore da caricare nella form utile x alcuni check
 
   frmInsEdit._pLedgerName := _pAccountName; // passo il nome del ledger di riferimento del record
-  frmInsEdit.ShowModal;                     // nostro la form modale
+  frmInsEdit.Show;
+  frmInsEdit.SetFocus;
+  // frmInsEdit.ShowModal;                     // nostro la form modale
 
   // aggiorno i datidella grid
   _fillGrid;
@@ -303,7 +320,8 @@ begin
 
   _lTotal := 0; // totale dei singoli record da imputare nel grafico
 
-  chTotals.Series[0].Clear(); // pulisco il grafico
+  chTotals.Series[0].Clear; // pulisco il grafico
+  chHistory.Axes.Bottom.Items.Clear;
   // query totalizzazione depositi
   _SQLString := 'SELECT Sum(TRNAMOUNT) AS Sum_TRNAMOUNT ' +
     ' FROM LedgerView ' +
@@ -414,9 +432,10 @@ begin
   //
   // Chart Storico
   //
-  chHistory.Series[0].Clear(); // pulisco il grafico
-  _lTotal := 0;                // resetto il conteggio
-  i       := 0;                // azzero il counter delle colonne
+  chHistory.Series[0].Clear; // pulisco il grafico
+  chHistory.Axes.Bottom.Items.Clear;
+  _lTotal := 0; // resetto il conteggio
+  i       := 0; // azzero il counter delle colonne
   // query totalizzazione spese
   _SQLString := 'SELECT StrfTime(''%Y'', TRNDATE) || ''-'' || StrfTime(''%W'', TRNDATE) AS Period, ' +
     ' StrfTime(''%Y'', TRNDATE) AS YY,' +
@@ -454,6 +473,7 @@ begin
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
   end;
+  chHistory.Pages.Current := chHistory.Pages.Count;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
