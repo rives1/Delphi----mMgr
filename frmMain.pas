@@ -310,7 +310,7 @@ begin
     sqlite_conn.Params.Database := _pDBFname;
     try
       sqlite_conn.Connected := true;
-      MainFRM.caption       := 'mMgr -> ' + ExtractFileName(_pDBFname);
+      MainFRM.caption       := 'mMgr -> ' + _pDBFname;
       _DbName               := _pDBFname;
       _treeMenuCreate;
     except
