@@ -72,7 +72,7 @@ implementation
 
 
 uses
-  frmMain, frmInsEdit;
+  frmMain, frmInsEdit, System.DateUtils;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.Delete1Click(Sender: TObject);
@@ -186,16 +186,16 @@ begin
     else
     begin
       // rosso se il val è negativo
-      if ACol = 7 then
+      if ACol = 8 then
       begin
-        _Text := grdLedger.cells[7, ARow];
+        _Text := grdLedger.cells[8, ARow];
         TryStrToFloat(_Text.Replace('''', ''), _Float);
         if (_Float < 0) then
           Canvas.Font.Color := clRed
         else
           Canvas.Font.Color := clBlack;
 
-        Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, cells[7, ARow]);
+        Canvas.TextRect(Rect, Rect.Left + 3, Rect.Top + 3, cells[8, ARow]);
         Canvas.FrameRect(Rect);
       end;
 
@@ -208,19 +208,21 @@ begin
           // Canvas.Brush.Color := $00FFEBDF;
       end;
 
-      Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, cells[ACol, ARow]);
+//      Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, cells[ACol, ARow]);
+      Canvas.TextRect(Rect, Rect.Left + 3, Rect.Top + 3, cells[ACol, ARow]);
+      Canvas.TextRect(Rect, Rect.Left, Rect.Top, cells[ACol, ARow]);
       Canvas.FrameRect(Rect);
     end;
   end;
 
   // allineamento a dx del testo
-  if (ACol in [0, 5 .. 7]) and (ARow <> 0) then // right-align text
+  if (ACol in [0, 6 .. 8]) and (ARow <> 0) then // right-align text
     with grdLedger.Canvas do
     begin
       // bold per la prima linea delle caption
       FillRect(Rect);
       _Text := grdLedger.cells[ACol, ARow];
-      _dx   := TextWidth(_Text) + 2;
+      _dx   := TextWidth(_Text) + 3;
       TextOut(Rect.Right - _dx, Rect.Top, _Text);
     end;
 
@@ -493,15 +495,17 @@ begin
   grdLedger.cells[0, 0] := 'ID';
   grdLedger.cells[1, 0] := 'Type';
   grdLedger.cells[2, 0] := 'Date';
-  grdLedger.cells[3, 0] := 'Payee';
-  grdLedger.cells[4, 0] := 'Category';
-  grdLedger.cells[5, 0] := 'In';
-  grdLedger.cells[6, 0] := 'Out';
-  grdLedger.cells[7, 0] := 'Balance';
-  grdLedger.cells[8, 0] := 'Description';
+  grdLedger.cells[3, 0] := 'wk';
+  grdLedger.cells[4, 0] := 'Payee';
+  grdLedger.cells[5, 0] := 'Category';
+  grdLedger.cells[6, 0] := 'In';
+  grdLedger.cells[7, 0] := 'Out';
+  grdLedger.cells[8, 0] := 'Balance';
+  grdLedger.cells[9, 0] := 'Description';
 
   // estrazione dati dal db e riempimento della grid
-  _SQLString := 'SELECT * FROM LedgerView where ACCNAME = ''' + _pAccountName + ''' ORDER BY TRNDATE, TRNID';
+  _SQLString := 'SELECT *, StrfTime(''%W'', TRNDATE) AS WW FROM LedgerView where ACCNAME = ''' + _pAccountName +
+    ''' ORDER BY TRNDATE, TRNID';
 
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
@@ -518,24 +522,25 @@ begin
         grdLedger.cells[0, i] := MainFRM.sqlQry.FieldValues['TRNID']; // ID
         grdLedger.cells[1, i] := MainFRM.sqlQry.FieldValues['TRNTYPE']; // Tipo operazione
         grdLedger.cells[2, i] := MainFRM.sqlQry.FieldValues['TRNDATE']; // Data
-        grdLedger.cells[3, i] := MainFRM.sqlQry.FieldValues['PAYNAME'];
-        grdLedger.cells[4, i] := MainFRM.sqlQry.FieldValues['CATDES'] + ' : ' + MainFRM.sqlQry.FieldValues
+        grdLedger.cells[3, i] := MainFRM.sqlQry.FieldValues['WW']; // Week
+        grdLedger.cells[4, i] := MainFRM.sqlQry.FieldValues['PAYNAME'];
+        grdLedger.cells[5, i] := MainFRM.sqlQry.FieldValues['CATDES'] + ' : ' + MainFRM.sqlQry.FieldValues
           ['SUBCDES'];
 
         if (MainFRM.sqlQry.FieldValues['TRNAMOUNT'] > 0) then
         begin
-          grdLedger.cells[5, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
+          grdLedger.cells[6, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
           _trxIndicator         := '->';
         end
         else
         begin
-          grdLedger.cells[6, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT'] * -1);
+          grdLedger.cells[7, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT'] * -1);
           _trxIndicator         := '<-';
         end;
 
         runSum                := runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];
-        grdLedger.cells[7, i] := FormatFloat('#,##0.00', runSum);
-        grdLedger.cells[8, i] := MainFRM.sqlQry.FieldValues['TRNDESCRIPTION'];
+        grdLedger.cells[8, i] := FormatFloat('#,##0.00', runSum);
+        grdLedger.cells[9, i] := MainFRM.sqlQry.FieldValues['TRNDESCRIPTION'];
 
         if (MainFRM.sqlQry.FieldValues['TRNTYPE'] = 'Transfer') then // se si tratta si trasferimento
         begin
@@ -552,8 +557,8 @@ begin
             _trxIndicator := _trxIndicator + ' ' + MainFRM.sqlQry2.FieldValues['ACCNAME'];
 
           MainFRM.sqlQry2.Close;
-          grdLedger.cells[3, i] := _trxIndicator; // imposto la scritta standard con indicato se trx in o out
-          grdLedger.cells[4, i] := '';            // la categoria anche se compilata la lascio vuota
+          grdLedger.cells[4, i] := _trxIndicator; // imposto la scritta standard con indicato se trx in o out
+          grdLedger.cells[5, i] := '';            // la categoria anche se compilata la lascio vuota
 
         end;
         // incremento per record e colonne

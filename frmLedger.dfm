@@ -113,22 +113,25 @@ object LedgerFrm: TLedgerFrm
       Height = 350
       Align = alClient
       Color = clBtnFace
-      ColCount = 9
+      ColCount = 10
       Ctl3D = False
-      DefaultRowHeight = 17
+      DefaultRowHeight = 18
+      DoubleBuffered = True
       DrawingStyle = gdsClassic
       FixedCols = 0
       RowCount = 2
-      Font.Charset = DEFAULT_CHARSET
+      Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'Tahoma'
+      Font.Height = -12
+      Font.Name = 'MS Sans Serif'
       Font.Style = []
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goRowSelect]
       ParentCtl3D = False
+      ParentDoubleBuffered = False
       ParentFont = False
       PopupMenu = PopupMenu1
       TabOrder = 1
+      StyleElements = [seFont, seBorder]
       OnDrawCell = grdLedgerDrawCell
     end
     object chTotals: TChart
