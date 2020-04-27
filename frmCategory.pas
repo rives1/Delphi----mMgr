@@ -124,7 +124,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TCategoryFrm.NewCategory1Click(Sender: TObject);
 begin
-  _ActionRecord := 'edit';
+  _ActionRecord := 'newCat';
   _cleanFormNewRecord;
 end;
 
@@ -433,9 +433,9 @@ begin
   // verifico che il nome della cat o subcat non sia stato già usato
 
   if (_lblName.Caption = 'Category Description') then // se categoria
-    _SQLString := 'SELECT CATID FROM DBCATEGORY where CATDES = ''' + _fName.Text + ''' '
+    _SQLString := 'SELECT CATID FROM DBCATEGORY where UCASE(CATDES) = ''' + UpperCase(_fName.Text) + ''' '
   else
-    _SQLString := 'SELECT SUBCID FROM DBSUBCATEGORY where SUBCDES = ''' + _fName.Text + ''' ';
+    _SQLString := 'SELECT SUBCID FROM DBSUBCATEGORY where UCASE(SUBCDES) = ''' + UpperCase(_fName.Text) + ''' ';
 
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);

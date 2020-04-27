@@ -83,7 +83,7 @@ procedure TMainFRM.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   _closeDB;
   // salvataggio delle impostazioni -- salvo il nome dell'ultimo db utilizzato
-  _iniRW(_iniFName, 'W', 'LASTDB', 'DBNAME', ExtractFileName(_DbName));
+  _iniRW(_iniFName, 'W', 'LASTDB', 'DBNAME', _DbName);
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -91,7 +91,7 @@ procedure TMainFRM.FormCreate(Sender: TObject);
 begin
   // leggeimpostazioni da file INI
   _iniFName := ExtractFilePath(Application.ExeName) + 'mMgr.ini';
-  _DbName   := ExtractFilePath(Application.ExeName) + 'db\' + _iniRW(_iniFName, 'R', 'LASTDB', 'DBNAME', 'x');
+  _DbName   := _iniRW(_iniFName, 'R', 'LASTDB', 'DBNAME', 'x');
   // apro il db -- se non apro il db non ha senso aprire il menu
   if (_openDB(_DbName)) then
   begin
@@ -112,7 +112,7 @@ end;
 procedure TMainFRM.Open1Click(Sender: TObject);
 begin
   // aprol adialog per la selezione del DB da aprire
-  dlgOpen.InitialDir := ExtractFilePath(Application.ExeName) + 'db\';
+  dlgOpen.InitialDir := ExtractFilePath(Application.ExeName);
   if ((dlgOpen.Execute) and (dlgOpen.FileName <> '')) then
     _openDB(dlgOpen.FileName);
 end;
@@ -160,7 +160,7 @@ end;
 procedure TMainFRM._createNewDB;
 begin
   // esecuzione delle query per la cerazione del nuovo db
-  dlgSave.InitialDir := ExtractFilePath(Application.ExeName) + 'db\';
+  dlgSave.InitialDir := ExtractFilePath(Application.ExeName);
   if ((dlgSave.Execute) and (dlgSave.FileName <> '')) then
   begin
     _DbName := dlgSave.FileName;
