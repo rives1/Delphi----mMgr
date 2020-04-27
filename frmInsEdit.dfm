@@ -141,7 +141,6 @@ object InsEditFrm: TInsEditFrm
     Sorted = True
     TabOrder = 6
     Text = ''
-    OnEnter = _fCategoryEnter
     OnExit = _fCategoryExit
     OnSelect = _fCategorySelect
   end
@@ -150,6 +149,7 @@ object InsEditFrm: TInsEditFrm
     Top = 131
     Width = 164
     Height = 21
+    AutoDropDown = True
     DropDownCount = 14
     Sorted = True
     TabOrder = 7
@@ -210,8 +210,5 @@ object InsEditFrm: TInsEditFrm
           'date'
         Width = 50
       end>
-    ExplicitLeft = 200
-    ExplicitTop = 225
-    ExplicitWidth = 0
   end
 end

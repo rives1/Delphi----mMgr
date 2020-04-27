@@ -40,7 +40,6 @@ type
     procedure _fTypeExit(Sender: TObject);
     procedure _fPayeeExit(Sender: TObject);
     procedure _fSubCategoryEnter(Sender: TObject);
-    procedure _fCategoryEnter(Sender: TObject);
     procedure _fCategorySelect(Sender: TObject);
 
   private
@@ -215,12 +214,6 @@ begin
   _fDescription.Text := '';
   _fAmount.Value     := 0;
   _fDate.SetFocus;
-end;
-
-// -------------------------------------------------------------------------------------------------------------//
-procedure TInsEditFrm._fCategoryEnter(Sender: TObject);
-begin
-  _fCategory.DroppedDown := True;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
