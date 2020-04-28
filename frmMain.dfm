@@ -5506,7 +5506,7 @@ object MainFRM: TMainFRM
     PrintOptions.Printer = 'Default'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 43929.991899351900000000
-    ReportOptions.LastChange = 43934.894028657410000000
+    ReportOptions.LastChange = 43949.830346863420000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'begin'
@@ -5604,13 +5604,13 @@ object MainFRM: TMainFRM
           IndexTag = 3
           AllowVectorExport = True
           Left = 212.716659890000000000
-          Top = 0.363416350000000000
+          Top = 0.363416349999994300
           Width = 60.511850110000000000
           Height = 15.118120000000000000
           DataField = 'rptFeb'
           DataSet = rptDset
           DataSetName = 'dsetBalanceYTD'
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clGray
@@ -5628,14 +5628,14 @@ object MainFRM: TMainFRM
         object dsetBalanceYTDrptJan: TfrxMemoView
           IndexTag = 4
           AllowVectorExport = True
-          Left = 139.771738000000000000
-          Top = 0.363416350000000000
-          Width = 65.763822000000000000
+          Left = 152.622140000000000000
+          Top = 0.363416349999994300
+          Width = 56.692950000000010000
           Height = 15.481536350000000000
           DataField = 'rptJan'
           DataSet = rptDset
           DataSetName = 'dsetBalanceYTD'
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clGray
@@ -5653,14 +5653,14 @@ object MainFRM: TMainFRM
         object dsetBalanceYTDrptMar: TfrxMemoView
           IndexTag = 2
           AllowVectorExport = True
-          Left = 276.968669890000000000
-          Top = 0.363416350000000000
-          Width = 60.511850110000000000
+          Left = 277.008040000000000000
+          Top = 0.363416349999994300
+          Width = 60.472480000000000000
           Height = 15.118120000000000000
           DataField = 'rptMar'
           DataSet = rptDset
           DataSetName = 'dsetBalanceYTD'
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clGray
@@ -5678,13 +5678,13 @@ object MainFRM: TMainFRM
         object dsetBalanceYTDrptApr: TfrxMemoView
           IndexTag = 1
           AllowVectorExport = True
-          Left = 343.779747000000000000
-          Width = 65.763822000000000000
+          Left = 345.291559000000000000
+          Width = 64.252010000000000000
           Height = 15.481536350000000000
           DataField = 'rptApr'
           DataSet = rptDset
           DataSetName = 'dsetBalanceYTD'
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clGray
@@ -5702,13 +5702,13 @@ object MainFRM: TMainFRM
         object dsetBalanceYTDrptMay: TfrxMemoView
           IndexTag = 10
           AllowVectorExport = True
-          Left = 415.338838000000000000
-          Width = 65.763822000000000000
+          Left = 416.850650000000000000
+          Width = 64.252010000000000000
           Height = 15.481536350000000000
           DataField = 'rptMay'
           DataSet = rptDset
           DataSetName = 'dsetBalanceYTD'
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clGray
@@ -5726,13 +5726,13 @@ object MainFRM: TMainFRM
         object dsetBalanceYTDrptJun: TfrxMemoView
           IndexTag = 9
           AllowVectorExport = True
-          Left = 485.496363620000000000
-          Width = 65.763822000000000000
+          Left = 487.008175620000000000
+          Width = 64.252010000000000000
           Height = 15.481536350000000000
           DataField = 'rptJun'
           DataSet = rptDset
           DataSetName = 'dsetBalanceYTD'
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clGray
@@ -5750,13 +5750,13 @@ object MainFRM: TMainFRM
         object dsetBalanceYTDrptJul: TfrxMemoView
           IndexTag = 8
           AllowVectorExport = True
-          Left = 555.181448000000000000
-          Width = 65.763822000000000000
+          Left = 556.693260000000000000
+          Width = 64.252010000000000000
           Height = 15.481536350000000000
           DataField = 'rptJul'
           DataSet = rptDset
           DataSetName = 'dsetBalanceYTD'
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clGray
@@ -5774,13 +5774,13 @@ object MainFRM: TMainFRM
         object dsetBalanceYTDrptAug: TfrxMemoView
           IndexTag = 7
           AllowVectorExport = True
-          Left = 626.992518000000000000
-          Width = 65.763822000000000000
+          Left = 628.504330000000000000
+          Width = 64.252010000000000000
           Height = 15.481536350000000000
           DataField = 'rptAug'
           DataSet = rptDset
           DataSetName = 'dsetBalanceYTD'
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clGray
@@ -5798,13 +5798,13 @@ object MainFRM: TMainFRM
         object dsetBalanceYTDrptSep: TfrxMemoView
           IndexTag = 6
           AllowVectorExport = True
-          Left = 695.024058000000000000
-          Width = 65.763822000000000000
+          Left = 696.535870000000000000
+          Width = 64.252010000000000000
           Height = 15.481536350000000000
           DataField = 'rptSep'
           DataSet = rptDset
           DataSetName = 'dsetBalanceYTD'
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clGray
@@ -5822,13 +5822,13 @@ object MainFRM: TMainFRM
         object dsetBalanceYTDrptOct: TfrxMemoView
           IndexTag = 5
           AllowVectorExport = True
-          Left = 766.835128000000000000
-          Width = 65.763822000000000000
+          Left = 768.346940000000000000
+          Width = 64.252010000000000000
           Height = 15.481536350000000000
           DataField = 'rptOct'
           DataSet = rptDset
           DataSetName = 'dsetBalanceYTD'
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clGray
@@ -5846,13 +5846,13 @@ object MainFRM: TMainFRM
         object dsetBalanceYTDrptNov: TfrxMemoView
           IndexTag = 4
           AllowVectorExport = True
-          Left = 838.646198000000000000
-          Width = 65.763822000000000000
+          Left = 840.158010000000000000
+          Width = 64.252010000000000000
           Height = 15.481536350000000000
           DataField = 'rptNov'
           DataSet = rptDset
           DataSetName = 'dsetBalanceYTD'
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clGray
@@ -5870,13 +5870,13 @@ object MainFRM: TMainFRM
         object dsetBalanceYTDrptDec: TfrxMemoView
           IndexTag = 3
           AllowVectorExport = True
-          Left = 906.677738000000000000
-          Width = 65.763822000000000000
+          Left = 908.189550000000000000
+          Width = 64.252010000000000000
           Height = 15.481536350000000000
           DataField = 'rptDec'
           DataSet = rptDset
           DataSetName = 'dsetBalanceYTD'
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clGray
@@ -5894,13 +5894,13 @@ object MainFRM: TMainFRM
         object dsetBalanceYTDrptTotLine: TfrxMemoView
           IndexTag = 2
           AllowVectorExport = True
-          Left = 978.142364000000000000
-          Width = 65.763822000000000000
+          Left = 978.898270000000000000
+          Width = 64.252010000000000000
           Height = 15.481536350000000000
           DataField = 'rptTotLine'
           DataSet = rptDset
           DataSetName = 'dsetBalanceYTD'
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clGray
@@ -5914,14 +5914,6 @@ object MainFRM: TMainFRM
             '[dsetBalanceYTD."rptTotLine"]')
           ParentFont = False
           WordWrap = False
-        end
-        object Line6: TfrxLineView
-          AllowVectorExport = True
-          Left = 975.118740000000000000
-          Height = 15.118120000000000000
-          Color = clBlack
-          Frame.Color = clSilver
-          Frame.Typ = [ftLeft]
         end
       end
       object PageHeader1: TfrxPageHeader
@@ -5939,8 +5931,8 @@ object MainFRM: TMainFRM
         object Memo2: TfrxMemoView
           AllowVectorExport = True
           Left = 15.118120000000000000
-          Top = 3.779530000000000000
-          Width = 68.031540000000000000
+          Top = 3.779530000000001000
+          Width = 68.031540000000010000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -5954,9 +5946,9 @@ object MainFRM: TMainFRM
         end
         object Memo3: TfrxMemoView
           AllowVectorExport = True
-          Left = 156.401670000000000000
-          Top = 3.779530000000000000
-          Width = 49.133890000000000000
+          Left = 152.622140000000000000
+          Top = 3.779530000000001000
+          Width = 56.692950000000010000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -5971,9 +5963,9 @@ object MainFRM: TMainFRM
         end
         object Memo6: TfrxMemoView
           AllowVectorExport = True
-          Left = 227.874150000000000000
-          Top = 3.779530000000000000
-          Width = 45.354360000000000000
+          Left = 212.716659890000000000
+          Top = 3.779530000000001000
+          Width = 60.511850110000000000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -5988,9 +5980,9 @@ object MainFRM: TMainFRM
         end
         object Memo5: TfrxMemoView
           AllowVectorExport = True
-          Left = 288.346630000000000000
-          Top = 3.779530000000000000
-          Width = 49.133890000000000000
+          Left = 277.008040000000000000
+          Top = 3.779530000000001000
+          Width = 60.472480000000000000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6005,9 +5997,9 @@ object MainFRM: TMainFRM
         end
         object Memo7: TfrxMemoView
           AllowVectorExport = True
-          Left = 355.496290000000000000
-          Top = 3.779530000000000000
-          Width = 54.047279000000000000
+          Left = 345.291559000000000000
+          Top = 3.779530000000001000
+          Width = 64.252010000000000000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6022,9 +6014,9 @@ object MainFRM: TMainFRM
         end
         object Memo16: TfrxMemoView
           AllowVectorExport = True
-          Left = 427.055381000000000000
-          Top = 3.779530000000000000
-          Width = 54.047279000000000000
+          Left = 416.850650000000000000
+          Top = 3.779530000000001000
+          Width = 64.252010000000000000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6039,9 +6031,9 @@ object MainFRM: TMainFRM
         end
         object Memo15: TfrxMemoView
           AllowVectorExport = True
-          Left = 497.212906620000000000
-          Top = 3.779530000000000000
-          Width = 54.047279000000000000
+          Left = 487.008175620000000000
+          Top = 3.779530000000001000
+          Width = 64.252010000000000000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6056,9 +6048,9 @@ object MainFRM: TMainFRM
         end
         object Memo14: TfrxMemoView
           AllowVectorExport = True
-          Left = 566.897991000000000000
-          Top = 3.779530000000000000
-          Width = 54.047279000000000000
+          Left = 556.693260000000000000
+          Top = 3.779530000000001000
+          Width = 64.252010000000000000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6073,9 +6065,9 @@ object MainFRM: TMainFRM
         end
         object Memo13: TfrxMemoView
           AllowVectorExport = True
-          Left = 638.709061000000000000
-          Top = 3.779530000000000000
-          Width = 54.047279000000000000
+          Left = 628.504330000000000000
+          Top = 3.779530000000001000
+          Width = 64.252010000000000000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6090,9 +6082,9 @@ object MainFRM: TMainFRM
         end
         object Memo12: TfrxMemoView
           AllowVectorExport = True
-          Left = 706.740601000000000000
-          Top = 3.779530000000000000
-          Width = 54.047279000000000000
+          Left = 696.535870000000000000
+          Top = 3.779530000000001000
+          Width = 64.252010000000000000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6107,9 +6099,9 @@ object MainFRM: TMainFRM
         end
         object Memo11: TfrxMemoView
           AllowVectorExport = True
-          Left = 778.551671000000000000
-          Top = 3.779530000000000000
-          Width = 54.047279000000000000
+          Left = 768.346940000000000000
+          Top = 3.779530000000001000
+          Width = 64.252010000000000000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6124,9 +6116,9 @@ object MainFRM: TMainFRM
         end
         object Memo10: TfrxMemoView
           AllowVectorExport = True
-          Left = 850.362741000000000000
-          Top = 3.779530000000000000
-          Width = 54.047279000000000000
+          Left = 840.158010000000000000
+          Top = 3.779530000000001000
+          Width = 64.252010000000000000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6141,9 +6133,9 @@ object MainFRM: TMainFRM
         end
         object Memo9: TfrxMemoView
           AllowVectorExport = True
-          Left = 918.394281000000000000
-          Top = 3.779530000000000000
-          Width = 54.047279000000000000
+          Left = 908.189550000000000000
+          Top = 3.779530000000001000
+          Width = 64.252010000000000000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6158,9 +6150,9 @@ object MainFRM: TMainFRM
         end
         object Memo8: TfrxMemoView
           AllowVectorExport = True
-          Left = 991.370719000000000000
-          Top = 3.779530000000000000
-          Width = 54.047279000000000000
+          Left = 978.898270000000000000
+          Top = 3.779530000000001000
+          Width = 64.252010000000000000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6175,9 +6167,9 @@ object MainFRM: TMainFRM
         end
         object Line2: TfrxLineView
           AllowVectorExport = True
-          Left = 26.677180000000000000
-          Top = 18.897650000000000000
-          Width = 994.016390000000000000
+          Left = 15.456692910000000000
+          Top = 18.897649999999990000
+          Width = 1031.811690000000000000
           Color = clBlack
           Frame.Typ = [ftTop]
         end
@@ -6304,10 +6296,10 @@ object MainFRM: TMainFRM
         object Memo18: TfrxMemoView
           IndexTag = 1
           AllowVectorExport = True
-          Left = 141.283550000000000000
-          Width = 64.252010000000000000
+          Left = 152.622140000000000000
+          Width = 56.692950000000010000
           Height = 18.897650000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6324,18 +6316,18 @@ object MainFRM: TMainFRM
         end
         object Line3: TfrxLineView
           AllowVectorExport = True
-          Left = 27.559060000000000000
-          Width = 994.016390000000000000
+          Left = 26.456692910000000000
+          Width = 1020.472440940000000000
           Color = clBlack
           Frame.Typ = [ftTop]
         end
         object Memo19: TfrxMemoView
           IndexTag = 1
           AllowVectorExport = True
-          Left = 208.976500000000000000
-          Width = 64.252010000000000000
+          Left = 212.716659890000000000
+          Width = 60.511850110000000000
           Height = 18.897650000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6356,7 +6348,7 @@ object MainFRM: TMainFRM
           Left = 277.008040000000000000
           Width = 60.472480000000000000
           Height = 18.897650000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6377,7 +6369,7 @@ object MainFRM: TMainFRM
           Left = 345.291559000000000000
           Width = 64.252010000000000000
           Height = 18.897650000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6398,7 +6390,7 @@ object MainFRM: TMainFRM
           Left = 416.850650000000000000
           Width = 64.252010000000000000
           Height = 18.897650000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6419,7 +6411,7 @@ object MainFRM: TMainFRM
           Left = 487.008175620000000000
           Width = 64.252010000000000000
           Height = 18.897650000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6440,7 +6432,7 @@ object MainFRM: TMainFRM
           Left = 556.693260000000000000
           Width = 64.252010000000000000
           Height = 18.897650000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6459,10 +6451,10 @@ object MainFRM: TMainFRM
           IndexTag = 1
           AllowVectorExport = True
           Left = 628.504330000000000000
-          Top = 0.779530000000000000
+          Top = 0.779530000000022500
           Width = 64.252010000000000000
           Height = 18.897650000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6483,7 +6475,7 @@ object MainFRM: TMainFRM
           Left = 696.535870000000000000
           Width = 64.252010000000000000
           Height = 18.897650000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6504,7 +6496,7 @@ object MainFRM: TMainFRM
           Left = 768.346940000000000000
           Width = 64.252010000000000000
           Height = 18.897650000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6525,7 +6517,7 @@ object MainFRM: TMainFRM
           Left = 840.158010000000000000
           Width = 64.252010000000000000
           Height = 18.897650000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6546,7 +6538,7 @@ object MainFRM: TMainFRM
           Left = 908.189550000000000000
           Width = 64.252010000000000000
           Height = 18.897650000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6567,7 +6559,7 @@ object MainFRM: TMainFRM
           Left = 978.898270000000000000
           Width = 64.252010000000000000
           Height = 18.897650000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6592,11 +6584,11 @@ object MainFRM: TMainFRM
         object Memo31: TfrxMemoView
           IndexTag = 1
           AllowVectorExport = True
-          Left = 141.283550000000000000
+          Left = 152.622140000000000000
           Top = 8.000000000000000000
-          Width = 64.252010000000000000
+          Width = 56.692950000000010000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6630,11 +6622,11 @@ object MainFRM: TMainFRM
         object Memo33: TfrxMemoView
           IndexTag = 1
           AllowVectorExport = True
-          Left = 208.976500000000000000
+          Left = 212.716659890000000000
           Top = 8.000000000000000000
-          Width = 64.252010000000000000
+          Width = 60.511850110000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6656,7 +6648,7 @@ object MainFRM: TMainFRM
           Top = 8.000000000000000000
           Width = 60.472480000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6678,7 +6670,7 @@ object MainFRM: TMainFRM
           Top = 8.000000000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6700,7 +6692,7 @@ object MainFRM: TMainFRM
           Top = 8.000000000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6722,7 +6714,7 @@ object MainFRM: TMainFRM
           Top = 8.000000000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6744,7 +6736,7 @@ object MainFRM: TMainFRM
           Top = 8.000000000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6763,10 +6755,10 @@ object MainFRM: TMainFRM
           IndexTag = 1
           AllowVectorExport = True
           Left = 628.504330000000000000
-          Top = 8.779530000000000000
+          Top = 8.779530000000023000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6788,7 +6780,7 @@ object MainFRM: TMainFRM
           Top = 8.000000000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6810,7 +6802,7 @@ object MainFRM: TMainFRM
           Top = 8.000000000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6832,7 +6824,7 @@ object MainFRM: TMainFRM
           Top = 8.000000000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6854,7 +6846,7 @@ object MainFRM: TMainFRM
           Top = 8.000000000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6876,7 +6868,7 @@ object MainFRM: TMainFRM
           Top = 8.000000000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6895,7 +6887,7 @@ object MainFRM: TMainFRM
           AllowVectorExport = True
           Left = 26.456710000000000000
           Top = 8.000000000000000000
-          Width = 994.016390000000000000
+          Width = 1020.472440944882000000
           Color = clBlack
           Frame.Typ = [ftTop]
         end
@@ -6917,10 +6909,10 @@ object MainFRM: TMainFRM
         object Memo45: TfrxMemoView
           IndexTag = 1
           AllowVectorExport = True
-          Left = 141.283550000000000000
-          Width = 64.252010000000000000
+          Left = 152.622140000000000000
+          Width = 56.692950000000010000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -6946,7 +6938,7 @@ object MainFRM: TMainFRM
         end
         object Memo46: TfrxMemoView
           AllowVectorExport = True
-          Left = 10.220470000000000000
+          Left = 15.118110236220470000
           Width = 94.488250000000000000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
@@ -6962,10 +6954,10 @@ object MainFRM: TMainFRM
         object Memo47: TfrxMemoView
           IndexTag = 1
           AllowVectorExport = True
-          Left = 208.976500000000000000
-          Width = 64.252010000000000000
+          Left = 212.716659890000000000
+          Width = 60.511850110000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -6995,7 +6987,7 @@ object MainFRM: TMainFRM
           Left = 277.008040000000000000
           Width = 60.472480000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -7025,7 +7017,7 @@ object MainFRM: TMainFRM
           Left = 345.291559000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -7055,7 +7047,7 @@ object MainFRM: TMainFRM
           Left = 416.850650000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -7085,7 +7077,7 @@ object MainFRM: TMainFRM
           Left = 487.008175620000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -7115,7 +7107,7 @@ object MainFRM: TMainFRM
           Left = 556.693260000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -7143,10 +7135,10 @@ object MainFRM: TMainFRM
           IndexTag = 1
           AllowVectorExport = True
           Left = 628.504330000000000000
-          Top = 0.779530000000000000
+          Top = 0.779530000000022500
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -7176,7 +7168,7 @@ object MainFRM: TMainFRM
           Left = 696.535870000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -7206,7 +7198,7 @@ object MainFRM: TMainFRM
           Left = 768.346940000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -7236,7 +7228,7 @@ object MainFRM: TMainFRM
           Left = 840.158010000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -7266,7 +7258,7 @@ object MainFRM: TMainFRM
           Left = 908.189550000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -7296,7 +7288,7 @@ object MainFRM: TMainFRM
           Left = 978.898270000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
-          DisplayFormat.FormatStr = '%2.0m'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -7322,8 +7314,8 @@ object MainFRM: TMainFRM
         end
         object Line5: TfrxLineView
           AllowVectorExport = True
-          Left = 26.456710000000000000
-          Width = 994.016390000000000000
+          Left = 15.118110240000000000
+          Width = 1031.811030940000000000
           Color = clBlack
           Frame.Typ = [ftTop]
         end
