@@ -524,7 +524,8 @@ begin
         // aggiungo i dati alla grid
         grdLedger.cells[0, _i] := MainFRM.sqlQry.FieldValues['TRNID']; // ID
         grdLedger.cells[1, _i] := MainFRM.sqlQry.FieldValues['TRNTYPE']; // Tipo operazione
-        grdLedger.cells[2, _i] := MainFRM.sqlQry.FieldValues['TRNDATE']; // Data
+//        grdLedger.cells[2, _i] := MainFRM.sqlQry.FieldValues['TRNDATE']; // Data
+        grdLedger.cells[2, _i] := FormatDateTime('dd.mmm.yy', MainFRM.sqlQry.FieldValues['TRNDATE']); // Data
         grdLedger.cells[3, _i] := MainFRM.sqlQry.FieldValues['WW']; // Week
         grdLedger.cells[4, _i] := MainFRM.sqlQry.FieldValues['PAYNAME'];
         grdLedger.cells[5, _i] := MainFRM.sqlQry.FieldValues['CATDES'] + ' : ' + MainFRM.sqlQry.FieldValues
