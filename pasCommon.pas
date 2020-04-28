@@ -3,11 +3,14 @@ unit pasCommon;
 interface
 
 uses
-  System.AnsiStrings, Classes, INIFiles, Forms, frmMain, SysUtils;
+  System.AnsiStrings, Classes, INIFiles, Forms, frmMain, SysUtils, CommCtrl, Vcl.ComCtrls;
 
+// functions
 function _UpCase(_pString: string): string;
 function _getDBField(_pTBL: string; _pIDfld: string; _pDESfld: string; _pParam: string): string;
 function _iniRW(_pFName: string; _pOperation: char; _pSection: string; _Pkey: string; _pValue: string): string;
+
+procedure _SetNodeState(node: TTreeNode; Flags: Integer);
 
 implementation
 
@@ -59,8 +62,21 @@ begin
     if _pOperation = 'W' then
       _iniFName.WriteString(_pSection, _Pkey, _pValue);
 
-  _iniFName.Free;
+    _iniFName.Free;
   end; // file exists
+end;
+
+/// -------------------------------------------------------------------------------------------------------------//
+procedure _SetNodeState(Node: TTreeNode; Flags: integer);
+var
+  tvi: TTVItem;
+begin
+  FillChar(tvi, SizeOf(tvi), 0);
+  tvi.hItem     := Node.ItemID;
+  tvi.Mask      := TVIF_STATE;
+  tvi.StateMask := TVIS_BOLD or TVIS_CUT;
+  tvi.State     := Flags;
+  TreeView_SetItem(Node.Handle, tvi);
 end;
 
 /// -------------------------------------------------------------------------------------------------------------//

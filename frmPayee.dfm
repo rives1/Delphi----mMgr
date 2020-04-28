@@ -99,6 +99,7 @@ object PayeeFRM: TPayeeFRM
         Caption = 'Payee Name'
       end>
     GridLines = True
+    HotTrack = True
     ReadOnly = True
     RowSelect = True
     PopupMenu = PopupMenu1

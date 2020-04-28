@@ -67,7 +67,7 @@ implementation
 
 
 uses
-  frmMain, pasCommon;
+  frmMain, pasCommon, CommCtrl;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TCategoryFrm.btnOKClick(Sender: TObject);
@@ -398,6 +398,7 @@ begin
           begin
             _vNodeCat               := _treeCategory.Items.AddChild(nil, MainFRM.sqlQry.FieldValues['CATDES']);
             _vNodeCat.SelectedIndex := 1; // imposto 1 nel caso si tratti di una categoria necessario
+            _SetNodeState(_vNodeCat, TVIS_BOLD);
             // per gestire il salavataggio del record.
           end;
           // aggiungo nodo sub se esiste

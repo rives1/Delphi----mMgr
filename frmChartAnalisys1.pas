@@ -195,7 +195,7 @@ begin
       if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
       begin
         _lTotal := Round(Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'])));
-        chartExpByCat.SeriesList[0].Add(_lTotal, MainFRM.sqlQry.FieldValues['CATDES'] + ' - ' + FloatToStr(_lTotal));
+        chartExpByCat.SeriesList[0].Add(_lTotal, MainFRM.sqlQry.FieldValues['CATDES'] + ' ' + FloatToStr(_lTotal));
       end;
       MainFRM.sqlQry.Next;
     end;

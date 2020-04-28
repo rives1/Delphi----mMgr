@@ -73,7 +73,7 @@ implementation
 
 
 uses
-  frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmPayee, frmCategory, pasCommon;
+  frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmPayee, frmCategory, pasCommon, CommCtrl;
 
 { TForm1 }
 
@@ -456,6 +456,7 @@ begin
     // area accounts
     vNodeGroup            := treeMenu.Items.Add(nil, 'Account');
     vNodeGroup.ImageIndex := 1;
+    _SetNodeState(vNodeGroup, TVIS_BOLD);
     sqlQry.Close;
     sqlQry.SQL.Clear;
     sqlQry.SQL.Add('SELECT * FROM DBACCOUNT ORDER BY ACCNAME');
@@ -502,26 +503,30 @@ begin
   // area chart
   vNodeGroup            := treeMenu.Items.Add(nil, 'Chart');
   vNodeGroup.ImageIndex := 3;
-  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Analisys Amt');
-  vNode.ImageIndex      := 13;
-  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Analisys Avg');
-  vNode.ImageIndex      := 13;
+  _SetNodeState(vNodeGroup, TVIS_BOLD);
+
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Analisys Amt');
+  vNode.ImageIndex := 13;
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Analisys Avg');
+  vNode.ImageIndex := 13;
 
   // area report
   vNodeGroup            := treeMenu.Items.Add(nil, 'Report');
   vNodeGroup.ImageIndex := 2;
-  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Balance YTD-Monthly');
-  vNode.ImageIndex      := 9;
+  _SetNodeState(vNodeGroup, TVIS_BOLD);
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Balance YTD-Monthly');
+  vNode.ImageIndex := 9;
 
   // area Config
   vNodeGroup            := treeMenu.Items.Add(nil, 'Config');
   vNodeGroup.ImageIndex := 4;
-  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Account');
-  vNode.ImageIndex      := 14;
-  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Payee');
-  vNode.ImageIndex      := 15;
-  vNode                 := treeMenu.Items.AddChild(vNodeGroup, 'Category');
-  vNode.ImageIndex      := 17;
+  _SetNodeState(vNodeGroup, TVIS_BOLD);
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Account');
+  vNode.ImageIndex := 14;
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Payee');
+  vNode.ImageIndex := 15;
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Category');
+  vNode.ImageIndex := 17;
 
   treeMenu.FullExpand;
   treeMenu.Items[0].Selected := true;

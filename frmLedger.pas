@@ -59,7 +59,7 @@ type
 
   public
     { Public declarations }
-    procedure _fillGrid;
+    procedure _fillGrid(_pAction: string);
 
   end;
 
@@ -95,7 +95,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.FormActivate(Sender: TObject);
 begin
-  _fillGrid;
+  _fillGrid('new');
   _ChartTotals;
 end;
 
@@ -208,7 +208,7 @@ begin
           // Canvas.Brush.Color := $00FFEBDF;
       end;
 
-//      Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, cells[ACol, ARow]);
+      // Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, cells[ACol, ARow]);
       Canvas.TextRect(Rect, Rect.Left + 3, Rect.Top + 3, cells[ACol, ARow]);
       Canvas.TextRect(Rect, Rect.Left, Rect.Top, cells[ACol, ARow]);
       Canvas.FrameRect(Rect);
@@ -270,7 +270,7 @@ begin
   // frmInsEdit.ShowModal;                     // nostro la form modale
 
   // aggiorno i datidella grid
-  _fillGrid;
+  _fillGrid('edit');
   _ChartTotals;
 
   grdLedger.Row := i; // reimposto il record della grid su quello precedente
@@ -479,17 +479,20 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TLedgerFrm._fillGrid();
+procedure TLedgerFrm._fillGrid(_pAction: string);
 // riempiemnto della grid
 var
-  i:             Integer;
-  runSum:        Double;
-  _trxIndicator: string; // indica con i segni > o > se il trasferimento è in entrata o uscita
-  // oppure lascio vuoto se non si tratta di un trasferimento
+  _i:            Integer;
+  _runSum:       Double;
+  _trxIndicator: string;  // indica con i segni > o > se il trasferimento è in entrata o uscita
+  _recPosition:  Integer; // posizione del record x riposizionare il marker
 begin
   // pulizia della grid
   _clearGrid;
   grdLedger.RowCount := 1;
+
+  if UpperCase(_pAction) = 'EDIT' then
+    _recPosition := grdLedger.Row;
 
   // inserisco le caption
   grdLedger.cells[0, 0] := 'ID';
@@ -511,36 +514,36 @@ begin
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
     MainFRM.sqlQry.Open;
-    i      := 1;
-    runSum := 0;
+    _i      := 1;
+    _runSum := 0;
     if (MainFRM.sqlQry.RecordCount <> 0) then
       while not MainFRM.sqlQry.EOF do // ciclo recupero dati
       begin
         // inserisco una nuova riga nella grid
         grdLedger.RowCount := grdLedger.RowCount + 1;
         // aggiungo i dati alla grid
-        grdLedger.cells[0, i] := MainFRM.sqlQry.FieldValues['TRNID']; // ID
-        grdLedger.cells[1, i] := MainFRM.sqlQry.FieldValues['TRNTYPE']; // Tipo operazione
-        grdLedger.cells[2, i] := MainFRM.sqlQry.FieldValues['TRNDATE']; // Data
-        grdLedger.cells[3, i] := MainFRM.sqlQry.FieldValues['WW']; // Week
-        grdLedger.cells[4, i] := MainFRM.sqlQry.FieldValues['PAYNAME'];
-        grdLedger.cells[5, i] := MainFRM.sqlQry.FieldValues['CATDES'] + ' : ' + MainFRM.sqlQry.FieldValues
+        grdLedger.cells[0, _i] := MainFRM.sqlQry.FieldValues['TRNID']; // ID
+        grdLedger.cells[1, _i] := MainFRM.sqlQry.FieldValues['TRNTYPE']; // Tipo operazione
+        grdLedger.cells[2, _i] := MainFRM.sqlQry.FieldValues['TRNDATE']; // Data
+        grdLedger.cells[3, _i] := MainFRM.sqlQry.FieldValues['WW']; // Week
+        grdLedger.cells[4, _i] := MainFRM.sqlQry.FieldValues['PAYNAME'];
+        grdLedger.cells[5, _i] := MainFRM.sqlQry.FieldValues['CATDES'] + ' : ' + MainFRM.sqlQry.FieldValues
           ['SUBCDES'];
 
         if (MainFRM.sqlQry.FieldValues['TRNAMOUNT'] > 0) then
         begin
-          grdLedger.cells[6, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
-          _trxIndicator         := '->';
+          grdLedger.cells[6, _i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
+          _trxIndicator          := '->';
         end
         else
         begin
-          grdLedger.cells[7, i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT'] * -1);
-          _trxIndicator         := '<-';
+          grdLedger.cells[7, _i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT'] * -1);
+          _trxIndicator          := '<-';
         end;
 
-        runSum                := runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];
-        grdLedger.cells[8, i] := FormatFloat('#,##0.00', runSum);
-        grdLedger.cells[9, i] := MainFRM.sqlQry.FieldValues['TRNDESCRIPTION'];
+        _runSum                := _runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];
+        grdLedger.cells[8, _i] := FormatFloat('#,##0.00', _runSum);
+        grdLedger.cells[9, _i] := MainFRM.sqlQry.FieldValues['TRNDESCRIPTION'];
 
         if (MainFRM.sqlQry.FieldValues['TRNTYPE'] = 'Transfer') then // se si tratta si trasferimento
         begin
@@ -557,12 +560,12 @@ begin
             _trxIndicator := _trxIndicator + ' ' + MainFRM.sqlQry2.FieldValues['ACCNAME'];
 
           MainFRM.sqlQry2.Close;
-          grdLedger.cells[4, i] := _trxIndicator; // imposto la scritta standard con indicato se trx in o out
-          grdLedger.cells[5, i] := '';            // la categoria anche se compilata la lascio vuota
+          grdLedger.cells[4, _i] := _trxIndicator; // imposto la scritta standard con indicato se trx in o out
+          grdLedger.cells[5, _i] := '';            // la categoria anche se compilata la lascio vuota
 
         end;
         // incremento per record e colonne
-        i := i + 1;
+        _i := _i + 1;
         MainFRM.sqlQry.Next;
 
       end
@@ -581,8 +584,11 @@ begin
   // autosize columns
   _autoSizeGrid;
 
-  // posiziorsi sull'ultimo record
-  grdLedger.Row := grdLedger.RowCount - 1;
+  // posiziorsi sull'ultimo record nel caso di inserimento e sul precedente in caso di editing
+  if UpperCase(_pAction) = 'EDIT' then
+    grdLedger.Row := _recPosition
+  else
+    grdLedger.Row := grdLedger.RowCount - 1;
 
   MainFRM._fillBalanceChart;
 end;
@@ -614,7 +620,7 @@ begin
   grdLedger.Row := _pRecRow;
 
   // refresh della grid
-  _fillGrid();
+  _fillGrid('new');
   _ChartTotals();
 end;
 
