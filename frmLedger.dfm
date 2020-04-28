@@ -2,8 +2,8 @@ object LedgerFrm: TLedgerFrm
   Left = 0
   Top = 0
   Caption = 'LedgerFrm'
-  ClientHeight = 539
-  ClientWidth = 814
+  ClientHeight = 625
+  ClientWidth = 744
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -24,24 +24,26 @@ object LedgerFrm: TLedgerFrm
   object RzSplitter1: TRzSplitter
     Left = 0
     Top = 0
-    Width = 814
-    Height = 520
+    Width = 744
+    Height = 606
     BorderWidth = 2
     FixedPane = fpLowerRight
     Orientation = orVertical
-    Position = 350
-    Percent = 68
+    Position = 366
+    Percent = 61
     HotSpotVisible = True
     SplitterStyle = ssBump
     SplitterWidth = 10
     Align = alClient
     TabOrder = 0
     VisualStyle = vsClassic
+    ExplicitWidth = 814
+    ExplicitHeight = 520
     BarSize = (
       2
-      352
-      812
-      362)
+      368
+      742
+      378)
     UpperLeftControls = (
       _e_grdLedger
       grdLedger)
@@ -109,8 +111,8 @@ object LedgerFrm: TLedgerFrm
     object grdLedger: TStringGrid
       Left = 0
       Top = 0
-      Width = 810
-      Height = 350
+      Width = 740
+      Height = 366
       Align = alClient
       Color = clBtnFace
       ColCount = 10
@@ -133,12 +135,14 @@ object LedgerFrm: TLedgerFrm
       TabOrder = 1
       StyleElements = [seFont, seBorder]
       OnDrawCell = grdLedgerDrawCell
+      ExplicitWidth = 810
+      ExplicitHeight = 350
     end
     object chTotals: TChart
       Left = 0
       Top = 0
-      Width = 377
-      Height = 156
+      Width = 346
+      Height = 123
       Border.Width = 0
       Legend.Alignment = laBottom
       Title.Text.Strings = (
@@ -151,6 +155,7 @@ object LedgerFrm: TLedgerFrm
       Align = alLeft
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitHeight = 150
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15
@@ -185,10 +190,10 @@ object LedgerFrm: TLedgerFrm
       end
     end
     object chHistory: TChart
-      Left = 377
-      Top = 0
-      Width = 433
-      Height = 156
+      Left = 0
+      Top = 123
+      Width = 740
+      Height = 103
       Legend.Visible = False
       MarginRight = 8
       MarginTop = 10
@@ -199,13 +204,15 @@ object LedgerFrm: TLedgerFrm
       BottomAxis.Axis.Width = 0
       BottomAxis.StartPosition = 1.000000000000000000
       Chart3DPercent = 1
-      Pages.MaxPointsPerPage = 13
+      Pages.MaxPointsPerPage = 25
       Pages.ScaleLastPage = False
       View3D = False
       View3DOptions.Orthogonal = False
-      Align = alClient
+      Align = alBottom
       BevelOuter = bvNone
       TabOrder = 1
+      ExplicitTop = 150
+      ExplicitWidth = 816
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 13
       object Series2: TAreaSeries
@@ -234,14 +241,16 @@ object LedgerFrm: TLedgerFrm
   end
   object RzStatusBar1: TRzStatusBar
     Left = 0
-    Top = 520
-    Width = 814
+    Top = 606
+    Width = 744
     Height = 19
     BorderInner = fsNone
     BorderOuter = fsNone
     BorderSides = [sdLeft, sdTop, sdRight, sdBottom]
     BorderWidth = 0
     TabOrder = 1
+    ExplicitTop = 520
+    ExplicitWidth = 814
   end
   object PopupMenu1: TPopupMenu
     Left = 35

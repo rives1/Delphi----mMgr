@@ -45,9 +45,8 @@ type
     { Private declarations }
 
     // variabili
-    _pAccountName: string;
-    // reminder per quale account aprire -- presa dal treemenu all'atto dell'instanza della form
-    _SQLString: string; // var per tutti gli statement sql da comporre
+    _pAccountName: string; // nominativo dell'account aperto presa dal treemenu all'atto dell'instanza della form
+    _SQLString:    string; // var per tutti gli statement sql da comporre
 
     // local functions
     procedure _clearGrid;
@@ -59,7 +58,7 @@ type
 
   public
     { Public declarations }
-    procedure _fillGrid(_pAction: string);
+    procedure _fillGrid;
 
   end;
 
@@ -95,7 +94,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.FormActivate(Sender: TObject);
 begin
-  _fillGrid('new');
+  _fillGrid;
   _ChartTotals;
 end;
 
@@ -270,8 +269,8 @@ begin
   // frmInsEdit.ShowModal;                     // nostro la form modale
 
   // aggiorno i datidella grid
-  _fillGrid('edit');
-  _ChartTotals;
+  // _fillGrid();
+  // _ChartTotals;
 
   grdLedger.Row := i; // reimposto il record della grid su quello precedente
 end;
@@ -479,7 +478,7 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TLedgerFrm._fillGrid(_pAction: string);
+procedure TLedgerFrm._fillGrid;
 // riempiemnto della grid
 var
   _i:            Integer;
@@ -487,12 +486,12 @@ var
   _trxIndicator: string;  // indica con i segni > o > se il trasferimento è in entrata o uscita
   _recPosition:  Integer; // posizione del record x riposizionare il marker
 begin
+  // salvo la riga corrente della grid
+  _recPosition := grdLedger.Row;
+
   // pulizia della grid
   _clearGrid;
   grdLedger.RowCount := 1;
-
-  if UpperCase(_pAction) = 'EDIT' then
-    _recPosition := grdLedger.Row;
 
   // inserisco le caption
   grdLedger.cells[0, 0] := 'ID';
@@ -524,7 +523,7 @@ begin
         // aggiungo i dati alla grid
         grdLedger.cells[0, _i] := MainFRM.sqlQry.FieldValues['TRNID']; // ID
         grdLedger.cells[1, _i] := MainFRM.sqlQry.FieldValues['TRNTYPE']; // Tipo operazione
-//        grdLedger.cells[2, _i] := MainFRM.sqlQry.FieldValues['TRNDATE']; // Data
+        // grdLedger.cells[2, _i] := MainFRM.sqlQry.FieldValues['TRNDATE']; // Data
         grdLedger.cells[2, _i] := FormatDateTime('dd.mmm.yy', MainFRM.sqlQry.FieldValues['TRNDATE']); // Data
         grdLedger.cells[3, _i] := MainFRM.sqlQry.FieldValues['WW']; // Week
         grdLedger.cells[4, _i] := MainFRM.sqlQry.FieldValues['PAYNAME'];
@@ -586,10 +585,10 @@ begin
   _autoSizeGrid;
 
   // posiziorsi sull'ultimo record nel caso di inserimento e sul precedente in caso di editing
-  if UpperCase(_pAction) = 'EDIT' then
-    grdLedger.Row := _recPosition
+  if _recPosition > grdLedger.RowCount - 1 then
+    grdLedger.Row := grdLedger.RowCount - 1
   else
-    grdLedger.Row := grdLedger.RowCount - 1;
+    grdLedger.Row := _recPosition;
 
   MainFRM._fillBalanceChart;
 end;
@@ -621,7 +620,7 @@ begin
   grdLedger.Row := _pRecRow;
 
   // refresh della grid
-  _fillGrid('new');
+  _fillGrid;
   _ChartTotals();
 end;
 
