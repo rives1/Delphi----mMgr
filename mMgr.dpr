@@ -19,6 +19,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TMainFRM, MainFRM);
-  Application.CreateForm(TtblBalanceFrm, tblBalanceFrm);
   Application.Run;
 end.
