@@ -362,7 +362,7 @@ begin
     // ultima riga del report con i bilanci
     //
     _lvItem         := _fLvBalanceYTD.Items.Add; // inserisco i dati nella listview
-    _lvItem.Caption := 'Totale';
+    _lvItem.Caption := 'Total Amount';
     _lvItem.GroupID := 2;     // bilancio
     _lvItem.SubItems.Add(''); // campo subcat vuoto
 

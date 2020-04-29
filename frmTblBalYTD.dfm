@@ -145,6 +145,7 @@ object tblBalanceFrm: TtblBalanceFrm
     HotTrack = True
     GroupView = True
     RowSelect = True
+    SortType = stText
     TabOrder = 1
     ViewStyle = vsReport
   end
