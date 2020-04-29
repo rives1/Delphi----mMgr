@@ -5506,7 +5506,7 @@ object MainFRM: TMainFRM
     PrintOptions.Printer = 'Default'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 43929.991899351900000000
-    ReportOptions.LastChange = 43949.830346863420000000
+    ReportOptions.LastChange = 43949.830346863430000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'begin'
@@ -5630,7 +5630,7 @@ object MainFRM: TMainFRM
           AllowVectorExport = True
           Left = 152.622140000000000000
           Top = 0.363416349999994300
-          Width = 56.692950000000010000
+          Width = 56.692950000000000000
           Height = 15.481536350000000000
           DataField = 'rptJan'
           DataSet = rptDset
@@ -5870,7 +5870,7 @@ object MainFRM: TMainFRM
         object dsetBalanceYTDrptDec: TfrxMemoView
           IndexTag = 3
           AllowVectorExport = True
-          Left = 908.189550000000000000
+          Left = 908.189550000000100000
           Width = 64.252010000000000000
           Height = 15.481536350000000000
           DataField = 'rptDec'
@@ -5948,7 +5948,7 @@ object MainFRM: TMainFRM
           AllowVectorExport = True
           Left = 152.622140000000000000
           Top = 3.779530000000001000
-          Width = 56.692950000000010000
+          Width = 56.692950000000000000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -6133,7 +6133,7 @@ object MainFRM: TMainFRM
         end
         object Memo9: TfrxMemoView
           AllowVectorExport = True
-          Left = 908.189550000000000000
+          Left = 908.189550000000100000
           Top = 3.779530000000001000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
@@ -6297,7 +6297,7 @@ object MainFRM: TMainFRM
           IndexTag = 1
           AllowVectorExport = True
           Left = 152.622140000000000000
-          Width = 56.692950000000010000
+          Width = 56.692950000000000000
           Height = 18.897650000000000000
           DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
@@ -6535,7 +6535,7 @@ object MainFRM: TMainFRM
         object Memo29: TfrxMemoView
           IndexTag = 1
           AllowVectorExport = True
-          Left = 908.189550000000000000
+          Left = 908.189550000000100000
           Width = 64.252010000000000000
           Height = 18.897650000000000000
           DisplayFormat.FormatStr = '%2.2n'
@@ -6586,7 +6586,7 @@ object MainFRM: TMainFRM
           AllowVectorExport = True
           Left = 152.622140000000000000
           Top = 8.000000000000000000
-          Width = 56.692950000000010000
+          Width = 56.692950000000000000
           Height = 15.118120000000000000
           DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
@@ -6755,7 +6755,7 @@ object MainFRM: TMainFRM
           IndexTag = 1
           AllowVectorExport = True
           Left = 628.504330000000000000
-          Top = 8.779530000000023000
+          Top = 8.779530000000022000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
           DisplayFormat.FormatStr = '%2.2n'
@@ -6842,7 +6842,7 @@ object MainFRM: TMainFRM
         object Memo43: TfrxMemoView
           IndexTag = 1
           AllowVectorExport = True
-          Left = 908.189550000000000000
+          Left = 908.189550000000100000
           Top = 8.000000000000000000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
@@ -6910,7 +6910,7 @@ object MainFRM: TMainFRM
           IndexTag = 1
           AllowVectorExport = True
           Left = 152.622140000000000000
-          Width = 56.692950000000010000
+          Width = 56.692950000000000000
           Height = 15.118120000000000000
           DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
@@ -6939,7 +6939,7 @@ object MainFRM: TMainFRM
         object Memo46: TfrxMemoView
           AllowVectorExport = True
           Left = 15.118110236220470000
-          Width = 94.488250000000000000
+          Width = 94.488249999999990000
           Height = 15.118120000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -7255,7 +7255,7 @@ object MainFRM: TMainFRM
         object Memo57: TfrxMemoView
           IndexTag = 1
           AllowVectorExport = True
-          Left = 908.189550000000000000
+          Left = 908.189550000000100000
           Width = 64.252010000000000000
           Height = 15.118120000000000000
           DisplayFormat.FormatStr = '%2.2n'

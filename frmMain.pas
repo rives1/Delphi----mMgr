@@ -55,7 +55,7 @@ type
     function _chkOpenForm(_frmCaption: string): boolean;
     procedure _closeDB;
     procedure _treeSelectOpen;
-    procedure _reportBalanceYTD;
+    // procedure _reportBalanceYTD;
     procedure _createNewDB;
 
   public
@@ -73,7 +73,7 @@ implementation
 
 
 uses
-  frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmPayee, frmCategory, pasCommon, CommCtrl;
+  frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmPayee, frmCategory, frmTblBalYTD, pasCommon, CommCtrl;
 
 { TForm1 }
 
@@ -330,115 +330,115 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TMainFRM._reportBalanceYTD;
-var
+{ procedure TMainFRM._reportBalanceYTD;
+  var
   _totCat:      Double;  // totale da calcolare per i 12 mesi della cat-subcat
   _mmField:     string;  // campo per l'assegnazione del valore
   _subcatCiclo: string;  // condizione per ciclo
   i:            integer; // x ciclo for
-begin
+  begin
   // pulire la tabella prima di procedere
   for i := 0 to fdMemBalYTD.RecordCount do
   begin
-    fdMemBalYTD.Edit;
-    fdMemBalYTD.Delete;
+  fdMemBalYTD.Edit;
+  fdMemBalYTD.Delete;
   end;
 
   _SQLString := 'Select CATTYPE, CATDES, SUBCDES, '
-    + ' StrfTime(''%Y'', TRNDATE) As YY, '
-    + ' StrfTime(''%m'', TRNDATE) As MM, '
-    + ' Sum(TRNAMOUNT) As Sum_TRNAMOUNT '
-    + ' From '
-    + ' TRANSACTIONS Inner Join '
-    + ' DBSUBCATEGORY On SUBCID = TRNSUBCATEGORY Inner Join '
-    + ' DBCATEGORY On CATID = SUBCATID '
+  + ' StrfTime(''%Y'', TRNDATE) As YY, '
+  + ' StrfTime(''%m'', TRNDATE) As MM, '
+  + ' Sum(TRNAMOUNT) As Sum_TRNAMOUNT '
+  + ' From '
+  + ' TRANSACTIONS Inner Join '
+  + ' DBSUBCATEGORY On SUBCID = TRNSUBCATEGORY Inner Join '
+  + ' DBCATEGORY On CATID = SUBCATID '
   // per la rimozione della categoria dalle transazioni
   // + ' TRANSACTIONS Left Join '
   // + ' DBCATEGORY On DBCATEGORY.CATID = TRNCATEGORY Left Join '
   // + ' DBSUBCATEGORY On DBSUBCATEGORY.SUBCID = TRNSUBCATEGORY '
-    + ' Where CATDES <> ''_Transfer'' '
-    + ' and StrfTime(''%Y'', TRNDATE) = '''
-    + InputBox('ReferenceYear', 'Insert Year for Report', FormatDateTime('yyyy', now)) + ''' '
-    + ' Group By '
-    + ' CATTYPE, '
-    + ' CATDES, '
-    + ' SUBCDES, '
-    + ' StrfTime(''%Y'', TRNDATE), '
-    + ' StrfTime(''%m'', TRNDATE) '
-    + ' Order By '
-    + ' CATTYPE, '
-    + ' CATDES ';
+  + ' Where CATDES <> ''_Transfer'' '
+  + ' and StrfTime(''%Y'', TRNDATE) = '''
+  + InputBox('ReferenceYear', 'Insert Year for Report', FormatDateTime('yyyy', now)) + ''' '
+  + ' Group By '
+  + ' CATTYPE, '
+  + ' CATDES, '
+  + ' SUBCDES, '
+  + ' StrfTime(''%Y'', TRNDATE), '
+  + ' StrfTime(''%m'', TRNDATE) '
+  + ' Order By '
+  + ' CATTYPE, '
+  + ' CATDES ';
 
   sqlQry.Close;
   sqlQry.SQL.Clear;
   sqlQry.SQL.Add(_SQLString);
   try
-    sqlQry.Open;
-    while not MainFRM.sqlQry.EOF do // ciclo recupero dati
-    begin
-      // travaso i dati dalla qry al recordset costruito per il report
-      with fdMemBalYTD do
-      begin
-        // condizione verifica su quando inserire un record
-        if (sqlQry.FieldValues['CATDES'] + sqlQry.FieldValues['SUBCDES'] <> _subcatCiclo) then
-        begin
-          Insert;
-          _totCat := 0;
-        end;
+  sqlQry.Open;
+  while not MainFRM.sqlQry.EOF do // ciclo recupero dati
+  begin
+  // travaso i dati dalla qry al recordset costruito per il report
+  with fdMemBalYTD do
+  begin
+  // condizione verifica su quando inserire un record
+  if (sqlQry.FieldValues['CATDES'] + sqlQry.FieldValues['SUBCDES'] <> _subcatCiclo) then
+  begin
+  Insert;
+  _totCat := 0;
+  end;
 
-        FieldByName('rptInOut').Value  := sqlQry.FieldValues['CATTYPE'];
-        FieldByName('rptYY').Value     := sqlQry.FieldValues['YY'];
-        FieldByName('rptCat').Value    := sqlQry.FieldValues['CATDES'];
-        FieldByName('rptSubCat').Value := sqlQry.FieldValues['SUBCDES'];
+  FieldByName('rptInOut').Value  := sqlQry.FieldValues['CATTYPE'];
+  FieldByName('rptYY').Value     := sqlQry.FieldValues['YY'];
+  FieldByName('rptCat').Value    := sqlQry.FieldValues['CATDES'];
+  FieldByName('rptSubCat').Value := sqlQry.FieldValues['SUBCDES'];
 
-        case StrToInt(sqlQry.FieldValues['MM']) of // in base al mese imposto i dati nel campo colonna-mese
-          1:
-            _mmField := 'rptJan';
-          2:
-            _mmField := 'rptFeb';
-          3:
-            _mmField := 'rptMar';
-          4:
-            _mmField := 'rptApr';
-          5:
-            _mmField := 'rptMay';
-          6:
-            _mmField := 'rptJun';
-          7:
-            _mmField := 'rptJul';
-          8:
-            _mmField := 'rptAug';
-          9:
-            _mmField := 'rptSep';
-          10:
-            _mmField := 'rptOct';
-          11:
-            _mmField := 'rptNov';
-          12:
-            _mmField := 'rptDec';
-        end;
+  case StrToInt(sqlQry.FieldValues['MM']) of // in base al mese imposto i dati nel campo colonna-mese
+  1:
+  _mmField := 'rptJan';
+  2:
+  _mmField := 'rptFeb';
+  3:
+  _mmField := 'rptMar';
+  4:
+  _mmField := 'rptApr';
+  5:
+  _mmField := 'rptMay';
+  6:
+  _mmField := 'rptJun';
+  7:
+  _mmField := 'rptJul';
+  8:
+  _mmField := 'rptAug';
+  9:
+  _mmField := 'rptSep';
+  10:
+  _mmField := 'rptOct';
+  11:
+  _mmField := 'rptNov';
+  12:
+  _mmField := 'rptDec';
+  end;
 
-        // assegno il valore al campo
-        FieldByName(_mmField).Value     := sqlQry.FieldValues['Sum_TRNAMOUNT'];
-        _totCat                         := _totCat + sqlQry.FieldValues['Sum_TRNAMOUNT'];
-        FieldByName('rptTotLine').Value := _totCat;
+  // assegno il valore al campo
+  FieldByName(_mmField).Value     := sqlQry.FieldValues['Sum_TRNAMOUNT'];
+  _totCat                         := _totCat + sqlQry.FieldValues['Sum_TRNAMOUNT'];
+  FieldByName('rptTotLine').Value := _totCat;
 
-        Update;
-      end;
-      _subcatCiclo := sqlQry.FieldValues['CATDES'] + sqlQry.FieldValues['SUBCDES'];
-      sqlQry.Next;
-    end; // ciclo lettura record
+  Update;
+  end;
+  _subcatCiclo := sqlQry.FieldValues['CATDES'] + sqlQry.FieldValues['SUBCDES'];
+  sqlQry.Next;
+  end; // ciclo lettura record
 
   finally
-    sqlQry.Close;
-    sqlQry.SQL.Clear;
+  sqlQry.Close;
+  sqlQry.SQL.Clear;
   end;
 
   // apertura report
   rptStandard.LoadFromFile(ExtractFilePath(Application.ExeName) + '\report\Balance-YTD.fr3');
   rptStandard.ShowReport();
-end;
-
+  end;
+}
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM._treeMenuCreate;
 // creazione di tutto l'albero del menù
@@ -541,6 +541,7 @@ var
   _Analisys2FRM:    TAnalisysFrm2;
   _PayeeFRM:        TPayeeFRM;
   _CategoryFRM:     TCategoryFrm;
+  _TblBalanceYTD:   TtblBalanceFrm;
 begin
   // apro la child form del ledger. se il nodo superiore è account si tratta sicuramente di un ledger da aprire
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
@@ -550,10 +551,13 @@ begin
     _LedgerChildFRM.WindowState := wsMaximized;
   end;
 
-  // apro i report
-  if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'REPORT')) then
-    if treeMenu.Selected.Text = 'Balance YTD-Monthly' then
-      _reportBalanceYTD;
+  // apro la form per tabella report balance ytd
+  if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'REPORT'))
+    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Balance YTD-Monthly') then
+  begin
+    _TblBalanceYTD             := TtblBalanceFrm.Create(nil);
+    _TblBalanceYTD.WindowState := wsMaximized;
+  end;
 
   // apro chart1
   if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART'))
