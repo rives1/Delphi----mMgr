@@ -130,6 +130,20 @@ object MainFRM: TMainFRM
         OnClick = Quit1Click
       end
     end
+    object Help1: TMenuItem
+      Caption = 'Help'
+      object Documentation1: TMenuItem
+        Caption = 'Documentation'
+        OnClick = Documentation1Click
+      end
+      object N2: TMenuItem
+        Caption = '-'
+      end
+      object Version1: TMenuItem
+        Caption = 'Version'
+        OnClick = Version1Click
+      end
+    end
   end
   object sqlite_conn: TFDConnection
     Params.Strings = (

@@ -150,8 +150,7 @@ object tblBalanceFrm: TtblBalanceFrm
     SortType = stText
     TabOrder = 1
     ViewStyle = vsReport
-    ExplicitWidth = 834
-    ExplicitHeight = 304
+    ExplicitLeft = 1
   end
   object Panel1: TPanel
     Left = 0

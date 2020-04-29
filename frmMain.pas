@@ -36,12 +36,18 @@ type
     dlgSave: TSaveDialog;
     dlgOpen: TOpenDialog;
     Open1: TMenuItem;
+    Help1: TMenuItem;
+    Documentation1: TMenuItem;
+    N2: TMenuItem;
+    Version1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure treeMenuDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Quit1Click(Sender: TObject);
     procedure New1Click(Sender: TObject);
     procedure Open1Click(Sender: TObject);
+    procedure Version1Click(Sender: TObject);
+    procedure Documentation1Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -73,12 +79,20 @@ implementation
 
 
 uses
-  frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmPayee, frmCategory, frmTblBalYTD, pasCommon, CommCtrl;
+  frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmPayee, frmCategory, frmTblBalYTD, pasCommon,
+  CommCtrl, ShellApi;
 
 { TForm1 }
 
 // -------------------------------------------------------------------------------------------------------------//
 
+procedure TMainFRM.Documentation1Click(Sender: TObject);
+begin
+  // rimando alla pagina del sito con la documentazione
+  ShellExecute(self.WindowHandle, 'open', 'www.mmgr.altervista.org/documentation.html', nil, nil, SW_SHOWNORMAL);
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   _closeDB;
@@ -128,6 +142,12 @@ procedure TMainFRM.treeMenuDblClick(Sender: TObject);
 begin
   _treeSelectOpen; // apro le form in base alla selezione del nodo
   _treeMenuCreate; // ripopolo il menu
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TMainFRM.Version1Click(Sender: TObject);
+begin
+  MessageDlg('mMgr 0.1 Beta', mtInformation, [mbOK], 0);
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
