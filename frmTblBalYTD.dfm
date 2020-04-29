@@ -2,8 +2,8 @@ object tblBalanceFrm: TtblBalanceFrm
   Left = 0
   Top = 0
   Caption = 'Table Balance YTD'
-  ClientHeight = 579
-  ClientWidth = 834
+  ClientHeight = 578
+  ClientWidth = 831
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,8 +20,8 @@ object tblBalanceFrm: TtblBalanceFrm
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 0
-    Top = 342
-    Width = 834
+    Top = 341
+    Width = 831
     Height = 7
     Cursor = crVSplit
     Align = alBottom
@@ -31,16 +31,18 @@ object tblBalanceFrm: TtblBalanceFrm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 560
-    Width = 834
+    Top = 559
+    Width = 831
     Height = 19
     Panels = <>
+    ExplicitTop = 560
+    ExplicitWidth = 834
   end
   object _fLvBalanceYTD: TListView
     Left = 0
     Top = 38
-    Width = 834
-    Height = 304
+    Width = 831
+    Height = 303
     Align = alClient
     Columns = <
       item
@@ -148,15 +150,18 @@ object tblBalanceFrm: TtblBalanceFrm
     SortType = stText
     TabOrder = 1
     ViewStyle = vsReport
+    ExplicitWidth = 834
+    ExplicitHeight = 304
   end
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 834
+    Width = 831
     Height = 38
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitWidth = 834
     object Label1: TLabel
       Left = 30
       Top = 12
@@ -208,16 +213,18 @@ object tblBalanceFrm: TtblBalanceFrm
   end
   object Panel2: TPanel
     Left = 0
-    Top = 349
-    Width = 834
+    Top = 348
+    Width = 831
     Height = 211
     Align = alBottom
     Caption = 'Panel2'
     TabOrder = 3
+    ExplicitTop = 349
+    ExplicitWidth = 834
     object chartInOutMM: TChart
       Left = 1
       Top = 1
-      Width = 832
+      Width = 829
       Height = 209
       Legend.Alignment = laTop
       Legend.FontSeriesColor = True
@@ -231,6 +238,7 @@ object tblBalanceFrm: TtblBalanceFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitWidth = 832
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15
