@@ -202,8 +202,12 @@ begin
       if (ARow <> Row) then
       begin
         if (ARow mod 2 = 0) then
-          Canvas.Brush.Color :=  $E5F3E8
-//          $DFECDF // colore alternativo $eff5ef
+          Canvas.Brush.Color := $C4EDFF
+
+          //color alternativi
+//          $E5F3E8
+//          $DFECDF
+//          $eff5ef
           // else
           // Canvas.Brush.Color := $00FFEBDF;
       end;
