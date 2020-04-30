@@ -157,14 +157,15 @@ object InsEditFrm: TInsEditFrm
     OnEnter = _fSubCategoryEnter
     OnExit = _fSubCategoryExit
   end
-  object _fDate: TJvDateTimePicker
-    Left = 247
-    Top = 21
+  object x_fDate: TJvDateTimePicker
+    Left = 187
+    Top = 227
     Width = 99
     Height = 21
     Date = 43911.000000000000000000
     Time = 0.726759432873223000
-    TabOrder = 2
+    TabOrder = 12
+    Visible = False
     DropDownDate = 43911.000000000000000000
   end
   object _fAmount: TJvValidateEdit
@@ -210,5 +211,13 @@ object InsEditFrm: TInsEditFrm
           'date'
         Width = 50
       end>
+  end
+  object _fDate: TRzDateTimeEdit
+    Left = 247
+    Top = 21
+    Width = 109
+    Height = 21
+    EditType = etDate
+    TabOrder = 2
   end
 end

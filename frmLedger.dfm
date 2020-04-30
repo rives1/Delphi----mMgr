@@ -133,7 +133,6 @@ object LedgerFrm: TLedgerFrm
       TabOrder = 1
       StyleElements = [seFont, seBorder]
       OnDrawCell = grdLedgerDrawCell
-      ExplicitHeight = 366
     end
     object chTotals: TChart
       Left = 0
@@ -152,7 +151,6 @@ object LedgerFrm: TLedgerFrm
       Align = alLeft
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitHeight = 226
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15
@@ -207,10 +205,6 @@ object LedgerFrm: TLedgerFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitLeft = 170
-      ExplicitTop = 33
-      ExplicitWidth = 520
-      ExplicitHeight = 103
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 13
       object Series2: TAreaSeries

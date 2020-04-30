@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, System.UITypes, Vcl.Graphics,
   Vcl.Controls,
   Vcl.Forms, Vcl.Dialogs, Vcl.Mask, JvExMask, JvToolEdit, JvMaskEdit, JvExStdCtrls, JvEdit, JvValidateEdit,
-  Vcl.ComCtrls, JvExComCtrls, JvDateTimePicker, Vcl.StdCtrls, Vcl.Buttons, JvExButtons, JvBitBtn, JvCombobox;
+  Vcl.ComCtrls, JvExComCtrls, JvDateTimePicker, Vcl.StdCtrls, Vcl.Buttons, JvExButtons, JvBitBtn, JvCombobox, RzEdit,
+  RzDTP;
 
 type
   TInsEditFrm = class(TForm)
@@ -24,12 +25,13 @@ type
     _fPayee: TJvComboBox;
     _fCategory: TJvComboBox;
     _fSubCategory: TJvComboBox;
-    _fDate: TJvDateTimePicker;
+    x_fDate: TJvDateTimePicker;
     _fAmount: TJvValidateEdit;
     _fAccountTo: TJvComboBox;
     _fAccountFrom: TJvComboBox;
     btnOK: TJvBitBtn;
     StatusBar1: TStatusBar;
+    _fDate: TRzDateTimeEdit;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormActivate(Sender: TObject);

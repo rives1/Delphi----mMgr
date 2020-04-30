@@ -10,7 +10,8 @@ uses
   FireDAC.Comp.Client, frxClass, frxDBSet, Vcl.BaseImageCollection, Vcl.ImageCollection, System.ImageList, Vcl.ImgList,
   Vcl.VirtualImageList, Data.DB, FireDAC.Comp.DataSet, Vcl.Menus, Vcl.ComCtrls, VclTee.TeEngine, VclTee.Series,
   VclTee.TeeProcs, VclTee.Chart, Vcl.ExtCtrls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Data.SqlExpr,
-  Data.DbxSqlite, Data.FMTBcd, frxExportBaseDialog, frxExportPDF, frxPreview;
+  Data.DbxSqlite, Data.FMTBcd, frxExportBaseDialog, frxExportPDF, frxPreview, JvToolEdit, JvExMask, JvMaskEdit,
+  JvCheckedMaskEdit, JvDatePickerEdit, JvExComCtrls, JvDateTimePicker, RzDTP, Vcl.Mask, RzEdit, Vcl.WinXPickers;
 
 type
   TMainFRM = class(TForm)
