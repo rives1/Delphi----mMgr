@@ -222,7 +222,10 @@ end;
 procedure TInsEditFrm._fCategoryExit(Sender: TObject);
 begin
   if not _newCategory then
-    _fCategory.SetFocus;
+    _fCategory.SetFocus
+  else
+    if (_fSubCategory.Text = '') and (_fSubCategory.Items.Count > 0) then
+    _fSubCategory.Text := _fSubCategory.Items[0];
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
