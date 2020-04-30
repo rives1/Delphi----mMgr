@@ -173,11 +173,15 @@ object InsEditFrm: TInsEditFrm
     Top = 203
     Width = 81
     Height = 21
+    Flat = False
+    ParentFlat = False
     CriticalPoints.MaxValueIncluded = False
     CriticalPoints.MinValueIncluded = False
+    TrimDecimals = True
     DisplayFormat = dfCurrency
     DecimalPlaces = 2
     TabOrder = 9
+    KeepPrefixSuffixIntact = True
   end
   object _fAccountTo: TJvComboBox
     Left = 263
