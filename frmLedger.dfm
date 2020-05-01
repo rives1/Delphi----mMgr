@@ -28169,9 +28169,6 @@ object LedgerFrm: TLedgerFrm
       StyleElements = [seFont, seBorder]
       OnDblClick = grdLedgerDblClick
       OnDrawCell = grdLedgerDrawCell
-      ExplicitLeft = -2
-      ExplicitTop = -2
-      ExplicitHeight = 294
     end
     object chTotals: TChart
       Left = 0
@@ -28317,6 +28314,13 @@ object LedgerFrm: TLedgerFrm
     object Delete1: TMenuItem
       Caption = '&Delete (DEL)'
       OnClick = Delete1Click
+    end
+    object N3: TMenuItem
+      Caption = '-'
+    end
+    object CSVexport1: TMenuItem
+      Caption = 'CSV export'
+      OnClick = CSVexport1Click
     end
   end
 end

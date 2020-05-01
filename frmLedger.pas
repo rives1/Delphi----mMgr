@@ -29,6 +29,8 @@ type
     Image1: TImage;
     N2: TMenuItem;
     ReconcileR1: TMenuItem;
+    N3: TMenuItem;
+    CSVexport1: TMenuItem;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -43,6 +45,7 @@ type
     procedure InsertExpense1Click(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure ReconcileR1Click(Sender: TObject);
+    procedure CSVexport1Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -59,6 +62,7 @@ type
     procedure _deleteRecord(_pRecID: string; _pRecRow: Integer; _precType: string);
     procedure _openRecordForm(_pEditKind: string);
     procedure _reconcileRecord;
+    procedure _exportCSV;
 
   public
     { Public declarations }
@@ -76,6 +80,12 @@ implementation
 
 uses
   frmMain, frmInsEdit, System.DateUtils;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm.CSVexport1Click(Sender: TObject);
+begin
+  _exportCSV;
+end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.Delete1Click(Sender: TObject);
@@ -308,7 +318,7 @@ begin
   // imposto il campo trnreconcile a X per mostrare il record come verfiicato
   for _i := grdLedger.Selection.Top to grdLedger.Selection.Bottom do
   begin
-    if (Uppercase(grdLedger.cells[1, _i]) = 'X') then
+    if (UpperCase(grdLedger.cells[1, _i]) = 'X') then
       _SQLString := 'update TRANSACTIONS set TRNRECONCILE = '''' where TRNID = ' + grdLedger.cells[0, _i]
     else
       _SQLString := 'update TRANSACTIONS set TRNRECONCILE = ''X'' where TRNID = ' + grdLedger.cells[0, _i];
@@ -652,7 +662,7 @@ begin
     try
       MainFRM.sqlite_conn.StartTransaction;
       // se trasferimento elimino prima il correlato
-      if (Uppercase(_precType) = 'TRANSFER') then
+      if (UpperCase(_precType) = 'TRANSFER') then
       begin
         _SQLString := 'DELETE FROM TRANSACTIONS WHERE TRNID = (SELECT TRNTRANSFERID FROM TRANSACTIONS WHERE TRNID = '
           + _pRecID + ')';
@@ -673,6 +683,39 @@ begin
   // refresh della grid
   _fillGrid;
   _ChartTotals();
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm._exportCSV;
+var
+  _fName:     string;
+  _csv:       tstringlist;
+  _row, _col: Integer;
+  _s:         string;
+
+begin
+  //impostazione dei parametri di default
+  MainFRM.dlgSave.InitialDir := ExtractFilePath(Application.ExeName);
+  MainFRM.dlgSave.DefaultExt := '.csv';
+  MainFRM.dlgSave.Filter     := 'csv|*.csv';
+
+  if ((MainFRM.dlgSave.Execute) and (MainFRM.dlgSave.FileName <> '')) then
+  begin
+    _fName := MainFRM.dlgSave.FileName;
+
+    _csv     := tstringlist.Create;
+    for _row := 1 to grdLedger.RowCount do
+    begin
+      _s       := '';
+      for _col := 0 to grdLedger.ColCount - 1 do
+        _s     := _s + grdLedger.cells[_col, _row - 1] + ',';
+      _csv.Add(_s)
+    end;
+
+    _csv.savetofile(_fName);
+    _csv.free;
+  end;
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

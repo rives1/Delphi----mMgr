@@ -170,7 +170,8 @@ begin
   begin
     // imposto il nuovo nome del file
     DateTimeToString(_datePartName, 'yyyymmddhhnnss', now());
-    _bakName := ExtractFilePath(_fName) +TPath.GetFileNameWithoutExtension(_fName) +'-'+ _datePartName + ExtractFileExt(_fName);
+    _bakName := ExtractFilePath(_fName) + TPath.GetFileNameWithoutExtension(_fName) + '-' + _datePartName +
+      ExtractFileExt(_fName);
     try
       CopyFile(PChar(_fName), PChar(_bakName), True)
     Except
@@ -218,6 +219,9 @@ begin
   dlgSave.InitialDir := ExtractFilePath(Application.ExeName);
   if ((dlgSave.Execute) and (dlgSave.FileName <> '')) then
   begin
+    MainFRM.dlgSave.DefaultExt := '.sqlite';
+    MainFRM.dlgSave.Filter     := 'sqlite|*.sqlite';
+
     _DbName := dlgSave.FileName;
     try
       sqlite_conn.Params.Database := _DbName;
