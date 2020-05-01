@@ -61,6 +61,7 @@ type
     function _validateField: boolean;
     function _newCategory: boolean;
     function _newSubCategory: boolean;
+    function _newPayee: boolean;
     // local procedures
     procedure _loadCmbAccounts;
     procedure _loadCmbPayee;
@@ -69,7 +70,6 @@ type
     procedure _recordLoad;
     procedure _writeRecord;
     procedure _recordSave;
-    procedure _newPayee;
     procedure _getRecentData;
     procedure _cleanFormNewRecord;
     procedure _changeType; // impostazioni da inserire sulla mask al cambio del tipo di movimento
@@ -243,7 +243,8 @@ begin
     _getRecentData
   else
     // inserisce il nuovo payee
-    _newPayee;
+    if not _newPayee then
+      _fPayee.SetFocus;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -703,9 +704,10 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TInsEditFrm._newPayee;
+function TInsEditFrm._newPayee: boolean;
 begin
   // se nuovo payee nella combo, aggiungo il record nella tabella
+  Result := True;
   if (_fPayee.Items.IndexOf(UpperCase(_fPayee.Text)) = -1)
     and (_fPayee.Text <> '') then
     if (MessageDlg('Add New Payee?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
@@ -713,7 +715,9 @@ begin
       _SQLString := 'INSERT INTO DBPAYEE (PAYNAME) VALUES(''' + _UpCase(_fPayee.Text) + ''' )';
       MainFRM.sqlQry.ExecSQL(_SQLString);
       _loadCmbPayee;
-    end;
+    end
+    else
+      Result := False;
 
 end;
 
