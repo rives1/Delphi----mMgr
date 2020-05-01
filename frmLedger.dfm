@@ -43,69 +43,10 @@ object LedgerFrm: TLedgerFrm
       742
       442)
     UpperLeftControls = (
-      _e_grdLedger
       grdLedger)
     LowerRightControls = (
       chTotals
       chHistory)
-    object _e_grdLedger: TJvgStringGrid
-      Left = 110
-      Top = 200
-      Width = 305
-      Height = 114
-      Cursor = crHandPoint
-      BorderStyle = bsNone
-      Color = clMoneyGreen
-      ColCount = 9
-      Ctl3D = True
-      DefaultColWidth = 70
-      DefaultRowHeight = 18
-      DefaultDrawing = False
-      DoubleBuffered = True
-      DrawingStyle = gdsGradient
-      FixedCols = 0
-      RowCount = 2
-      GradientEndColor = clBlack
-      GradientStartColor = clMoneyGreen
-      GridLineWidth = 2
-      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowSelect]
-      ParentCtl3D = False
-      ParentDoubleBuffered = False
-      PopupMenu = PopupMenu1
-      TabOrder = 0
-      CaptionFont.Charset = DEFAULT_CHARSET
-      CaptionFont.Color = clWindowText
-      CaptionFont.Height = -11
-      CaptionFont.Name = 'Tahoma'
-      CaptionFont.Style = [fsBold]
-      Captions.Strings = (
-        'ID'
-        'Type'
-        'Date'
-        'Payee'
-        'Category'
-        'In'
-        'Out'
-        'Balance'
-        'Description')
-      ExtOptions = []
-      EditorColor = clBlack
-      EditorFont.Charset = DEFAULT_CHARSET
-      EditorFont.Color = clWindowText
-      EditorFont.Height = -11
-      EditorFont.Name = 'Tahoma'
-      EditorFont.Style = []
-      ColWidths = (
-        70
-        70
-        70
-        70
-        70
-        70
-        70
-        70
-        -255)
-    end
     object grdLedger: TStringGrid
       Left = 0
       Top = 0
@@ -130,9 +71,10 @@ object LedgerFrm: TLedgerFrm
       ParentDoubleBuffered = False
       ParentFont = False
       PopupMenu = PopupMenu1
-      TabOrder = 1
+      TabOrder = 0
       StyleElements = [seFont, seBorder]
       OnDrawCell = grdLedgerDrawCell
+      ExplicitHeight = 216
     end
     object chTotals: TChart
       Left = 0

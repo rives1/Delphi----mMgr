@@ -11,7 +11,9 @@ uses
   frmPayee in 'frmPayee.pas' {PayeeFRM},
   frmCategory in 'frmCategory.pas' {CategoryFrm},
   frmChartAnalisys2 in 'frmChartAnalisys2.pas' {AnalisysFrm2},
-  frmTblBalYTD in 'frmTblBalYTD.pas' {tblBalanceFrm};
+  frmTblBalYTD in 'frmTblBalYTD.pas' {tblBalanceFrm},
+  Vcl.Themes,
+  Vcl.Styles;
 
 {$R *.res}
 
