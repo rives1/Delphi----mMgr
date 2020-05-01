@@ -56,14 +56,21 @@ type
     _SQLString: string;
     _DbName:    string;
     _iniFName:  string;
+    //
     // local function
+    //
     function _openDB(_pDBFname: string): boolean;
-    // function _SeekNode(pvSkString: string): TTreeNode;
     function _chkOpenForm(_frmCaption: string): boolean;
+    function _backupDB(_fName: string): boolean;
+    // function _SeekNode(pvSkString: string): TTreeNode;
+
+    //
+    // local procedures
+    //
     procedure _closeDB;
     procedure _treeSelectOpen;
-    // procedure _reportBalanceYTD;
     procedure _createNewDB;
+    // procedure _reportBalanceYTD;
 
   public
     { Public declarations }
@@ -81,7 +88,7 @@ implementation
 
 uses
   frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmPayee, frmCategory, frmTblBalYTD, pasCommon,
-  CommCtrl, ShellApi;
+  CommCtrl, ShellApi, System.IOUtils;
 
 { TForm1 }
 
@@ -152,12 +159,39 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
+function TMainFRM._backupDB(_fName: string): boolean;
+var
+  _bakName:      string;
+  _datePartName: string;
+begin
+  Result := True;
+  // copio il file che viene selezionato come da aprire
+  if FileExists(_fName) then
+  begin
+    // imposto il nuovo nome del file
+    DateTimeToString(_datePartName, 'yyyymmddhhnnss', now());
+    _bakName := ExtractFilePath(_fName) +TPath.GetFileNameWithoutExtension(_fName) +'-'+ _datePartName + ExtractFileExt(_fName);
+    try
+      CopyFile(PChar(_fName), PChar(_bakName), True)
+    Except
+      On E: Exception Do
+      begin
+        ShowMessage(E.ClassName + ' Erro in creating backup file: ' + E.Message);
+        Result := False;
+      end;
+    end;
+
+  end;
+
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
 function TMainFRM._chkOpenForm(_frmCaption: string): boolean;
 var
   i: integer;
 begin
   // verifico che non ci sia già una forma aperta
-  Result := false;
+  Result := False;
   for i  := 0 to MDIChildCount - 1 do
   begin
     if (MDIChildren[i].caption = _frmCaption) then
@@ -165,7 +199,7 @@ begin
       MDIChildren[i].Show;
       MDIChildren[i].SetFocus;
       MDIChildren[i].WindowState := wsMaximized;
-      Result                     := true;
+      Result                     := True;
     end;
   end;
 end;
@@ -187,7 +221,7 @@ begin
     _DbName := dlgSave.FileName;
     try
       sqlite_conn.Params.Database := _DbName;
-      sqlite_conn.Connected       := true;
+      sqlite_conn.Connected       := True;
       sqlite_conn.StartTransaction;
 
       _SQLString := ' CREATE TABLE IF NOT EXISTS ''TRANSACTIONS'' ( '
@@ -200,6 +234,7 @@ begin
         + ' ''TRNACCOUNT''	INTEGER NOT NULL, '
         + ' ''TRNDESCRIPTION''	STRING(100), '
         + ' ''TRNTRANSFERID''	INTEGER, '
+        + ' ''TRNRECONCILE''	STRING(1), '
         + ' FOREIGN KEY(''TRNPAYEE'') REFERENCES ''DBPAYEE''(''PAYID''), '
         + ' FOREIGN KEY(''TRNSUBCATEGORY'') REFERENCES ''DBSUBCATEGORY''(''SUBCID''), '
         + ' FOREIGN KEY(''TRNACCOUNT'') REFERENCES ''DBACCOUNT''(''ACCID''));';
@@ -248,6 +283,7 @@ begin
         + ' TRANSACTIONS.TRNAMOUNT, '
         + ' TRANSACTIONS.TRNDESCRIPTION, '
         + ' TRANSACTIONS.TRNTRANSFERID, '
+        + ' TRANSACTIONS.TRNRECONCILE, '
         + ' DBACCOUNT.ACCNAME, '
         + ' DBPAYEE.PAYNAME, '
         + ' DBCATEGORY.CATDES, '
@@ -324,30 +360,32 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 function TMainFRM._openDB(_pDBFname: string): boolean;
 begin
-  Result := true;
+  Result := True;
   // apro la connesione al db oppure ne creo uno nuovo se il nome passato non è un file esistente
-  if FileExists(_pDBFname) then
-  begin
-    sqlite_conn.Params.Database := _pDBFname;
-    try
-      sqlite_conn.Connected := true;
-      MainFRM.caption       := 'mMgr -> ' + _pDBFname;
-      _DbName               := _pDBFname;
-      _treeMenuCreate;
-    except
-      MessageDlg('Impossible to open the database -> ' + _pDBFname, mtError, [mbOK], 0);
-      Result := false;
+  if FileExists(_pDBFname) then  // verifica esistenza file
+    if _backupDB(_pDBFname) then // creazione backup file db
+    begin
+      // creo una copia del db prima di aprirlo come backup pre-sessione
+      sqlite_conn.Params.Database := _pDBFname;
+      try
+        sqlite_conn.Connected := True;
+        MainFRM.caption       := 'mMgr -> ' + _pDBFname;
+        _DbName               := _pDBFname;
+        _treeMenuCreate;
+      except
+        MessageDlg('Impossible to open the database -> ' + _pDBFname, mtError, [mbOK], 0);
+        Result := False;
+      end;
+    end
+    else
+      if (MessageDlg('Database -> ' + _pDBFname + ' not found. Create a new one?', mtConfirmation,
+      [mbYes, mbNo], 0) = mrYes) then
+      _createNewDB
+    else
+    begin
+      MessageDlg('Operation aborted', mtInformation, [mbOK], 0);
+      Result := False;
     end;
-  end
-  else
-    if (MessageDlg('Database -> ' + _pDBFname + ' not found. Create a new one?', mtConfirmation,
-    [mbYes, mbNo], 0) = mrYes) then
-    _createNewDB
-  else
-  begin
-    MessageDlg('Operation aborted', mtInformation, [mbOK], 0);
-    Result := false;
-  end;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -482,7 +520,7 @@ begin
     sqlQry.SQL.Clear;
     sqlQry.SQL.Add('SELECT * FROM DBACCOUNT ORDER BY ACCNAME');
     try
-      sqlQry.Active := true;
+      sqlQry.Active := True;
       if (sqlQry.RecordCount <> 0) then
         while not sqlQry.EOF do // ciclo recupero dati
         begin
@@ -550,7 +588,7 @@ begin
   vNode.ImageIndex := 17;
 
   treeMenu.FullExpand;
-  treeMenu.Items[0].Selected := true;
+  treeMenu.Items[0].Selected := True;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

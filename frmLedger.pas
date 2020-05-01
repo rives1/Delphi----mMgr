@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, JvExComCtrls, JvComCtrls, RzTreeVw, JvLookOut, JvExControls,
   JvOutlookBar, Vcl.Grids, JvgStringGrid, VclTee.TeeGDIPlus, VclTee.Series, VclTee.TeEngine, RzPanel, VclTee.TeeProcs,
   VclTee.Chart, Vcl.ExtCtrls, RzSplit, JvExGrids, JvStringGrid, RzGrids, JvListView, Vcl.Menus, JvComponentBase,
-  JvgExportComponents;
+  JvgExportComponents, Vcl.Imaging.pngimage;
 
 type
   TLedgerFrm = class(TForm)
@@ -26,6 +26,9 @@ type
     grdLedger: TStringGrid;
     Transfer1: TMenuItem;
     InsertExpense1: TMenuItem;
+    Image1: TImage;
+    N2: TMenuItem;
+    ReconcileR1: TMenuItem;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -39,6 +42,7 @@ type
     procedure Transfer1Click(Sender: TObject);
     procedure InsertExpense1Click(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure ReconcileR1Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -54,6 +58,7 @@ type
     procedure _ChartTotals;
     procedure _deleteRecord(_pRecID: string; _pRecRow: Integer; _precType: string);
     procedure _openRecordForm(_pEditKind: string);
+    procedure _reconcileRecord;
 
   public
     { Public declarations }
@@ -137,6 +142,8 @@ begin
       _action := 'new';  // apro la form in inserimento
     46:                  // DEL - elimino record direttamente dalla form del registro
       _deleteRecord(grdLedger.cells[0, grdLedger.Row], grdLedger.Row, grdLedger.cells[1, grdLedger.Row]);
+    82:                    // 'R'
+      _reconcileRecord;    // per riconciliare la riga
     106:                   // *
       _action := 'newTrx'; // trasferimento fra conti
     107:                   // +
@@ -168,9 +175,11 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.grdLedgerDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
 var
-  _dx:    Integer;
-  _Text:  string;
-  _Float: Double;
+  _dx:      Integer;
+  _Text:    string;
+  _Float:   Double;
+  _s:       string; // val su cui eseguire check per immagine
+  _aCanvas: TCanvas;
 begin
 
   with (Sender as TStringGrid) do
@@ -183,10 +192,34 @@ begin
     end
     else
     begin
-      // rosso se il val è negativo
-      if ACol = 8 then
+      // Draw the Band except on current highlighted row
+      if (ARow <> Row) then
       begin
-        _Text := grdLedger.cells[8, ARow];
+        if (ARow mod 2 = 0) then
+          Canvas.Brush.Color := $C4EDFF
+          // else
+          // Canvas.Brush.Color := $00FFEBDF;
+      end;
+
+      // Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, cells[ACol, ARow]);
+      Canvas.TextRect(Rect, Rect.Left + 3, Rect.Top + 3, cells[ACol, ARow]);
+      Canvas.TextRect(Rect, Rect.Left, Rect.Top, cells[ACol, ARow]);
+      Canvas.FrameRect(Rect);
+
+      // se la colonna 2 è = 1 allora metto l'immagine
+      if ACol = 1 then
+      begin
+        _s       := (Sender as TStringGrid).cells[1, ARow];
+        _aCanvas := (Sender as TStringGrid).Canvas;
+        _aCanvas.FillRect(Rect);
+        if (UpperCase(_s) = 'X') then
+          _aCanvas.StretchDraw(Rect, Image1.Picture.Bitmap);
+      end;
+
+      // rosso se il val è negativo
+      if ACol = 9 then
+      begin
+        _Text := grdLedger.cells[9, ARow];
         TryStrToFloat(_Text.Replace('''', ''), _Float);
         if (_Float < 0) then
           Canvas.Font.Color := clRed
@@ -196,30 +229,11 @@ begin
         Canvas.TextRect(Rect, Rect.Left + 3, Rect.Top + 3, cells[8, ARow]);
         Canvas.FrameRect(Rect);
       end;
-
-      // Draw the Band except on current highlighted row
-      if (ARow <> Row) then
-      begin
-        if (ARow mod 2 = 0) then
-          Canvas.Brush.Color := $C4EDFF
-
-          //color alternativi
-//          $E5F3E8
-//          $DFECDF
-//          $eff5ef
-          // else
-          // Canvas.Brush.Color := $00FFEBDF;
-      end;
-
-      // Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, cells[ACol, ARow]);
-      Canvas.TextRect(Rect, Rect.Left + 3, Rect.Top + 3, cells[ACol, ARow]);
-      Canvas.TextRect(Rect, Rect.Left, Rect.Top, cells[ACol, ARow]);
-      Canvas.FrameRect(Rect);
     end;
   end;
 
   // allineamento a dx del testo
-  if (ACol in [0, 6 .. 8]) and (ARow <> 0) then // right-align text
+  if (ACol in [0, 7 .. 9]) and (ARow <> 0) then // right-align text
     with grdLedger.Canvas do
     begin
       // bold per la prima linea delle caption
@@ -241,6 +255,12 @@ end;
 procedure TLedgerFrm.InsertExpense1Click(Sender: TObject);
 begin
   _openRecordForm('newExp');
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm.ReconcileR1Click(Sender: TObject);
+begin
+  _reconcileRecord;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -277,6 +297,27 @@ begin
   // _ChartTotals;
 
   grdLedger.Row := i; // reimposto il record della grid su quello precedente
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm._reconcileRecord;
+var
+  _Rect: TGridRect;
+  _i:    Integer; // ciclo
+begin
+  // imposto il campo trnreconcile a X per mostrare il record come verfiicato
+  for _i := grdLedger.Selection.Top to grdLedger.Selection.Bottom do
+  begin
+    if (Uppercase(grdLedger.cells[1, _i]) = 'X') then
+      _SQLString := 'update TRANSACTIONS set TRNRECONCILE = '''' where TRNID = ' + grdLedger.cells[0, _i]
+    else
+      _SQLString := 'update TRANSACTIONS set TRNRECONCILE = ''X'' where TRNID = ' + grdLedger.cells[0, _i];
+
+    MainFRM.sqlQry.ExecSQL(_SQLString);
+  end;
+
+  _fillGrid;
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -498,16 +539,17 @@ begin
   grdLedger.RowCount := 1;
 
   // inserisco le caption
-  grdLedger.cells[0, 0] := 'ID';
-  grdLedger.cells[1, 0] := 'Type';
-  grdLedger.cells[2, 0] := 'Date';
-  grdLedger.cells[3, 0] := 'wk';
-  grdLedger.cells[4, 0] := 'Payee';
-  grdLedger.cells[5, 0] := 'Category';
-  grdLedger.cells[6, 0] := 'In';
-  grdLedger.cells[7, 0] := 'Out';
-  grdLedger.cells[8, 0] := 'Balance';
-  grdLedger.cells[9, 0] := 'Description';
+  grdLedger.cells[0, 0]  := 'ID';
+  grdLedger.cells[1, 0]  := 'Ok';
+  grdLedger.cells[2, 0]  := 'Type';
+  grdLedger.cells[3, 0]  := 'Date';
+  grdLedger.cells[4, 0]  := 'wk';
+  grdLedger.cells[5, 0]  := 'Payee';
+  grdLedger.cells[6, 0]  := 'Category';
+  grdLedger.cells[7, 0]  := 'In';
+  grdLedger.cells[8, 0]  := 'Out';
+  grdLedger.cells[9, 0]  := 'Balance';
+  grdLedger.cells[10, 0] := 'Description';
 
   // estrazione dati dal db e riempimento della grid
   _SQLString := 'SELECT *, StrfTime(''%W'', TRNDATE) AS WW FROM LedgerView where ACCNAME = ''' + _pAccountName +
@@ -526,28 +568,33 @@ begin
         grdLedger.RowCount := grdLedger.RowCount + 1;
         // aggiungo i dati alla grid
         grdLedger.cells[0, _i] := MainFRM.sqlQry.FieldValues['TRNID']; // ID
-        grdLedger.cells[1, _i] := MainFRM.sqlQry.FieldValues['TRNTYPE']; // Tipo operazione
-        // grdLedger.cells[2, _i] := MainFRM.sqlQry.FieldValues['TRNDATE']; // Data
-        grdLedger.cells[2, _i] := FormatDateTime('dd.mmm.yy', MainFRM.sqlQry.FieldValues['TRNDATE']); // Data
-        grdLedger.cells[3, _i] := MainFRM.sqlQry.FieldValues['WW']; // Week
-        grdLedger.cells[4, _i] := MainFRM.sqlQry.FieldValues['PAYNAME'];
-        grdLedger.cells[5, _i] := MainFRM.sqlQry.FieldValues['CATDES'] + ' : ' + MainFRM.sqlQry.FieldValues
+
+        if (MainFRM.sqlQry.FieldValues['TRNRECONCILE'] <> null) then
+          grdLedger.cells[1, _i] := MainFRM.sqlQry.FieldValues['TRNRECONCILE'] // operazione riconciliata
+        else
+          grdLedger.cells[1, _i] := '';
+
+        grdLedger.cells[2, _i] := MainFRM.sqlQry.FieldValues['TRNTYPE']; // Tipo operazione
+        grdLedger.cells[3, _i] := FormatDateTime('dd.mmm.yy', MainFRM.sqlQry.FieldValues['TRNDATE']); // Data
+        grdLedger.cells[4, _i] := MainFRM.sqlQry.FieldValues['WW']; // Week
+        grdLedger.cells[5, _i] := MainFRM.sqlQry.FieldValues['PAYNAME'];
+        grdLedger.cells[6, _i] := MainFRM.sqlQry.FieldValues['CATDES'] + ' : ' + MainFRM.sqlQry.FieldValues
           ['SUBCDES'];
 
         if (MainFRM.sqlQry.FieldValues['TRNAMOUNT'] > 0) then
         begin
-          grdLedger.cells[6, _i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
+          grdLedger.cells[7, _i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
           _trxIndicator          := '->';
         end
         else
         begin
-          grdLedger.cells[7, _i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT'] * -1);
+          grdLedger.cells[8, _i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT'] * -1);
           _trxIndicator          := '<-';
         end;
 
-        _runSum                := _runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];
-        grdLedger.cells[8, _i] := FormatFloat('#,##0.00', _runSum);
-        grdLedger.cells[9, _i] := MainFRM.sqlQry.FieldValues['TRNDESCRIPTION'];
+        _runSum                 := _runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];
+        grdLedger.cells[9, _i]  := FormatFloat('#,##0.00', _runSum);
+        grdLedger.cells[10, _i] := MainFRM.sqlQry.FieldValues['TRNDESCRIPTION'];
 
         if (MainFRM.sqlQry.FieldValues['TRNTYPE'] = 'Transfer') then // se si tratta si trasferimento
         begin
@@ -564,8 +611,8 @@ begin
             _trxIndicator := _trxIndicator + ' ' + MainFRM.sqlQry2.FieldValues['ACCNAME'];
 
           MainFRM.sqlQry2.Close;
-          grdLedger.cells[4, _i] := _trxIndicator; // imposto la scritta standard con indicato se trx in o out
-          grdLedger.cells[5, _i] := '';            // la categoria anche se compilata la lascio vuota
+          grdLedger.cells[5, _i] := _trxIndicator; // imposto la scritta standard con indicato se trx in o out
+          grdLedger.cells[6, _i] := '';            // la categoria anche se compilata la lascio vuota
 
         end;
         // incremento per record e colonne
@@ -605,7 +652,7 @@ begin
     try
       MainFRM.sqlite_conn.StartTransaction;
       // se trasferimento elimino prima il correlato
-      if (UpperCase(_precType) = 'TRANSFER') then
+      if (Uppercase(_precType) = 'TRANSFER') then
       begin
         _SQLString := 'DELETE FROM TRANSACTIONS WHERE TRNID = (SELECT TRNTRANSFERID FROM TRANSACTIONS WHERE TRNID = '
           + _pRecID + ')';
