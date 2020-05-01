@@ -40,7 +40,6 @@ object MainFRM: TMainFRM
       Ctl3D = False
       ParentCtl3D = False
       TabOrder = 0
-      ExplicitWidth = 201
       object chartBalance: TChart
         Left = 0
         Top = 0
@@ -58,7 +57,6 @@ object MainFRM: TMainFRM
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 201
         DefaultCanvas = 'TGDIPlusCanvas'
         PrintMargins = (
           27
@@ -102,7 +100,6 @@ object MainFRM: TMainFRM
       Items.NodeData = {
         0301000000260000000500000000000000FFFFFFFFFFFFFFFF00000000000000
         0000000000010452006F006F007400}
-      ExplicitWidth = 201
     end
   end
   object StatusBar1: TStatusBar
