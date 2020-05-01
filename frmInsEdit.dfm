@@ -1,6 +1,7 @@
 object InsEditFrm: TInsEditFrm
   Left = 0
   Top = 0
+  BorderIcons = [biSystemMenu]
   Caption = 'Insert/Edit Record'
   ClientHeight = 273
   ClientWidth = 461
