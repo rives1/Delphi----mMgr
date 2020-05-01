@@ -59,7 +59,7 @@ type
     procedure _autoSizeCol(Grid: TStringGrid; Column: Integer);
     procedure _autoSizeGrid;
     procedure _ChartTotals;
-    procedure _deleteRecord(_pRecID: string; _pRecRow: Integer; _precType: string);
+    procedure _deleteRecord;
     procedure _openRecordForm(_pEditKind: string);
     procedure _reconcileRecord;
     procedure _exportCSV;
@@ -90,7 +90,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.Delete1Click(Sender: TObject);
 begin
-  _deleteRecord(grdLedger.cells[0, grdLedger.Row], grdLedger.Row, grdLedger.cells[1, grdLedger.Row]);
+  _deleteRecord;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -151,7 +151,7 @@ begin
     45:                  // INS
       _action := 'new';  // apro la form in inserimento
     46:                  // DEL - elimino record direttamente dalla form del registro
-      _deleteRecord(grdLedger.cells[0, grdLedger.Row], grdLedger.Row, grdLedger.cells[1, grdLedger.Row]);
+      _deleteRecord;
     82:                    // 'R'
       _reconcileRecord;    // per riconciliare la riga
     106:                   // *
@@ -655,29 +655,42 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TLedgerFrm._deleteRecord(_pRecID: string; _pRecRow: Integer; _precType: string);
+procedure TLedgerFrm._deleteRecord;
+var
+  _i:       Integer; // var per i cicli
+  _pRecRow: Integer; // linea attuale della griglia
+
 begin
+  // imposto posizione attuale sulla griglia
+  _pRecRow := grdLedger.Row;
+
   // richiesta conferma cancellazione
-  if (_pRecID <> '') and (MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
+  if (grdLedger.cells[0, grdLedger.Row] <> '') and (MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0)
+    = mrYes) then
     try
       MainFRM.sqlite_conn.StartTransaction;
       // se trasferimento elimino prima il correlato
-      if (UpperCase(_precType) = 'TRANSFER') then
+      for _i := grdLedger.Selection.Top to grdLedger.Selection.Bottom do
       begin
-        _SQLString := 'DELETE FROM TRANSACTIONS WHERE TRNID = (SELECT TRNTRANSFERID FROM TRANSACTIONS WHERE TRNID = '
-          + _pRecID + ')';
-        MainFRM.sqlQry.ExecSQL(_SQLString);
-      end;
+        if (UpperCase(grdLedger.cells[1, _i]) = 'TRANSFER') then
+        begin
+          // se mov di trasferimento elimino prima il correlato
+          _SQLString := 'DELETE FROM TRANSACTIONS WHERE TRNID = (SELECT TRNTRANSFERID FROM TRANSACTIONS WHERE TRNID = '
+            + grdLedger.cells[0, _i] + ')';
+          MainFRM.sqlQry.ExecSQL(_SQLString);
+        end;
 
-      // eliminazione del record selezionato in griglia
-      MainFRM.sqlQry.ExecSQL('DELETE FROM TRANSACTIONS WHERE TRNID = ' + _pRecID);
-      MainFRM.sqlite_conn.Commit;
+        // eliminazione del record selezionato in griglia
+        MainFRM.sqlQry.ExecSQL('DELETE FROM TRANSACTIONS WHERE TRNID = ' + grdLedger.cells[0, _i]);
+        MainFRM.sqlite_conn.Commit;
+      end;
 
       // finally
     except
       raise Exception.Create('Error in Deletion. Operation Aborted');
       MainFRM.sqlite_conn.Rollback;
     end;
+
   grdLedger.Row := _pRecRow;
 
   // refresh della grid
@@ -694,7 +707,7 @@ var
   _s:         string;
 
 begin
-  //impostazione dei parametri di default
+  // impostazione dei parametri di default
   MainFRM.dlgSave.InitialDir := ExtractFilePath(Application.ExeName);
   MainFRM.dlgSave.DefaultExt := '.csv';
   MainFRM.dlgSave.Filter     := 'csv|*.csv';
