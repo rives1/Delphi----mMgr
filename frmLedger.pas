@@ -16,7 +16,6 @@ type
     chHistory: TChart;
     RzStatusBar1: TRzStatusBar;
     Series1: TPieSeries;
-    _e_grdLedger: TJvgStringGrid;
     Series2: TAreaSeries;
     PopupMenu1: TPopupMenu;
     Edit1: TMenuItem;

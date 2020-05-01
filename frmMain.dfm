@@ -22,7 +22,7 @@ object MainFRM: TMainFRM
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 201
+    Width = 211
     Height = 608
     Align = alLeft
     BevelOuter = bvNone
@@ -32,7 +32,7 @@ object MainFRM: TMainFRM
     object Panel2: TPanel
       Left = 0
       Top = 375
-      Width = 201
+      Width = 211
       Height = 233
       Align = alBottom
       BevelOuter = bvNone
@@ -40,10 +40,11 @@ object MainFRM: TMainFRM
       Ctl3D = False
       ParentCtl3D = False
       TabOrder = 0
+      ExplicitWidth = 201
       object chartBalance: TChart
         Left = 0
         Top = 0
-        Width = 201
+        Width = 211
         Height = 233
         Title.Text.Strings = (
           'TChart')
@@ -57,12 +58,13 @@ object MainFRM: TMainFRM
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 201
         DefaultCanvas = 'TGDIPlusCanvas'
         PrintMargins = (
+          27
           15
-          17
-          15
-          17)
+          27
+          15)
         ColorPaletteIndex = 21
         object Series1: TBarSeries
           Legend.Visible = False
@@ -86,7 +88,7 @@ object MainFRM: TMainFRM
     object treeMenu: TTreeView
       Left = 0
       Top = 0
-      Width = 201
+      Width = 211
       Height = 375
       Align = alClient
       BorderStyle = bsNone
@@ -100,6 +102,7 @@ object MainFRM: TMainFRM
       Items.NodeData = {
         0301000000260000000500000000000000FFFFFFFFFFFFFFFF00000000000000
         0000000000010452006F006F007400}
+      ExplicitWidth = 201
     end
   end
   object StatusBar1: TStatusBar
