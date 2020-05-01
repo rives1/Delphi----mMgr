@@ -22,7 +22,7 @@ object InsEditFrm: TInsEditFrm
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 209
+    Left = 227
     Top = 24
     Width = 23
     Height = 13
@@ -31,7 +31,7 @@ object InsEditFrm: TInsEditFrm
   object Label2: TLabel
     Left = 16
     Top = 24
-    Width = 24
+    Width = 37
     Height = 13
     Caption = 'Type'
   end
@@ -218,11 +218,12 @@ object InsEditFrm: TInsEditFrm
       end>
   end
   object _fDate: TRzDateTimeEdit
-    Left = 247
+    Left = 263
     Top = 21
     Width = 109
     Height = 21
     EditType = etDate
     TabOrder = 2
+    OnEnter = _fDateEnter
   end
 end

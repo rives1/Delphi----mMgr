@@ -26,7 +26,6 @@ type
     sqlQry: TFDQuery;
     VirtualImageList1: TVirtualImageList;
     ImageCollection1: TImageCollection;
-    Series1: TBarSeries;
     rptStandard: TfrxReport;
     rptDset: TfrxDBDataset;
     fdMemBalYTD: TFDMemTable;
@@ -41,6 +40,7 @@ type
     Documentation1: TMenuItem;
     N2: TMenuItem;
     Version1: TMenuItem;
+    Series1: THorizBarSeries;
     procedure FormCreate(Sender: TObject);
     procedure treeMenuDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -348,7 +348,7 @@ begin
           begin
             _lTotal := Round(strtofloat(sqlQry.FieldValues['Sum_TRNAMOUNT']));
             chartBalance.SeriesList[0].Add(_lTotal);
-            chartBalance.Axes.Bottom.Items.Add(i, sqlQry.FieldValues['ACCNAME']);
+            chartBalance.Axes.Left.Items.Add(i, sqlQry.FieldValues['ACCNAME']);
             i := i + 1;
           end;
           sqlQry.Next;

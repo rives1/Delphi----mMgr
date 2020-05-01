@@ -63,8 +63,8 @@ object MainFRM: TMainFRM
           15
           27
           15)
-        ColorPaletteIndex = 21
-        object Series1: TBarSeries
+        ColorPaletteIndex = 18
+        object Series1: THorizBarSeries
           Legend.Visible = False
           ColorEachPoint = True
           Marks.Frame.Visible = False
@@ -72,14 +72,13 @@ object MainFRM: TMainFRM
           ValueFormat = '#,##0;(#,##0)'
           BarStyle = bsRoundRectangle
           MultiBar = mbNone
-          XValues.Name = 'X'
-          XValues.Order = loAscending
-          YValues.Name = 'Bar'
-          YValues.Order = loNone
+          XValues.Name = 'Bar'
+          XValues.Order = loNone
+          YValues.Name = 'Y'
+          YValues.Order = loAscending
           Data = {
             00060000000000000000207C400000000000607D400000000000E48140000000
             0000B87F4000000000001880400000000000607840}
-          Detail = {0000000000}
         end
       end
     end

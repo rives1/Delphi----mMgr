@@ -43,6 +43,7 @@ type
     procedure _fPayeeExit(Sender: TObject);
     procedure _fSubCategoryEnter(Sender: TObject);
     procedure _fCategorySelect(Sender: TObject);
+    procedure _fDateEnter(Sender: TObject);
 
   private
     { Private declarations }
@@ -134,7 +135,7 @@ begin
       _fType.SetFocus;
     end;
     _fAccountFrom.Text := _pLedgerName;
-    _fDate.Date        := now;
+//    _fDate.Date        := now;
     // _cleanFormNewRecord; //impostazione
   end;
 end;
@@ -232,6 +233,13 @@ end;
 procedure TInsEditFrm._fCategorySelect(Sender: TObject);
 begin
   _fSubCategory.Text := '';
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TInsEditFrm._fDateEnter(Sender: TObject);
+begin
+  if (_fDate.Date=EncodeDate(1899,12,30) )then
+    _fDate.Date:=Now;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
