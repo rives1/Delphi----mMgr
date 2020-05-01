@@ -27,6 +27,8 @@ type
     Transfer1: TMenuItem;
     InsertExpense1: TMenuItem;
     Image1: TImage;
+    N2: TMenuItem;
+    ReconcileR1: TMenuItem;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -40,6 +42,7 @@ type
     procedure Transfer1Click(Sender: TObject);
     procedure InsertExpense1Click(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure ReconcileR1Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -55,6 +58,7 @@ type
     procedure _ChartTotals;
     procedure _deleteRecord(_pRecID: string; _pRecRow: Integer; _precType: string);
     procedure _openRecordForm(_pEditKind: string);
+    procedure _reconcileRecord;
 
   public
     { Public declarations }
@@ -138,6 +142,8 @@ begin
       _action := 'new';  // apro la form in inserimento
     46:                  // DEL - elimino record direttamente dalla form del registro
       _deleteRecord(grdLedger.cells[0, grdLedger.Row], grdLedger.Row, grdLedger.cells[1, grdLedger.Row]);
+    82:                    // 'R'
+      _reconcileRecord;    // per riconciliare la riga
     106:                   // *
       _action := 'newTrx'; // trasferimento fra conti
     107:                   // +
@@ -169,11 +175,11 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.grdLedgerDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
 var
-  _dx:    Integer;
-  _Text:  string;
-  _Float: Double;
-  _s: string; //val su cui eseguire check per immagine
-  _aCanvas : TCanvas;
+  _dx:      Integer;
+  _Text:    string;
+  _Float:   Double;
+  _s:       string; // val su cui eseguire check per immagine
+  _aCanvas: TCanvas;
 begin
 
   with (Sender as TStringGrid) do
@@ -202,15 +208,15 @@ begin
 
       // se la colonna 2 è = 1 allora metto l'immagine
       if ACol = 1 then
-        begin
-          _s := (Sender as TStringGrid).Cells[1, ARow];
-          _aCanvas := (Sender as TStringGrid).Canvas;
-          _aCanvas.FillRect(Rect);
-          if (_s = 'x') then
-           _aCanvas.StretchDraw(Rect, Image1.Picture.Bitmap);
-        end;
+      begin
+        _s       := (Sender as TStringGrid).cells[1, ARow];
+        _aCanvas := (Sender as TStringGrid).Canvas;
+        _aCanvas.FillRect(Rect);
+        if (UpperCase(_s) = 'X') then
+          _aCanvas.StretchDraw(Rect, Image1.Picture.Bitmap);
+      end;
 
-     // rosso se il val è negativo
+      // rosso se il val è negativo
       if ACol = 9 then
       begin
         _Text := grdLedger.cells[9, ARow];
@@ -252,6 +258,12 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm.ReconcileR1Click(Sender: TObject);
+begin
+  _reconcileRecord;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.Transfer1Click(Sender: TObject);
 begin
   _openRecordForm('newTrx');
@@ -285,6 +297,27 @@ begin
   // _ChartTotals;
 
   grdLedger.Row := i; // reimposto il record della grid su quello precedente
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm._reconcileRecord;
+var
+  _Rect: TGridRect;
+  _i:    Integer; // ciclo
+begin
+  // imposto il campo trnreconcile a X per mostrare il record come verfiicato
+  for _i := grdLedger.Selection.Top to grdLedger.Selection.Bottom do
+  begin
+    if (Uppercase(grdLedger.cells[1, _i]) = 'X') then
+      _SQLString := 'update TRANSACTIONS set TRNRECONCILE = '''' where TRNID = ' + grdLedger.cells[0, _i]
+    else
+      _SQLString := 'update TRANSACTIONS set TRNRECONCILE = ''X'' where TRNID = ' + grdLedger.cells[0, _i];
+
+    MainFRM.sqlQry.ExecSQL(_SQLString);
+  end;
+
+  _fillGrid;
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -506,16 +539,16 @@ begin
   grdLedger.RowCount := 1;
 
   // inserisco le caption
-  grdLedger.cells[0, 0] := 'ID';
-  grdLedger.cells[1, 0] := 'Chk';
-  grdLedger.cells[2, 0] := 'Type';
-  grdLedger.cells[3, 0] := 'Date';
-  grdLedger.cells[4, 0] := 'wk';
-  grdLedger.cells[5, 0] := 'Payee';
-  grdLedger.cells[6, 0] := 'Category';
-  grdLedger.cells[7, 0] := 'In';
-  grdLedger.cells[8, 0] := 'Out';
-  grdLedger.cells[9, 0] := 'Balance';
+  grdLedger.cells[0, 0]  := 'ID';
+  grdLedger.cells[1, 0]  := 'Ok';
+  grdLedger.cells[2, 0]  := 'Type';
+  grdLedger.cells[3, 0]  := 'Date';
+  grdLedger.cells[4, 0]  := 'wk';
+  grdLedger.cells[5, 0]  := 'Payee';
+  grdLedger.cells[6, 0]  := 'Category';
+  grdLedger.cells[7, 0]  := 'In';
+  grdLedger.cells[8, 0]  := 'Out';
+  grdLedger.cells[9, 0]  := 'Balance';
   grdLedger.cells[10, 0] := 'Description';
 
   // estrazione dati dal db e riempimento della grid
@@ -535,9 +568,13 @@ begin
         grdLedger.RowCount := grdLedger.RowCount + 1;
         // aggiungo i dati alla grid
         grdLedger.cells[0, _i] := MainFRM.sqlQry.FieldValues['TRNID']; // ID
-        grdLedger.cells[1, _i] := MainFRM.sqlQry.FieldValues['TRNRECONCILE']; // operazione riconciliata
+
+        if (MainFRM.sqlQry.FieldValues['TRNRECONCILE'] <> null) then
+          grdLedger.cells[1, _i] := MainFRM.sqlQry.FieldValues['TRNRECONCILE'] // operazione riconciliata
+        else
+          grdLedger.cells[1, _i] := '';
+
         grdLedger.cells[2, _i] := MainFRM.sqlQry.FieldValues['TRNTYPE']; // Tipo operazione
-        // grdLedger.cells[2, _i] := MainFRM.sqlQry.FieldValues['TRNDATE']; // Data
         grdLedger.cells[3, _i] := FormatDateTime('dd.mmm.yy', MainFRM.sqlQry.FieldValues['TRNDATE']); // Data
         grdLedger.cells[4, _i] := MainFRM.sqlQry.FieldValues['WW']; // Week
         grdLedger.cells[5, _i] := MainFRM.sqlQry.FieldValues['PAYNAME'];
@@ -555,8 +592,8 @@ begin
           _trxIndicator          := '<-';
         end;
 
-        _runSum                := _runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];
-        grdLedger.cells[9, _i] := FormatFloat('#,##0.00', _runSum);
+        _runSum                 := _runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];
+        grdLedger.cells[9, _i]  := FormatFloat('#,##0.00', _runSum);
         grdLedger.cells[10, _i] := MainFRM.sqlQry.FieldValues['TRNDESCRIPTION'];
 
         if (MainFRM.sqlQry.FieldValues['TRNTYPE'] = 'Transfer') then // se si tratta si trasferimento
@@ -615,7 +652,7 @@ begin
     try
       MainFRM.sqlite_conn.StartTransaction;
       // se trasferimento elimino prima il correlato
-      if (UpperCase(_precType) = 'TRANSFER') then
+      if (Uppercase(_precType) = 'TRANSFER') then
       begin
         _SQLString := 'DELETE FROM TRANSACTIONS WHERE TRNID = (SELECT TRNTRANSFERID FROM TRANSACTIONS WHERE TRNID = '
           + _pRecID + ')';

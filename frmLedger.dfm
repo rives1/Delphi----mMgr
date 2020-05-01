@@ -28160,13 +28160,14 @@ object LedgerFrm: TLedgerFrm
       Font.Height = -12
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goRowSelect]
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
       ParentCtl3D = False
       ParentDoubleBuffered = False
       ParentFont = False
       PopupMenu = PopupMenu1
       TabOrder = 0
       StyleElements = [seFont, seBorder]
+      OnDblClick = grdLedgerDblClick
       OnDrawCell = grdLedgerDrawCell
       ExplicitLeft = -2
       ExplicitTop = -2
@@ -28304,6 +28305,13 @@ object LedgerFrm: TLedgerFrm
       OnClick = Edit2Click
     end
     object N1: TMenuItem
+      Caption = '-'
+    end
+    object ReconcileR1: TMenuItem
+      Caption = 'Toggle Reconcile (R)'
+      OnClick = ReconcileR1Click
+    end
+    object N2: TMenuItem
       Caption = '-'
     end
     object Delete1: TMenuItem
