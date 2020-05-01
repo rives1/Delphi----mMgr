@@ -35,8 +35,6 @@ object tblBalanceFrm: TtblBalanceFrm
     Width = 831
     Height = 19
     Panels = <>
-    ExplicitTop = 560
-    ExplicitWidth = 834
   end
   object _fLvBalanceYTD: TListView
     Left = 0
@@ -150,7 +148,6 @@ object tblBalanceFrm: TtblBalanceFrm
     SortType = stText
     TabOrder = 1
     ViewStyle = vsReport
-    ExplicitLeft = 1
   end
   object Panel1: TPanel
     Left = 0
@@ -160,7 +157,6 @@ object tblBalanceFrm: TtblBalanceFrm
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitWidth = 834
     object Label1: TLabel
       Left = 30
       Top = 12
@@ -201,10 +197,10 @@ object tblBalanceFrm: TtblBalanceFrm
       Date = 43949.000000000000000000
       DateFormat = 'yyyy'
       DropDownCount = 10
-      Font.Charset = DEFAULT_CHARSET
+      Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Segoe UI'
+      Font.Height = -11
+      Font.Name = 'Tahoma'
       Font.Style = []
       TabOrder = 2
       OnChange = _fYearChange
@@ -218,8 +214,6 @@ object tblBalanceFrm: TtblBalanceFrm
     Align = alBottom
     Caption = 'Panel2'
     TabOrder = 3
-    ExplicitTop = 349
-    ExplicitWidth = 834
     object chartInOutMM: TChart
       Left = 1
       Top = 1
@@ -237,18 +231,18 @@ object tblBalanceFrm: TtblBalanceFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitWidth = 832
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15
-        24
+        37
         15
-        24)
+        37)
       ColorPaletteIndex = 19
       object BarSeries1: TBarSeries
         BarBrush.Gradient.EndColor = 15054131
         BarBrush.Gradient.Visible = True
         Marks.Frame.Visible = False
+        Marks.Angle = 90
         Title = 'In'
         ValueFormat = '#,##0;(#,##0)'
         BarStyle = bsRectGradient
@@ -261,6 +255,7 @@ object tblBalanceFrm: TtblBalanceFrm
       end
       object BarSeries2: TBarSeries
         Marks.Frame.Visible = False
+        Marks.Angle = 90
         Title = 'Out'
         ValueFormat = '#,##0;(#,##0)'
         XValues.Name = 'X'
@@ -270,6 +265,7 @@ object tblBalanceFrm: TtblBalanceFrm
         Data = {
           00060000000000000000E66C403333333333146B409999999999536D40CCCCCC
           CCCCCD7040CCCCCCCC4C127140FEFFFFFFFFE56C40}
+        Detail = {0000000000}
       end
     end
   end
