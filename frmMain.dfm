@@ -74,26 +74,23 @@ object MainFRM: TMainFRM
           27
           15)
         ColorPaletteIndex = 18
-        object Series1: TBarSeries
+        object Series1: TPointSeries
           Legend.Visible = False
-          BarBrush.Gradient.Direction = gdLeftRight
-          BarBrush.Gradient.EndColor = 4284326
-          BarBrush.Gradient.Visible = True
           ColorEachPoint = True
           Marks.Frame.Visible = False
+          Marks.Visible = True
           Marks.Angle = 90
           Marks.AutoPosition = False
+          Marks.Callout.Length = 20
           Marks.SoftClip = True
           ShowInLegend = False
           ValueFormat = '#,##0;(#,##0)'
-          BarStyle = bsRectGradient
-          Gradient.Direction = gdLeftRight
-          Gradient.EndColor = 4284326
-          Gradient.Visible = True
-          MultiBar = mbNone
+          ClickableLine = False
+          Pointer.InflateMargins = True
+          Pointer.Style = psTriangle
           XValues.Name = 'X'
           XValues.Order = loAscending
-          YValues.Name = 'Bar'
+          YValues.Name = 'Y'
           YValues.Order = loNone
           Data = {
             00060000000000000000207C400000000000607D400000000000E48140000000

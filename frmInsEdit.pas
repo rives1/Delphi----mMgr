@@ -203,7 +203,7 @@ begin
   end;
 
   // focus sulla data
-  _fPayee.SetFocus;
+//  _fPayee.SetFocus;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -349,7 +349,7 @@ begin
   // carico i dati nella compo dei payee
   _fAccountFrom.Items.Clear;
   _fAccountTo.Items.Clear;
-  _SQLString := 'SELECT ACCNAME FROM DBACCOUNT ORDER BY ACCNAME';
+  _SQLString := 'SELECT ACCNAME FROM DBACCOUNT WHERE UCASE(ACCSTATUS) = ''OPEN'' ORDER BY ACCNAME';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try

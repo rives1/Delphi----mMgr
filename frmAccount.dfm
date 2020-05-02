@@ -75,6 +75,14 @@ object AccountFrm: TAccountFrm
         HeaderAlign = taLeftJustify
         FooterAlign = taLeftJustify
         TitleImage = -1
+      end
+      item
+        Header = 'Closed Account'
+        GroupID = 4
+        State = [lgsNormal]
+        HeaderAlign = taLeftJustify
+        FooterAlign = taLeftJustify
+        TitleImage = -1
       end>
     Items.ItemData = {
       05500000000200000000000000FFFFFFFFFFFFFFFF00000000FFFFFFFF000000
@@ -124,6 +132,13 @@ object AccountFrm: TAccountFrm
       Height = 13
       Caption = 'Type'
     end
+    object Label1: TLabel
+      Left = 6
+      Top = 165
+      Width = 31
+      Height = 13
+      Caption = 'Status'
+    end
     object _fName: TEdit
       Left = 18
       Top = 67
@@ -161,12 +176,24 @@ object AccountFrm: TAccountFrm
     end
     object btnOK: TJvBitBtn
       Left = 168
-      Top = 165
+      Top = 247
       Width = 75
       Height = 25
       Caption = '&Save'
-      TabOrder = 3
+      TabOrder = 4
       OnClick = btnOKClick
+    end
+    object _fStatus: TJvComboBox
+      Left = 18
+      Top = 184
+      Width = 118
+      Height = 21
+      AutoDropDown = True
+      TabOrder = 3
+      Text = ''
+      Items.Strings = (
+        'Open'
+        'Closed')
     end
   end
   object PopupMenu1: TPopupMenu

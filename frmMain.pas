@@ -40,8 +40,8 @@ type
     Documentation1: TMenuItem;
     N2: TMenuItem;
     Version1: TMenuItem;
-    Series1: TBarSeries;
     Splitter1: TSplitter;
+    Series1: TPointSeries;
     procedure FormCreate(Sender: TObject);
     procedure treeMenuDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -149,12 +149,13 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM.treeMenuDblClick(Sender: TObject);
 begin
- if Uppercase( _DbName) = 'NEGATIVE' then
-    MessageDlg('No database open', mtInformation,[mbOK],0)
-   else
+  if Uppercase(_DbName) = 'NEGATIVE' then
+    MessageDlg('No database open', mtInformation, [mbOK], 0)
+  else
   begin
-  _treeSelectOpen; // apro le form in base alla selezione del nodo
-  _treeMenuCreate; // ripopolo il menu
+    _treeSelectOpen; // apro le form in base alla selezione del nodo
+    _treeMenuCreate; // ripopolo il menu
+    _fillBalanceChart; //aggiorno il chart
   end;
 
 end;
@@ -296,6 +297,7 @@ begin
         + ' TRANSACTIONS.TRNTRANSFERID, '
         + ' TRANSACTIONS.TRNRECONCILE, '
         + ' DBACCOUNT.ACCNAME, '
+        + ' DBACCOUNT.ACCSTATUS, '
         + ' DBPAYEE.PAYNAME, '
         + ' DBCATEGORY.CATDES, '
         + ' DBSUBCATEGORY.SUBCDES, '
@@ -338,10 +340,12 @@ begin
     // area accounts
     sqlQry.Close;
     sqlQry.SQL.Clear;
-    sqlQry.SQL.Add('SELECT ACCNAME, Sum(TRNAMOUNT) AS Sum_TRNAMOUNT ' +
+    _SQLString := 'SELECT ACCNAME, Sum(TRNAMOUNT) AS Sum_TRNAMOUNT ' +
       ' FROM DBACCOUNT INNER JOIN TRANSACTIONS ON ACCID = TRNACCOUNT ' +
+      ' WHERE UCASE(ACCSTATUS) = ''OPEN'' ' +
       ' GROUP BY ACCNAME ' +
-      ' ORDER BY ACCNAME ');
+      ' ORDER BY ACCNAME ';
+    sqlQry.SQL.Add(_SQLString);
     try
       sqlQry.Open;
       i := 0;
@@ -529,7 +533,8 @@ begin
     _SetNodeState(vNodeGroup, TVIS_BOLD);
     sqlQry.Close;
     sqlQry.SQL.Clear;
-    sqlQry.SQL.Add('SELECT * FROM DBACCOUNT ORDER BY ACCNAME');
+   _SQLString:= 'SELECT * FROM DBACCOUNT WHERE UCASE(ACCSTATUS) = ''OPEN'' ORDER BY ACCNAME';
+    sqlQry.SQL.Add(_SQLString);
     try
       sqlQry.Active := True;
       if (sqlQry.RecordCount <> 0) then
@@ -614,7 +619,7 @@ var
   _TblBalanceYTD:   TtblBalanceFrm;
 begin
   // apro la child form del ledger. se il nodo superiore è account si tratta sicuramente di un ledger da aprire
-  if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
+  if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
     and not _chkOpenForm(treeMenu.Selected.Text) then
   begin
     _LedgerChildFRM             := TLedgerFrm.Create(nil);
@@ -622,7 +627,7 @@ begin
   end;
 
   // apro la form per tabella report balance ytd
-  if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'REPORT'))
+  if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'REPORT'))
     and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Balance YTD-Monthly') then
   begin
     _TblBalanceYTD             := TtblBalanceFrm.Create(nil);
@@ -630,14 +635,14 @@ begin
   end;
 
   // apro chart1
-  if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART'))
+  if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'CHART'))
     and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Analisys Amt') then
   begin
     _Analisys1FRM             := TAnalisysFrm1.Create(nil);
     _Analisys1FRM.WindowState := wsMaximized;
   end;
   // apro chart2
-  if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CHART'))
+  if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'CHART'))
     and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Analisys Avg') then
   begin
     _Analisys2FRM             := TAnalisysFrm2.Create(nil);
@@ -645,7 +650,7 @@ begin
   end;
 
   // Config
-  if ((treeMenu.Selected.Level <> 0) and (UpperCase(treeMenu.Selected.Parent.Text) = 'CONFIG')) then
+  if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'CONFIG')) then
   begin
     if (treeMenu.Selected.Text = 'Account') and not _chkOpenForm(treeMenu.Selected.Text) then
     begin

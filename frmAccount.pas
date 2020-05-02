@@ -16,7 +16,6 @@ type
     _fID: TEdit;
     _fType: TJvComboBox;
     Name: TLabel;
-    Label2: TLabel;
     btnOK: TJvBitBtn;
     Splitter1: TSplitter;
     PopupMenu1: TPopupMenu;
@@ -24,6 +23,9 @@ type
     EditAccount1: TMenuItem;
     N1: TMenuItem;
     DeleteAccount1: TMenuItem;
+    _fStatus: TJvComboBox;
+    Label2: TLabel;
+    Label1: TLabel;
     procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -138,9 +140,10 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TAccountFrm._cleanFormNewRecord;
 begin
-  _fID.Text   := '';
-  _fName.Text := '';
-  _fType.Text := '';
+  _fID.Text     := '';
+  _fName.Text   := '';
+  _fType.Text   := '';
+  _fStatus.Text := '';
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -199,6 +202,8 @@ begin
     begin
       _lvItem         := _fLvAccount.Items.Add;
       _lvItem.Caption := VarToStr(MainFRM.sqlQry.FieldValues['ACCNAME']);
+
+      // imposto il gruppo nella listview
       if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Checking') then
         _lvItem.GroupID := 0;
       if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Cash') then
@@ -207,6 +212,10 @@ begin
         _lvItem.GroupID := 2;
       if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Online') then
         _lvItem.GroupID := 3;
+
+      // visualizzazione logica - evidenzio e raggruppo iconti chiusi senza modificare i dati del db
+      if (Uppercase(MainFRM.sqlQry.FieldValues['ACCSTATUS']) = 'CLOSED') then
+        _lvItem.GroupID := 4;
 
       MainFRM.sqlQry.Next;
     end;
@@ -227,9 +236,11 @@ begin
     MainFRM.sqlQry.Open;
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
     begin
-      _fID.Text   := MainFRM.sqlQry.FieldValues['ACCID'];
-      _fType.Text := MainFRM.sqlQry.FieldValues['ACCTYPE'];
-      _fName.Text := VarToStr(MainFRM.sqlQry.FieldValues['ACCNAME']);
+      _fID.Text     := MainFRM.sqlQry.FieldValues['ACCID'];
+      _fType.Text   := MainFRM.sqlQry.FieldValues['ACCTYPE'];
+      _fName.Text   := VarToStr(MainFRM.sqlQry.FieldValues['ACCNAME']);
+      _fStatus.Text := VarToStr(MainFRM.sqlQry.FieldValues['ACCSTATUS']);
+
       MainFRM.sqlQry.Next;
     end;
 
@@ -256,8 +267,7 @@ function TAccountFrm._validateField: Boolean;
 begin
   // verifica che i campi della mask siano compilati
   Result := True;
-  if (_fType.Text = '')
-    or (_fName.Text = '') then
+  if (_fType.Text = '') or (_fName.Text = '') or (_fStatus.Text = '') then
   begin
     MessageDlg('Data field incomplete!!', mtInformation, [mbOk], 0);
     Result := False;
@@ -276,13 +286,15 @@ begin
   try
     MainFRM.sqlite_conn.StartTransaction;
     if (_fID.Text = '') then
-      _SQLString := ' INSERT INTO DBACCOUNT (ACCTYPE, ACCNAME) '
+      _SQLString := ' INSERT INTO DBACCOUNT (ACCTYPE, ACCNAME, ACCSTATUS) '
         + ' VALUES ( ''' + _fType.Text + ''' '
-        + ', ''' + _fName.Text + ''') '
+        + ', ''' + _fName.Text + ''' '
+        + ', ''' + _fStatus.Text + ''' ) '
     else
       _SQLString := 'UPDATE DBACCOUNT SET '
         + '  ACCTYPE = ''' + _fType.Text + ''' '
         + ', ACCNAME = ''' + _fName.Text + ''' '
+        + ', ACCSTATUS = ''' + _fStatus.Text + ''' '
         + ' WHERE ACCID = ''' + _fID.Text + ''' ';
 
     MainFRM.sqlQry.ExecSQL(_SQLString);
