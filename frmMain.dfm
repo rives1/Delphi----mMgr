@@ -29,6 +29,15 @@ object MainFRM: TMainFRM
     Ctl3D = False
     ParentCtl3D = False
     TabOrder = 0
+    object Splitter1: TSplitter
+      Left = 0
+      Top = 370
+      Width = 211
+      Height = 5
+      Cursor = crVSplit
+      Align = alBottom
+      ExplicitTop = 372
+    end
     object Panel2: TPanel
       Left = 0
       Top = 375
@@ -48,9 +57,10 @@ object MainFRM: TMainFRM
         Title.Text.Strings = (
           'TChart')
         Title.Visible = False
-        BottomAxis.LabelsAlternate = True
+        BottomAxis.LabelsAngle = 90
         BottomAxis.LabelsMultiLine = True
         Chart3DPercent = 1
+        LeftAxis.AxisValuesFormat = '#,##0'
         Panning.MouseWheel = pmwNone
         View3D = False
         ZoomWheel = pmwNormal
@@ -64,20 +74,27 @@ object MainFRM: TMainFRM
           27
           15)
         ColorPaletteIndex = 18
-        object Series1: THorizBarSeries
+        object Series1: TBarSeries
           Legend.Visible = False
           BarBrush.Gradient.Direction = gdLeftRight
+          BarBrush.Gradient.EndColor = 4284326
+          BarBrush.Gradient.Visible = True
           ColorEachPoint = True
           Marks.Frame.Visible = False
+          Marks.Angle = 90
+          Marks.AutoPosition = False
+          Marks.SoftClip = True
           ShowInLegend = False
           ValueFormat = '#,##0;(#,##0)'
-          BarStyle = bsRoundRectangle
+          BarStyle = bsRectGradient
           Gradient.Direction = gdLeftRight
+          Gradient.EndColor = 4284326
+          Gradient.Visible = True
           MultiBar = mbNone
-          XValues.Name = 'Bar'
-          XValues.Order = loNone
-          YValues.Name = 'Y'
-          YValues.Order = loAscending
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Bar'
+          YValues.Order = loNone
           Data = {
             00060000000000000000207C400000000000607D400000000000E48140000000
             0000B87F4000000000001880400000000000607840}
@@ -88,7 +105,7 @@ object MainFRM: TMainFRM
       Left = 0
       Top = 0
       Width = 211
-      Height = 375
+      Height = 370
       Align = alClient
       BorderStyle = bsNone
       Color = clBtnFace
@@ -101,6 +118,7 @@ object MainFRM: TMainFRM
       Items.NodeData = {
         0301000000260000000500000000000000FFFFFFFFFFFFFFFF00000000000000
         0000000000010452006F006F007400}
+      ExplicitHeight = 281
     end
   end
   object StatusBar1: TStatusBar

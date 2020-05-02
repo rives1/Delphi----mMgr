@@ -249,26 +249,26 @@ begin
       ///
       /// se il mov è di trasferimento imposto un colore diverso
       ///
-      if (ACol in [7,8]) then
+      if (ACol in [7, 8]) then
       begin
         if (UpperCase(grdLedger.cells[2, ARow]) = 'TRANSFER') then
         begin
-        if (grdLedger.cells[7, ARow] <> '') then
-        begin
-          _Text := grdLedger.cells[7, ARow];
-          TryStrToFloat(_Text.Replace('''', ''), _Float);
-          Canvas.Font.Color := clFuchsia;
-          Canvas.TextRect(Rect, Rect.Left + 3, Rect.Top + 3, cells[7, ARow]);
-          Canvas.FrameRect(Rect);
-        end
-        else
-        begin
-          _Text := grdLedger.cells[8, ARow];
-          TryStrToFloat(_Text.Replace('''', ''), _Float);
-          Canvas.Font.Color := clFuchsia;
-          Canvas.TextRect(Rect, Rect.Left + 3, Rect.Top + 3, cells[8, ARow]);
-          Canvas.FrameRect(Rect);
-        end
+          if (grdLedger.cells[7, ARow] <> '') then
+          begin
+            _Text := grdLedger.cells[7, ARow];
+            TryStrToFloat(_Text.Replace('''', ''), _Float);
+            Canvas.Font.Color := clFuchsia;
+            Canvas.TextRect(Rect, Rect.Left + 3, Rect.Top + 3, cells[7, ARow]);
+            Canvas.FrameRect(Rect);
+          end
+          else
+          begin
+            _Text := grdLedger.cells[8, ARow];
+            TryStrToFloat(_Text.Replace('''', ''), _Float);
+            Canvas.Font.Color := clFuchsia;
+            Canvas.TextRect(Rect, Rect.Left + 3, Rect.Top + 3, cells[8, ARow]);
+            Canvas.FrameRect(Rect);
+          end
         end;
 
       end; // colore
@@ -352,11 +352,29 @@ begin
   for _i := grdLedger.Selection.Top to grdLedger.Selection.Bottom do
   begin
     if (UpperCase(grdLedger.cells[1, _i]) = 'X') then
-      _SQLString := 'update TRANSACTIONS set TRNRECONCILE = '''' where TRNID = ' + grdLedger.cells[0, _i]
-    else
-      _SQLString := 'update TRANSACTIONS set TRNRECONCILE = ''X'' where TRNID = ' + grdLedger.cells[0, _i];
+    begin
+      if (UpperCase(grdLedger.cells[2, _i]) = 'TRANSFER') then
+      begin
+        _SQLString := 'update TRANSACTIONS set TRNRECONCILE = '''' where TRNID = '
+          + '(SELECT TRNTRANSFERID FROM TRANSACTIONS WHERE TRNID = ' + grdLedger.cells[0, _i] + ')';
+        MainFRM.sqlQry.ExecSQL(_SQLString);
+      end;
 
-    MainFRM.sqlQry.ExecSQL(_SQLString);
+      _SQLString := 'update TRANSACTIONS set TRNRECONCILE = '''' where TRNID = ' + grdLedger.cells[0, _i];
+      MainFRM.sqlQry.ExecSQL(_SQLString);
+    end
+    else
+    begin
+      if (UpperCase(grdLedger.cells[2, _i]) = 'TRANSFER') then
+      begin
+        _SQLString := 'update TRANSACTIONS set TRNRECONCILE = ''X'' where TRNID = '
+          + '(SELECT TRNTRANSFERID FROM TRANSACTIONS WHERE TRNID = ' + grdLedger.cells[0, _i] + ')';
+        MainFRM.sqlQry.ExecSQL(_SQLString);
+      end;
+      _SQLString := 'update TRANSACTIONS set TRNRECONCILE = ''X'' where TRNID = ' + grdLedger.cells[0, _i];
+      MainFRM.sqlQry.ExecSQL(_SQLString);
+    end;
+
   end;
 
   _fillGrid;
