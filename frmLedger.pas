@@ -188,8 +188,8 @@ var
   _dx:      Integer;
   _Text:    string;
   _Float:   Double;
-  _s:       string; // val su cui eseguire check per immagine
-  _aCanvas: TCanvas;
+  _s:       string;  // val su cui eseguire check per immagine
+  _aCanvas: TCanvas; //
 begin
 
   with (Sender as TStringGrid) do
@@ -202,7 +202,9 @@ begin
     end
     else
     begin
-      // Draw the Band except on current highlighted row
+      ///
+      /// Draw the Band except on current highlighted row
+      ///
       if (ARow <> Row) then
       begin
         if (ARow mod 2 = 0) then
@@ -216,8 +218,10 @@ begin
       Canvas.TextRect(Rect, Rect.Left, Rect.Top, cells[ACol, ARow]);
       Canvas.FrameRect(Rect);
 
-      // se la colonna 2 è = 1 allora metto l'immagine
-      if ACol = 1 then
+      ///
+      /// riconciliazione - se la colonna 2 è = 1 allora metto l'immagine
+      ///
+      if (ACol = 1) then
       begin
         _s       := (Sender as TStringGrid).cells[1, ARow];
         _aCanvas := (Sender as TStringGrid).Canvas;
@@ -226,8 +230,10 @@ begin
           _aCanvas.StretchDraw(Rect, Image1.Picture.Bitmap);
       end;
 
-      // rosso se il val è negativo
-      if ACol = 9 then
+      ///
+      /// rosso se il salso è negativo
+      ///
+      if (ACol = 9) then
       begin
         _Text := grdLedger.cells[9, ARow];
         TryStrToFloat(_Text.Replace('''', ''), _Float);
@@ -239,8 +245,35 @@ begin
         Canvas.TextRect(Rect, Rect.Left + 3, Rect.Top + 3, cells[8, ARow]);
         Canvas.FrameRect(Rect);
       end;
-    end;
-  end;
+
+      ///
+      /// se il mov è di trasferimento imposto un colore diverso
+      ///
+      if (ACol in [7,8]) then
+      begin
+        if (UpperCase(grdLedger.cells[2, ARow]) = 'TRANSFER') then
+        begin
+        if (grdLedger.cells[7, ARow] <> '') then
+        begin
+          _Text := grdLedger.cells[7, ARow];
+          TryStrToFloat(_Text.Replace('''', ''), _Float);
+          Canvas.Font.Color := clFuchsia;
+          Canvas.TextRect(Rect, Rect.Left + 3, Rect.Top + 3, cells[7, ARow]);
+          Canvas.FrameRect(Rect);
+        end
+        else
+        begin
+          _Text := grdLedger.cells[8, ARow];
+          TryStrToFloat(_Text.Replace('''', ''), _Float);
+          Canvas.Font.Color := clFuchsia;
+          Canvas.TextRect(Rect, Rect.Left + 3, Rect.Top + 3, cells[8, ARow]);
+          Canvas.FrameRect(Rect);
+        end
+        end;
+
+      end; // colore
+    end;   // arow<>0
+  end;     // with
 
   // allineamento a dx del testo
   if (ACol in [0, 7 .. 9]) and (ARow <> 0) then // right-align text
