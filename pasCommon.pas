@@ -51,32 +51,31 @@ function _iniRW(_pFName: string; _pOperation: char; _pSection: string; _Pkey: st
 begin
   Result := 'Negative';
   // check if file exists
-  if FileExists(_pFName) then
-  begin
-    // Read INI
-    _iniFName := TiniFile.Create(_pFName);
-    if _pOperation = 'R' then
+  _iniFName := TiniFile.Create(_pFName);
+
+  if _pOperation = 'R' then
+    if FileExists(_pFName) then
+      // Read INI
       Result := _iniFName.ReadString(_pSection, _Pkey, '');
 
-    // write ini file
-    if _pOperation = 'W' then
-      _iniFName.WriteString(_pSection, _Pkey, _pValue);
+  // Write INI
+  if _pOperation = 'W' then
+    _iniFName.WriteString(_pSection, _Pkey, _pValue);
 
-    _iniFName.Free;
-  end; // file exists
+  _iniFName.Free;
 end;
 
 /// -------------------------------------------------------------------------------------------------------------//
-procedure _SetNodeState(Node: TTreeNode; Flags: integer);
+procedure _SetNodeState(node: TTreeNode; Flags: Integer);
 var
   tvi: TTVItem;
 begin
   FillChar(tvi, SizeOf(tvi), 0);
-  tvi.hItem     := Node.ItemID;
+  tvi.hItem     := node.ItemID;
   tvi.Mask      := TVIF_STATE;
   tvi.StateMask := TVIS_BOLD or TVIS_CUT;
   tvi.State     := Flags;
-  TreeView_SetItem(Node.Handle, tvi);
+  TreeView_SetItem(node.Handle, tvi);
 end;
 
 /// -------------------------------------------------------------------------------------------------------------//
