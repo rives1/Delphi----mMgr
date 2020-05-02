@@ -148,8 +148,14 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM.treeMenuDblClick(Sender: TObject);
 begin
+ if Uppercase( _DbName) = 'NEGATIVE' then
+    MessageDlg('No database open', mtInformation,[mbOK],0)
+   else
+  begin
   _treeSelectOpen; // apro le form in base alla selezione del nodo
   _treeMenuCreate; // ripopolo il menu
+  end;
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -177,7 +183,7 @@ begin
     Except
       On E: Exception Do
       begin
-        ShowMessage(E.ClassName + ' Erro in creating backup file: ' + E.Message);
+        ShowMessage(E.ClassName + 'Error in creating backup file: ' + E.Message);
         Result := False;
       end;
     end;

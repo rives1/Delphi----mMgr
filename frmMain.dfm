@@ -66,11 +66,13 @@ object MainFRM: TMainFRM
         ColorPaletteIndex = 18
         object Series1: THorizBarSeries
           Legend.Visible = False
+          BarBrush.Gradient.Direction = gdLeftRight
           ColorEachPoint = True
           Marks.Frame.Visible = False
           ShowInLegend = False
           ValueFormat = '#,##0;(#,##0)'
           BarStyle = bsRoundRectangle
+          Gradient.Direction = gdLeftRight
           MultiBar = mbNone
           XValues.Name = 'Bar'
           XValues.Order = loNone
