@@ -294,15 +294,15 @@ begin
       _lTotal := Abs(_tempTable.FieldByName('fValue').AsFloat);
       if UpperCase(_tempTable.FieldByName('fType').AsString) = 'EXPENSE' then
         if _lTotal = 0 then
-          chartInOutMM.SeriesList[0].AddNull(0)
-        else
-          chartInOutMM.SeriesList[0].Add(_lTotal)
-      else
-      begin
-        if _lTotal = 0 then
           chartInOutMM.SeriesList[1].AddNull(0)
         else
           chartInOutMM.SeriesList[1].Add(_lTotal)
+      else
+      begin
+        if _lTotal = 0 then
+          chartInOutMM.SeriesList[0].AddNull(0)
+        else
+          chartInOutMM.SeriesList[0].Add(_lTotal)
       end;
       // etichetta dell'asse x
       chartInOutMM.Axes.Bottom.Items.Add(_tempTable.FieldByName('fPeriod').AsInteger - 1,
@@ -380,10 +380,10 @@ begin
         _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
         // in base al tipo di spesa imputo su quale serie aggiungere il dato
         if (UpperCase(MainFRM.sqlQry.FieldValues['CATTYPE']) = 'EXPENSE') then
-          chartInOutYY.SeriesList[0].Add(_lTotal)
+          chartInOutYY.SeriesList[1].Add(_lTotal)
         else
           // chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY']);
-          chartInOutYY.SeriesList[1].Add(_lTotal);
+          chartInOutYY.SeriesList[0].Add(_lTotal);
       end;
 
       MainFRM.sqlQry.Next;

@@ -22,14 +22,14 @@ object InsEditFrm: TInsEditFrm
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 16
+    Left = 227
     Top = 24
     Width = 23
     Height = 13
     Caption = 'Date'
   end
   object Label2: TLabel
-    Left = 226
+    Left = 16
     Top = 24
     Width = 24
     Height = 13
@@ -78,12 +78,12 @@ object InsEditFrm: TInsEditFrm
     Caption = 'To'
   end
   object _fType: TJvComboBox
-    Left = 263
+    Left = 88
     Top = 21
     Width = 97
     Height = 21
     AutoDropDown = True
-    TabOrder = 2
+    TabOrder = 1
     Text = ''
     OnExit = _fTypeExit
     Items.Strings = (
@@ -158,17 +158,6 @@ object InsEditFrm: TInsEditFrm
     OnEnter = _fSubCategoryEnter
     OnExit = _fSubCategoryExit
   end
-  object x_fDate: TJvDateTimePicker
-    Left = 187
-    Top = 227
-    Width = 99
-    Height = 21
-    Date = 43911.000000000000000000
-    Time = 0.726759432873223000
-    TabOrder = 12
-    Visible = False
-    DropDownDate = 43911.000000000000000000
-  end
   object _fAmount: TJvValidateEdit
     Left = 88
     Top = 203
@@ -218,12 +207,12 @@ object InsEditFrm: TInsEditFrm
       end>
   end
   object _fDate: TRzDateTimeEdit
-    Left = 88
+    Left = 263
     Top = 21
     Width = 109
     Height = 21
     EditType = etDate
-    TabOrder = 1
+    TabOrder = 2
     OnEnter = _fDateEnter
   end
 end

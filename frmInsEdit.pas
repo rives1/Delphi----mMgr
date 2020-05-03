@@ -25,7 +25,6 @@ type
     _fPayee: TJvComboBox;
     _fCategory: TJvComboBox;
     _fSubCategory: TJvComboBox;
-    x_fDate: TJvDateTimePicker;
     _fAmount: TJvValidateEdit;
     _fAccountTo: TJvComboBox;
     _fAccountFrom: TJvComboBox;
@@ -132,10 +131,11 @@ begin
 
     if (_pEditType = 'new') then // nuova transazione generica
     begin
+      _fType.Text := 'Pay';
       _fType.SetFocus;
     end;
     _fAccountFrom.Text := _pLedgerName;
-//    _fDate.Date        := now;
+
     // _cleanFormNewRecord; //impostazione
   end;
 end;
@@ -202,8 +202,8 @@ begin
 
   end;
 
-  // focus sulla data
-//  _fPayee.SetFocus;
+  // focus su data
+  _fDate.SetFocus;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

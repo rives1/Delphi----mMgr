@@ -3,7 +3,7 @@ object MainFRM: TMainFRM
   Top = 0
   ActiveControl = chartBalance
   Caption = 'mMgr'
-  ClientHeight = 632
+  ClientHeight = 676
   ClientWidth = 1105
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -23,15 +23,16 @@ object MainFRM: TMainFRM
     Left = 0
     Top = 0
     Width = 211
-    Height = 608
+    Height = 652
     Align = alLeft
     BevelOuter = bvNone
     Ctl3D = False
     ParentCtl3D = False
     TabOrder = 0
+    ExplicitHeight = 608
     object Splitter1: TSplitter
       Left = 0
-      Top = 370
+      Top = 414
       Width = 211
       Height = 5
       Cursor = crVSplit
@@ -40,7 +41,7 @@ object MainFRM: TMainFRM
     end
     object Panel2: TPanel
       Left = 0
-      Top = 375
+      Top = 419
       Width = 211
       Height = 233
       Align = alBottom
@@ -49,11 +50,13 @@ object MainFRM: TMainFRM
       Ctl3D = False
       ParentCtl3D = False
       TabOrder = 0
+      ExplicitTop = 375
       object chartBalance: TChart
         Left = 0
         Top = 0
         Width = 211
         Height = 233
+        MarginTop = 15
         Title.Text.Strings = (
           'TChart')
         Title.Visible = False
@@ -63,6 +66,9 @@ object MainFRM: TMainFRM
         LeftAxis.AxisValuesFormat = '#,##0'
         Panning.MouseWheel = pmwNone
         View3D = False
+        Zoom.Animated = True
+        Zoom.KeepAspectRatio = True
+        Zoom.UpLeftZooms = True
         ZoomWheel = pmwNormal
         Align = alClient
         BevelOuter = bvNone
@@ -102,7 +108,7 @@ object MainFRM: TMainFRM
       Left = 0
       Top = 0
       Width = 211
-      Height = 370
+      Height = 414
       Align = alClient
       BorderStyle = bsNone
       Color = clBtnFace
@@ -115,15 +121,16 @@ object MainFRM: TMainFRM
       Items.NodeData = {
         0301000000260000000500000000000000FFFFFFFFFFFFFFFF00000000000000
         0000000000010452006F006F007400}
-      ExplicitHeight = 281
+      ExplicitHeight = 370
     end
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 608
+    Top = 652
     Width = 1105
     Height = 24
     Panels = <>
+    ExplicitTop = 608
   end
   object MainMenu1: TMainMenu
     Left = 244
