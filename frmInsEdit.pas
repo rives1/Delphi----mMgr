@@ -58,7 +58,7 @@ type
     _TrxText: string = '_Transfer';
 
     // local functions
-    function _validateField: boolean;
+    function _validateField(_pConfirmation: boolean): boolean;
     function _newCategory: boolean;
     function _newSubCategory: boolean;
     function _newPayee: boolean;
@@ -69,7 +69,7 @@ type
     procedure _loadCmbSubcategory;
     procedure _recordLoad;
     procedure _writeRecord;
-    procedure _recordSave;
+    procedure _recordSave(_pConfirmation: boolean);
     procedure _getRecentData;
     procedure _cleanFormNewRecord;
     procedure _changeType; // impostazioni da inserire sulla mask al cambio del tipo di movimento
@@ -101,7 +101,7 @@ uses
 // -------------------------------------------------------------------------------------------------------------//
 procedure TInsEditFrm.btnOKClick(Sender: TObject);
 begin
-  _recordSave;
+  _recordSave(True);
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -160,7 +160,7 @@ begin
           self.Close;
       end;
     vkF12: // F12
-      _recordSave;
+      _recordSave(False);
   end;
 end;
 
@@ -467,9 +467,9 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TInsEditFrm._recordSave;
+procedure TInsEditFrm._recordSave(_pConfirmation: boolean);
 begin
-  if _validateField then
+  if _validateField(_pConfirmation) then
   begin
     // _newPayee; //il nuovo payee viene inserito all'atto dell'uscita dal campo del payee stesso
     _writeRecord;
@@ -479,7 +479,7 @@ begin
     else
     begin
       _cleanFormNewRecord;
-//      _changeType;
+      // _changeType;
     end;
   end;
 end;
@@ -626,7 +626,7 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-function TInsEditFrm._validateField: boolean;
+function TInsEditFrm._validateField(_pConfirmation: boolean): boolean;
 begin
   Result := True;
   // verifica che i campi della mask siano compilati
@@ -643,8 +643,9 @@ begin
   end
   else
   begin
-    if MessageDlg('Save Record?', mtConfirmation, [mbYes, mbNo], 0) = mrNo then
-      Result := False;
+    if (_pConfirmation) then
+      if MessageDlg('Save Record?', mtConfirmation, [mbYes, mbNo], 0) = mrNo then
+        Result := False;
   end;
 end;
 
