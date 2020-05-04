@@ -51,14 +51,14 @@ object InsEditFrm: TInsEditFrm
   end
   object Label5: TLabel
     Left = 16
-    Top = 169
+    Top = 209
     Width = 53
     Height = 13
     Caption = 'Description'
   end
   object Label6: TLabel
     Left = 16
-    Top = 206
+    Top = 170
     Width = 37
     Height = 13
     Caption = 'Amount'
@@ -92,8 +92,8 @@ object InsEditFrm: TInsEditFrm
       'Transfer')
   end
   object btnOK: TJvBitBtn
-    Left = 328
-    Top = 211
+    Left = 367
+    Top = 175
     Width = 75
     Height = 25
     Caption = '&Save'
@@ -115,10 +115,10 @@ object InsEditFrm: TInsEditFrm
   end
   object _fDescription: TEdit
     Left = 88
-    Top = 166
-    Width = 339
+    Top = 206
+    Width = 273
     Height = 21
-    TabOrder = 8
+    TabOrder = 9
   end
   object _fPayee: TJvComboBox
     Left = 88
@@ -160,7 +160,7 @@ object InsEditFrm: TInsEditFrm
   end
   object _fAmount: TJvValidateEdit
     Left = 88
-    Top = 203
+    Top = 167
     Width = 81
     Height = 21
     Flat = False
@@ -170,7 +170,7 @@ object InsEditFrm: TInsEditFrm
     TrimDecimals = True
     DisplayFormat = dfCurrency
     DecimalPlaces = 2
-    TabOrder = 9
+    TabOrder = 8
     KeepPrefixSuffixIntact = True
   end
   object _fAccountTo: TJvComboBox
