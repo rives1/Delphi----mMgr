@@ -216,7 +216,7 @@ begin
   _fSubCategory.Text := '';
   _fDescription.Text := '';
   _fAmount.Value     := 0;
-  _fDate.SetFocus;
+  _fType.SetFocus;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -238,8 +238,8 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TInsEditFrm._fDateEnter(Sender: TObject);
 begin
-  if (_fDate.Date=EncodeDate(1899,12,30) )then
-    _fDate.Date:=Now;
+  if (_fDate.Date = EncodeDate(1899, 12, 30)) then
+    _fDate.Date := Now;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -479,7 +479,7 @@ begin
     else
     begin
       _cleanFormNewRecord;
-      _changeType;
+//      _changeType;
     end;
   end;
 end;
@@ -716,8 +716,7 @@ function TInsEditFrm._newPayee: boolean;
 begin
   // se nuovo payee nella combo, aggiungo il record nella tabella
   Result := True;
-  if (_fPayee.Items.IndexOf(UpperCase(_fPayee.Text)) = -1)
-    and (_fPayee.Text <> '') then
+  if (_fPayee.Items.IndexOf(UpperCase(_fPayee.Text)) = -1) and (_fPayee.Text <> '') then
     if (MessageDlg('Add New Payee?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
     begin
       _SQLString := 'INSERT INTO DBPAYEE (PAYNAME) VALUES(''' + _UpCase(_fPayee.Text) + ''' )';
@@ -726,7 +725,6 @@ begin
     end
     else
       Result := False;
-
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
