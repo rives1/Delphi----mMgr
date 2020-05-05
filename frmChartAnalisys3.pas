@@ -126,7 +126,7 @@ begin
   _i        := 0;
   _Cat      := '';
   _mmPeriod := MonthsBetween(_fdtTo.DateTime, _fdtFrom.DateTime) + 1;
-  _lvAverageMM.Items.Clear;
+//  _lvAverageMM.Items.Clear;
 
   // eseguo ciclo sui dati
   try
@@ -155,7 +155,7 @@ begin
 
         // 25.04.20 - fill della listview con i dati della tabella x mostrare il dettaglio della
         // tabella soprastante
-        _lvItem         := _lvAverageMM.Items.Add;
+//        _lvItem         := _lvAverageMM.Items.Add;
         _lvItem.Caption := VarToStr(MainFRM.sqlQry.FieldValues['CATDES']);
         _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] * -1));
         _lvItem.SubItems.Add(FormatFloat('#,##0.##', _mmPeriod));

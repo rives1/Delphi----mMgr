@@ -241,6 +241,7 @@ object AnalisysFrm3: TAnalisysFrm3
         24)
       ColorPaletteIndex = 19
       object BarSeries1: THorizBarSeries
+        BarBrush.Gradient.Direction = gdLeftRight
         BarBrush.Gradient.EndColor = 13408512
         BarBrush.Gradient.Visible = True
         ColorEachPoint = True
@@ -248,6 +249,7 @@ object AnalisysFrm3: TAnalisysFrm3
         Title = 'In'
         ValueFormat = '#,##0;(#,##0)'
         BarStyle = bsRectGradient
+        Gradient.Direction = gdLeftRight
         Gradient.EndColor = 13408512
         Gradient.Visible = True
         XValues.Name = 'Bar'

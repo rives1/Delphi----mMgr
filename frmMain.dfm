@@ -62,6 +62,7 @@ object MainFRM: TMainFRM
         BottomAxis.LabelsMultiLine = True
         Chart3DPercent = 1
         LeftAxis.AxisValuesFormat = '#,##0'
+        LeftAxis.Visible = False
         Panning.MouseWheel = pmwNone
         View3D = False
         Zoom.Animated = True
