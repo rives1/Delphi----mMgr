@@ -3,10 +3,12 @@ unit frmInsEdit;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, System.UITypes, Vcl.Graphics,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, System.UITypes,
+  Vcl.Graphics,
   Vcl.Controls,
   Vcl.Forms, Vcl.Dialogs, Vcl.Mask, JvExMask, JvToolEdit, JvMaskEdit, JvExStdCtrls, JvEdit, JvValidateEdit,
-  Vcl.ComCtrls, JvExComCtrls, JvDateTimePicker, Vcl.StdCtrls, Vcl.Buttons, JvExButtons, JvBitBtn, JvCombobox, RzEdit,
+  Vcl.ComCtrls, JvExComCtrls, JvDateTimePicker, Vcl.StdCtrls, Vcl.Buttons, JvExButtons, JvBitBtn, JvCombobox,
+  RzEdit,
   RzDTP;
 
 type
@@ -31,6 +33,7 @@ type
     btnOK: TJvBitBtn;
     StatusBar1: TStatusBar;
     _fDate: TRzDateTimeEdit;
+    _fLastTransaction: TEdit;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormActivate(Sender: TObject);
@@ -48,10 +51,10 @@ type
     { Private declarations }
 
     // variabili
-    _plEditType:   string;  // properties to define if the new record
-    _plLedgerName: string;  // properties for account ID
-    _plEditID:     integer; // defines which is the ID of the record in case of record editing
-    _SQLString:    string;  // container x query string
+    _plEditType: string;   // properties to define if the new record
+    _plLedgerName: string; // properties for account ID
+    _plEditID: integer;    // defines which is the ID of the record in case of record editing
+    _SQLString: string;    // container x query string
 
     // costanti
   const
@@ -73,13 +76,15 @@ type
     procedure _getRecentData;
     procedure _cleanFormNewRecord;
     procedure _changeType; // impostazioni da inserire sulla mask al cambio del tipo di movimento
+    procedure _lastTransactionInfo;
+    // compilo il memo a piede della form con i dati dell'ultima transazione eseguita
 
   public
     { Public declarations }
 
   published
-    property _pEditType:   string read _plEditType write _plEditType;
-    property _pEditID:     integer read _plEditID write _plEditID;
+    property _pEditType: string read _plEditType write _plEditType;
+    property _pEditID: integer read _plEditID write _plEditID;
     property _pLedgerName: string read _plLedgerName write _plLedgerName;
     // property _pAccountName: string read _plAccountName write _plAccountName;
 
@@ -111,17 +116,13 @@ begin
     _recordLoad // carico i dati nella form
   else
   begin
+    _fAccountFrom.Text := _pLedgerName; //impostazione conto su cui inserire le transazioni
+
     if (_pEditType = 'newExp') then // nuova spesa
-    begin
       _fType.Text := 'Pay';
-      _fPayee.SetFocus;
-    end;
 
     if (_pEditType = 'newDep') then // nuovo deposito
-    begin
       _fType.Text := 'Deposit';
-      _fPayee.SetFocus;
-    end;
 
     if (_pEditType = 'newTrx') then // nuovo trasferimento
     begin
@@ -129,14 +130,15 @@ begin
       _changeType;
     end;
 
+    _fPayee.SetFocus;
+
     if (_pEditType = 'new') then // nuova transazione generica
     begin
       _fType.Text := 'Pay';
       _fType.SetFocus;
     end;
-    _fAccountFrom.Text := _pLedgerName;
 
-    // _cleanFormNewRecord; //impostazione
+
   end;
 end;
 
@@ -178,25 +180,25 @@ procedure TInsEditFrm._changeType;
 begin
   if (UpperCase(_fType.Text) = 'TRANSFER') then
   begin
-    _fAccountTo.Enabled   := True;
-    _fPayee.Enabled       := False;
-    _fCategory.Enabled    := False;
+    _fAccountTo.Enabled := True;
+    _fPayee.Enabled := False;
+    _fCategory.Enabled := False;
     _fSubCategory.Enabled := False;
-    _fPayee.Text          := _TrxText;
-    _fCategory.Text       := _TrxText;
-    _fSubCategory.Text    := _TrxText;
+    _fPayee.Text := _TrxText;
+    _fCategory.Text := _TrxText;
+    _fSubCategory.Text := _TrxText;
   end
   else
   begin
-    _fAccountTo.Enabled   := False;
-    _fPayee.Enabled       := True;
-    _fCategory.Enabled    := True;
+    _fAccountTo.Enabled := False;
+    _fPayee.Enabled := True;
+    _fCategory.Enabled := True;
     _fSubCategory.Enabled := True;
     if _pEditType <> 'edit' then // azzero i campi se non sto modificando il record
     begin
-      _fAccountTo.Text   := '';
-      _fPayee.Text       := '';
-      _fCategory.Text    := '';
+      _fAccountTo.Text := '';
+      _fPayee.Text := '';
+      _fCategory.Text := '';
       _fSubCategory.Text := '';
     end;
 
@@ -212,10 +214,10 @@ begin
   /// ripulisco la form per inserire il prox recod
   _loadCmbCategory;
   _fAccountFrom.Text := _pLedgerName;
-  _fPayee.Text       := '';
+  _fPayee.Text := '';
   _fSubCategory.Text := '';
   _fDescription.Text := '';
-  _fAmount.Value     := 0;
+  _fAmount.Value := 0;
   _fType.SetFocus;
 end;
 
@@ -301,18 +303,18 @@ begin
       // if i find a record the DESC order shows the most recent payee data
       if MainFRM.sqlQry.RecordCount > 0 then // recupero il primo record
       begin
-        _fCategory.Text    := MainFRM.sqlQry.FieldValues['CATDES'];
+        _fCategory.Text := MainFRM.sqlQry.FieldValues['CATDES'];
         _fSubCategory.Text := MainFRM.sqlQry.FieldValues['SUBCDES'];
         _fDescription.Text := MainFRM.sqlQry.FieldValues['TRNDESCRIPTION'];
-        _fAmount.Text      :=
+        _fAmount.Text :=
           FloatToStr(Abs(MainFRM.sqlQry.FieldValues['TRNAMOUNT']));
       end
       else // se il payee è nuovo i campi devono essere vuoti/svuotati nel caso di cambio di payees selezionato in precedenza
       begin
-        _fCategory.Text    := '';
+        _fCategory.Text := '';
         _fSubCategory.Text := '';
         _fDescription.Text := '';
-        _fAmount.Value     := 0;
+        _fAmount.Value := 0;
       end;
 
     finally
@@ -341,6 +343,15 @@ begin
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
   end;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TInsEditFrm._lastTransactionInfo;
+begin
+  _fLastTransaction.Text := 'Last Transaction: ' + _fType.Text
+  + ' - ' + DateToStr(_fDate.Date)
+  + ' - ' + 'Amt: ' + _fAmount.Text
+  + ' - ' + 'Payee: ' + _fPayee.Text;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -375,7 +386,7 @@ begin
   // carico i dati nella combo categorie
   _fCategory.Items.Clear;
   _fCategory.Text := '';
-  _SQLString      := 'SELECT * FROM DBCATEGORY WHERE UCASE(CATDES) <> ''_TRANSFER'' ';
+  _SQLString := 'SELECT * FROM DBCATEGORY WHERE UCASE(CATDES) <> ''_TRANSFER'' ';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
@@ -428,16 +439,16 @@ begin
     MainFRM.sqlQry.Open;
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
     begin
-      _fID.Text          := IntToStr(_plEditID);
-      _fType.Text        := MainFRM.sqlQry.FieldValues['TRNTYPE'];
-      _fDate.Date        := VarToDateTime(MainFRM.sqlQry.FieldValues['TRNDATE']);
-      _fPayee.Text       := VarToStr(MainFRM.sqlQry.FieldValues['PAYNAME']);
-      _fCategory.Text    := VarToStr(MainFRM.sqlQry.FieldValues['CATDES']);
+      _fID.Text := IntToStr(_plEditID);
+      _fType.Text := MainFRM.sqlQry.FieldValues['TRNTYPE'];
+      _fDate.Date := VarToDateTime(MainFRM.sqlQry.FieldValues['TRNDATE']);
+      _fPayee.Text := VarToStr(MainFRM.sqlQry.FieldValues['PAYNAME']);
+      _fCategory.Text := VarToStr(MainFRM.sqlQry.FieldValues['CATDES']);
       _fSubCategory.Text := VarToStr(MainFRM.sqlQry.FieldValues['SUBCDES']);
       _fDescription.Text := VarToStr(MainFRM.sqlQry.FieldValues['TRNDESCRIPTION']);
-      _fAmount.Value     := Abs(MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
+      _fAmount.Value := Abs(MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
       _fAccountFrom.Text := _plLedgerName;
-      _fAccountTo.Text   := '';
+      _fAccountTo.Text := '';
       if (MainFRM.sqlQry.FieldValues['TRNTRANSFERID'] <> null) then
         _trxID := MainFRM.sqlQry.FieldValues['TRNTRANSFERID'];
       MainFRM.sqlQry.Next;
@@ -473,6 +484,8 @@ begin
   begin
     // _newPayee; //il nuovo payee viene inserito all'atto dell'uscita dal campo del payee stesso
     _writeRecord;
+    // aggiorno il campo con il rif all'ultima transazione
+    _lastTransactionInfo;
     // nel caso di editing di un record chiudo la form adesso
     if _pEditType = 'edit' then
       self.Close
@@ -487,9 +500,9 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TInsEditFrm._writeRecord;
 var
-  _lAmount:       string;  // ammontare da inserire nel db. pos o neg in base al tipo di spesa
-  _lCategoryType: string;  // tipo categoria
-  _lrecID:        integer; // id del record per inserire i riferimenti sui mov trasferimento
+  _lAmount: string;       // ammontare da inserire nel db. pos o neg in base al tipo di spesa
+  _lCategoryType: string; // tipo categoria
+  _lrecID: integer;       // id del record per inserire i riferimenti sui mov trasferimento
 begin
   // il valore deve essere ngativo se la il tipo di transazione è pay
   if UpperCase(_fType.Text) = 'DEPOSIT' then
@@ -547,7 +560,8 @@ begin
         // + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
           + ', ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
           + ', ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
-          + ', ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' ' // conto di destinazione
+          + ', ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' '
+        // conto di destinazione
           + ', ''' + _fDescription.Text + ''') ';
         MainFRM.sqlQry.ExecSQL(_SQLString);
 
@@ -581,10 +595,12 @@ begin
           + ', TRNPAYEE = ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
         // + ', TRNCATEGORY =  ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
           + ', TRNSUBCATEGORY = ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
-          + ', TRNAMOUNT = ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
+          + ', TRNAMOUNT = ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' '
+        // inverto il segno del movimento
           + ', TRNACCOUNT = ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' '
           + ', TRNDESCRIPTION = ''' + _fDescription.Text + ''' '
-          + ' WHERE TRNID = ''' + _getDBField('TRANSACTIONS', 'TRNTRANSFERID', 'TRNID', IntToStr(_pEditID)) + ''' ';
+          + ' WHERE TRNID = ''' + _getDBField('TRANSACTIONS', 'TRNTRANSFERID', 'TRNID',
+          IntToStr(_pEditID)) + ''' ';
         MainFRM.sqlQry.ExecSQL(_SQLString);
       end;
 
@@ -667,7 +683,8 @@ begin
       else
         _lCategoryType := 'Income';
 
-      _SQLString := 'INSERT INTO DBCATEGORY (CATDES, CATTYPE) VALUES(''' + _UpCase(_fCategory.Text) + ''', ' + ' ''' +
+      _SQLString := 'INSERT INTO DBCATEGORY (CATDES, CATTYPE) VALUES(''' + _UpCase(_fCategory.Text) + ''', ' +
+        ' ''' +
         _lCategoryType + ''' )';
       MainFRM.sqlQry.ExecSQL(_SQLString);
 
@@ -706,7 +723,8 @@ begin
       else
       begin
         _SQLString := 'INSERT INTO DBSUBCATEGORY (SUBCDES, SUBCATID) VALUES(''' +
-          _UpCase(_fSubCategory.Text) + ''', ' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + '); ';
+          _UpCase(_fSubCategory.Text) + ''', ' + _getDBField('DBCATEGORY', 'CATID', 'CATDES',
+          _fCategory.Text) + '); ';
         MainFRM.sqlQry.ExecSQL(_SQLString);
       end;
     end;

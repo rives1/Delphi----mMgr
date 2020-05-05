@@ -2,9 +2,10 @@ object InsEditFrm: TInsEditFrm
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
   Caption = 'Insert/Edit Record'
-  ClientHeight = 273
-  ClientWidth = 461
+  ClientHeight = 289
+  ClientWidth = 459
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -44,23 +45,23 @@ object InsEditFrm: TInsEditFrm
   end
   object Label4: TLabel
     Left = 16
-    Top = 134
+    Top = 166
     Width = 45
     Height = 13
     Caption = 'Category'
   end
   object Label5: TLabel
     Left = 16
-    Top = 209
+    Top = 201
     Width = 53
     Height = 13
     Caption = 'Description'
   end
   object Label6: TLabel
     Left = 16
-    Top = 170
+    Top = 133
     Width = 37
-    Height = 13
+    Height = 14
     Caption = 'Amount'
   end
   object Label7: TLabel
@@ -91,15 +92,6 @@ object InsEditFrm: TInsEditFrm
       'Deposit'
       'Transfer')
   end
-  object btnOK: TJvBitBtn
-    Left = 367
-    Top = 175
-    Width = 75
-    Height = 25
-    Caption = '&Save'
-    TabOrder = 10
-    OnClick = btnOKClick
-  end
   object _fID: TEdit
     Left = 378
     Top = 8
@@ -115,7 +107,7 @@ object InsEditFrm: TInsEditFrm
   end
   object _fDescription: TEdit
     Left = 88
-    Top = 206
+    Top = 198
     Width = 273
     Height = 21
     TabOrder = 9
@@ -134,35 +126,35 @@ object InsEditFrm: TInsEditFrm
   end
   object _fCategory: TJvComboBox
     Left = 88
-    Top = 131
+    Top = 163
     Width = 169
     Height = 21
     AutoDropDown = True
     DropDownCount = 20
     Sorted = True
-    TabOrder = 6
+    TabOrder = 7
     Text = ''
     OnExit = _fCategoryExit
     OnSelect = _fCategorySelect
   end
   object _fSubCategory: TJvComboBox
     Left = 263
-    Top = 131
+    Top = 163
     Width = 164
     Height = 21
     AutoDropDown = True
     DropDownCount = 14
     Sorted = True
-    TabOrder = 7
+    TabOrder = 8
     Text = ''
     OnEnter = _fSubCategoryEnter
     OnExit = _fSubCategoryExit
   end
   object _fAmount: TJvValidateEdit
     Left = 88
-    Top = 167
+    Top = 130
     Width = 81
-    Height = 21
+    Height = 22
     Flat = False
     ParentFlat = False
     CriticalPoints.MaxValueIncluded = False
@@ -170,7 +162,7 @@ object InsEditFrm: TInsEditFrm
     TrimDecimals = True
     DisplayFormat = dfCurrency
     DecimalPlaces = 2
-    TabOrder = 8
+    TabOrder = 6
     KeepPrefixSuffixIntact = True
   end
   object _fAccountTo: TJvComboBox
@@ -195,8 +187,8 @@ object InsEditFrm: TInsEditFrm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 254
-    Width = 461
+    Top = 270
+    Width = 459
     Height = 19
     Panels = <
       item
@@ -205,6 +197,8 @@ object InsEditFrm: TInsEditFrm
           'date'
         Width = 50
       end>
+    ExplicitTop = 254
+    ExplicitWidth = 461
   end
   object _fDate: TRzDateTimeEdit
     Left = 263
@@ -214,5 +208,23 @@ object InsEditFrm: TInsEditFrm
     EditType = etDate
     TabOrder = 2
     OnEnter = _fDateEnter
+  end
+  object btnOK: TJvBitBtn
+    Left = 376
+    Top = 209
+    Width = 75
+    Height = 25
+    Caption = '&Save'
+    TabOrder = 10
+    OnClick = btnOKClick
+  end
+  object _fLastTransaction: TEdit
+    Left = 16
+    Top = 239
+    Width = 427
+    Height = 21
+    BorderStyle = bsNone
+    Color = clBtnFace
+    TabOrder = 12
   end
 end
