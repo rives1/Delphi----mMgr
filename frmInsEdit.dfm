@@ -61,7 +61,7 @@ object InsEditFrm: TInsEditFrm
     Left = 16
     Top = 133
     Width = 37
-    Height = 14
+    Height = 13
     Caption = 'Amount'
   end
   object Label7: TLabel
@@ -154,7 +154,7 @@ object InsEditFrm: TInsEditFrm
     Left = 88
     Top = 130
     Width = 81
-    Height = 22
+    Height = 21
     Flat = False
     ParentFlat = False
     CriticalPoints.MaxValueIncluded = False
@@ -197,8 +197,6 @@ object InsEditFrm: TInsEditFrm
           'date'
         Width = 50
       end>
-    ExplicitTop = 254
-    ExplicitWidth = 461
   end
   object _fDate: TRzDateTimeEdit
     Left = 263

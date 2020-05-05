@@ -118,26 +118,14 @@ begin
   begin
     _fAccountFrom.Text := _pLedgerName; //impostazione conto su cui inserire le transazioni
 
-    if (_pEditType = 'newExp') then // nuova spesa
+    if (_pEditType = 'newExp') or (_pEditType = 'new') then // nuova spesa o transaz generica
       _fType.Text := 'Pay';
 
     if (_pEditType = 'newDep') then // nuovo deposito
       _fType.Text := 'Deposit';
 
     if (_pEditType = 'newTrx') then // nuovo trasferimento
-    begin
       _fType.Text := 'Transfer';
-      _changeType;
-    end;
-
-    _fPayee.SetFocus;
-
-    if (_pEditType = 'new') then // nuova transazione generica
-    begin
-      _fType.Text := 'Pay';
-      _fType.SetFocus;
-    end;
-
 
   end;
 end;
@@ -205,7 +193,7 @@ begin
   end;
 
   // focus su data
-  _fDate.SetFocus;
+//  _fType.SetFocus;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -472,7 +460,7 @@ begin
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
   end;
-  // agiorno i dati della combo subcategory
+  // aggiorno i dati della combo subcategory
   _loadCmbSubcategory;
 
 end;
