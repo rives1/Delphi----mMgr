@@ -131,6 +131,10 @@
             <Form>tblBalanceFrm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="frmChartAnalisys3.pas">
+            <Form>AnalisysFrm3</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

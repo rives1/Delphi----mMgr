@@ -13,7 +13,8 @@ uses
   frmChartAnalisys2 in 'frmChartAnalisys2.pas' {AnalisysFrm2},
   frmTblBalYTD in 'frmTblBalYTD.pas' {tblBalanceFrm},
   Vcl.Themes,
-  Vcl.Styles;
+  Vcl.Styles,
+  frmChartAnalisys3 in 'frmChartAnalisys3.pas' {AnalisysFrm3};
 
 {$R *.res}
 

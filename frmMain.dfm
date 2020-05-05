@@ -29,7 +29,6 @@ object MainFRM: TMainFRM
     Ctl3D = False
     ParentCtl3D = False
     TabOrder = 0
-    ExplicitHeight = 608
     object Splitter1: TSplitter
       Left = 0
       Top = 414
@@ -50,7 +49,6 @@ object MainFRM: TMainFRM
       Ctl3D = False
       ParentCtl3D = False
       TabOrder = 0
-      ExplicitTop = 375
       object chartBalance: TChart
         Left = 0
         Top = 0
@@ -121,7 +119,6 @@ object MainFRM: TMainFRM
       Items.NodeData = {
         0301000000260000000500000000000000FFFFFFFFFFFFFFFF00000000000000
         0000000000010452006F006F007400}
-      ExplicitHeight = 370
     end
   end
   object StatusBar1: TStatusBar
@@ -130,7 +127,6 @@ object MainFRM: TMainFRM
     Width = 1105
     Height = 24
     Panels = <>
-    ExplicitTop = 608
   end
   object MainMenu1: TMainMenu
     Left = 244
