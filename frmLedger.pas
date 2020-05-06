@@ -26,11 +26,11 @@ type
     grdLedger: TStringGrid;
     Transfer1: TMenuItem;
     InsertExpense1: TMenuItem;
-    Image1: TImage;
     N2: TMenuItem;
     ReconcileR1: TMenuItem;
     N3: TMenuItem;
     CSVexport1: TMenuItem;
+    oggleBookmarkB1: TMenuItem;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -46,6 +46,7 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure ReconcileR1Click(Sender: TObject);
     procedure CSVexport1Click(Sender: TObject);
+    procedure oggleBookmarkB1Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -61,7 +62,7 @@ type
     procedure _ChartTotals;
     procedure _deleteRecord;
     procedure _openRecordForm(_pEditKind: string);
-    procedure _reconcileRecord;
+    procedure _stateRecord(_pState: string);
     procedure _exportCSV;
 
   public
@@ -144,16 +145,18 @@ begin
   _action := '';
 
   case Key of
-    13:                  // ENTER
-      _action := 'edit'; // editing del record
-    27:                  // ESC
-      Self.Close;        // chiudo la form
-    45:                  // INS
-      _action := 'new';  // apro la form in inserimento
-    46:                  // DEL - elimino record direttamente dalla form del registro
-      _deleteRecord;
+    13:                    // ENTER
+      _action := 'edit';   // editing del record
+    27:                    // ESC
+      Self.Close;          // chiudo la form
+    45:                    // INS
+      _action := 'new';    // apro la form in inserimento
+    46:                    // DEL
+      _deleteRecord;       // elimino record direttamente dalla form del registro
+    66:                    // 'B'
+      _stateRecord('B');   // per bookmark su riga
     82:                    // 'R'
-      _reconcileRecord;    // per riconciliare la riga
+      _stateRecord('R');   // per riconciliare la riga
     106:                   // *
       _action := 'newTrx'; // trasferimento fra conti
     107:                   // +
@@ -226,8 +229,11 @@ begin
         _s       := (Sender as TStringGrid).cells[1, ARow];
         _aCanvas := (Sender as TStringGrid).Canvas;
         _aCanvas.FillRect(Rect);
-        if (UpperCase(_s) = 'X') then
-          _aCanvas.StretchDraw(Rect, Image1.Picture.Bitmap);
+        if (UpperCase(_s) = 'R') then
+          _aCanvas.StretchDraw(Rect, MainFRM.imgReconcile.Picture.Bitmap);
+        if (UpperCase(_s) = 'B') then
+          _aCanvas.StretchDraw(Rect, MainFRM.imgHighligth.Picture.Bitmap);
+
       end;
 
       ///
@@ -257,7 +263,7 @@ begin
           begin
             _Text := grdLedger.cells[7, ARow];
             TryStrToFloat(_Text.Replace('''', ''), _Float);
-            Canvas.Font.Color := clFuchsia;
+            Canvas.Font.Color := clPurple;
             Canvas.TextRect(Rect, Rect.Left + 3, Rect.Top + 3, cells[7, ARow]);
             Canvas.FrameRect(Rect);
           end
@@ -265,7 +271,7 @@ begin
           begin
             _Text := grdLedger.cells[8, ARow];
             TryStrToFloat(_Text.Replace('''', ''), _Float);
-            Canvas.Font.Color := clFuchsia;
+            Canvas.Font.Color := clPurple;
             Canvas.TextRect(Rect, Rect.Left + 3, Rect.Top + 3, cells[8, ARow]);
             Canvas.FrameRect(Rect);
           end
@@ -301,9 +307,15 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
+procedure TLedgerFrm.oggleBookmarkB1Click(Sender: TObject);
+begin
+  _stateRecord('B');
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.ReconcileR1Click(Sender: TObject);
 begin
-  _reconcileRecord;
+  _stateRecord('R');
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -343,7 +355,7 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TLedgerFrm._reconcileRecord;
+procedure TLedgerFrm._stateRecord(_pState: string);
 var
   _Rect: TGridRect;
   _i:    Integer; // ciclo
@@ -351,7 +363,7 @@ begin
   // imposto il campo trnreconcile a X per mostrare il record come verfiicato
   for _i := grdLedger.Selection.Top to grdLedger.Selection.Bottom do
   begin
-    if (UpperCase(grdLedger.cells[1, _i]) = 'X') then
+    if (UpperCase(grdLedger.cells[1, _i]) = _pState) then
     begin
       if (UpperCase(grdLedger.cells[2, _i]) = 'TRANSFER') then
       begin
@@ -367,11 +379,12 @@ begin
     begin
       if (UpperCase(grdLedger.cells[2, _i]) = 'TRANSFER') then
       begin
-        _SQLString := 'update TRANSACTIONS set TRNRECONCILE = ''X'' where TRNID = '
+        _SQLString := 'update TRANSACTIONS set TRNRECONCILE = ''' + _pState + ''' where TRNID = '
           + '(SELECT TRNTRANSFERID FROM TRANSACTIONS WHERE TRNID = ' + grdLedger.cells[0, _i] + ')';
         MainFRM.sqlQry.ExecSQL(_SQLString);
       end;
-      _SQLString := 'update TRANSACTIONS set TRNRECONCILE = ''X'' where TRNID = ' + grdLedger.cells[0, _i];
+      _SQLString := 'update TRANSACTIONS set TRNRECONCILE = ''' + _pState + ''' where TRNID = ' +
+        grdLedger.cells[0, _i];
       MainFRM.sqlQry.ExecSQL(_SQLString);
     end;
 

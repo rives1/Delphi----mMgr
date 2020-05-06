@@ -37,7 +37,6 @@ object PayeeFRM: TPayeeFRM
         Text = 'Double click to edit Payee'
         Width = 50
       end>
-    ExplicitWidth = 530
   end
   object Panel3: TPanel
     Left = 293
@@ -47,8 +46,6 @@ object PayeeFRM: TPayeeFRM
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = 250
-    ExplicitWidth = 360
     object Name: TLabel
       Left = 7
       Top = 48

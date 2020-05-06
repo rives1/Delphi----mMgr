@@ -143,7 +143,8 @@ begin
     if MainFRM.sqlQry.RecordCount > 0 then
       MessageDlg('Data alreay used in application. Impossible to delete.', mtInformation, [mbOk], 0)
     else
-      if MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+      if MessageDlg('Confirm Deletion of ' + _flvPayee.Selected.Caption + '?', mtConfirmation, [mbYes, mbNo], 0) = mrYes
+    then
     begin
       _SQLString := 'DELETE FROM DBPAYEE WHERE PAYNAME = ''' + _flvPayee.Selected.Caption + ''' ';
       // esecuzione della query di cancellazione

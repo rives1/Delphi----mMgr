@@ -671,7 +671,7 @@ begin
       else
         _lCategoryType := 'Income';
 
-      _SQLString := 'INSERT INTO DBCATEGORY (CATDES, CATTYPE) VALUES(''' + _UpCase(_fCategory.Text) + ''', ' +
+      _SQLString := 'INSERT INTO DBCATEGORY (CATDES, CATTYPE) VALUES(''' + _UpCase(Trim(_fCategory.Text)) + ''', ' +
         ' ''' +
         _lCategoryType + ''' )';
       MainFRM.sqlQry.ExecSQL(_SQLString);
@@ -711,7 +711,7 @@ begin
       else
       begin
         _SQLString := 'INSERT INTO DBSUBCATEGORY (SUBCDES, SUBCATID) VALUES(''' +
-          _UpCase(_fSubCategory.Text) + ''', ' + _getDBField('DBCATEGORY', 'CATID', 'CATDES',
+          _UpCase(trim( _fSubCategory.Text)) + ''', ' + _getDBField('DBCATEGORY', 'CATID', 'CATDES',
           _fCategory.Text) + '); ';
         MainFRM.sqlQry.ExecSQL(_SQLString);
       end;
@@ -726,7 +726,7 @@ begin
   if (_fPayee.Items.IndexOf(UpperCase(_fPayee.Text)) = -1) and (_fPayee.Text <> '') then
     if (MessageDlg('Add New Payee?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
     begin
-      _SQLString := 'INSERT INTO DBPAYEE (PAYNAME) VALUES(''' + _UpCase(_fPayee.Text) + ''' )';
+      _SQLString := 'INSERT INTO DBPAYEE (PAYNAME) VALUES(''' + _UpCase(Trim(_fPayee.Text)) + ''' )';
       MainFRM.sqlQry.ExecSQL(_SQLString);
       _loadCmbPayee;
     end

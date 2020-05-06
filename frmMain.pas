@@ -42,6 +42,8 @@ type
     Version1: TMenuItem;
     Splitter1: TSplitter;
     Series1: TPointSeries;
+    imgReconcile: TImage;
+    imgHighligth: TImage;
     procedure FormCreate(Sender: TObject);
     procedure treeMenuDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);

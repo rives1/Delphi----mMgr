@@ -195,7 +195,7 @@ begin
       if MainFRM.sqlQry.RecordCount > 0 then
         MessageDlg('Account data alreay used in application. Impossible to delete.', mtInformation, [mbOk], 0)
       else
-        if MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+        if MessageDlg('Confirm Deletion of ' + _treeCategory.Selected.Text+ '?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
       begin
         _SQLString := 'DELETE FROM DBCATEGORY WHERE CATDES  = ''' + _treeCategory.Selected.Text + ''' ';;
         // esecuzione della query di cancellazione
@@ -225,7 +225,7 @@ begin
       if MainFRM.sqlQry.RecordCount > 0 then
         MessageDlg('Account data alreay used in application. Impossible to delete.', mtInformation, [mbOk], 0)
       else
-        if MessageDlg('Confirm Deletion?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+        if MessageDlg('Confirm Deletion of ' + _treeCategory.Selected.Text+ '?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
       begin
         _SQLString := 'DELETE FROM DBSUBCATEGORY WHERE SUBCDES = ''' + _treeCategory.Selected.Text + ''' ';
         // esecuzione della query di cancellazione
