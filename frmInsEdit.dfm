@@ -15,7 +15,6 @@ object InsEditFrm: TInsEditFrm
   KeyPreview = True
   OldCreateOrder = False
   Position = poMainFormCenter
-  Visible = True
   OnActivate = FormActivate
   OnClose = FormClose
   OnKeyDown = FormKeyDown
