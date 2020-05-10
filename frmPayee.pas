@@ -150,6 +150,7 @@ begin
       // esecuzione della query di cancellazione
       MainFRM.sqlQry.ExecSQL(_SQLString);
       MainFRM.sqlite_conn.Commit;
+      MessageDlg(_flvPayee.Selected.Caption + ' Deleted!!', mtInformation, [mbOk], 0);
     end;
     MainFRM.sqlQry.Close;
   except

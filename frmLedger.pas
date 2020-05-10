@@ -136,11 +136,6 @@ var
   _action: string; // tipologia dell'intervento da eseguire
 begin
   /// gestione pressione tasti
-  /// INS   - aggiunge nuovo record
-  /// +     - aggiungo un nuovo record di spesa e continua con l'inserimento in serie
-  /// ENTER - edita il record corrente
-  /// ESC   - chiudo la form
-  /// *    - Trasferimento
 
   _action := '';
 
@@ -345,6 +340,8 @@ begin
   frmInsEdit._pLedgerName := _pAccountName; // passo il nome del ledger di riferimento del record
   frmInsEdit.Show;
   frmInsEdit.SetFocus;
+
+
   // frmInsEdit.ShowModal;                     // nostro la form modale
 
   // aggiorno i datidella grid

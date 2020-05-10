@@ -158,17 +158,18 @@ begin
     MainFRM.sqlQry.Open;
     if MainFRM.sqlQry.RecordCount > 0 then
       MessageDlg('Data alreay used in application. Impossible to delete.', mtInformation, [mbOk], 0)
+
     else
-      if MessageDlg('Confirm Deletion of ' + _fLvAccount.Selected.Caption + '?', mtConfirmation, [mbYes, mbNo], 0) = mrYes
-    then
+      if MessageDlg('Confirm Deletion of ' + _fLvAccount.Selected.Caption + '?',
+      mtConfirmation, [mbYes, mbNo], 0) = mrYes then
     begin
       _SQLString := 'DELETE FROM DBACCOUNT WHERE ACCNAME = ''' + _fLvAccount.Selected.Caption + ''' ';
       // esecuzione della query di cancellazione
       MainFRM.sqlQry.ExecSQL(_SQLString);
       MainFRM.sqlite_conn.Commit;
+      MessageDlg(_fLvAccount.Selected.Caption + ' Deleted!!', mtInformation, [mbOk], 0);
     end;
     MainFRM.sqlQry.Close;
-    MessageDlg(_fLvAccount.Selected.Caption + ' Deleted!!', mtInformation, [mbOk], 0);
 
   except
     begin
