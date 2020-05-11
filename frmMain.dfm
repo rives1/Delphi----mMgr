@@ -1081,7 +1081,8 @@ object MainFRM: TMainFRM
   end
   object sqlite_conn: TFDConnection
     Params.Strings = (
-      'DriverID=SQLite')
+      'DriverID=SQLite'
+      'LockingMode=Normal')
     Left = 229
     Top = 443
   end

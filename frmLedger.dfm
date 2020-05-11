@@ -43,19 +43,21 @@ object LedgerFrm: TLedgerFrm
       742
       442)
     UpperLeftControls = (
-      grdLedger)
+      grdLedger
+      pnlCaption)
     LowerRightControls = (
       chTotals
       chHistory)
     object grdLedger: TStringGrid
       Left = 0
-      Top = 0
+      Top = 21
       Width = 740
-      Height = 430
+      Height = 409
       Align = alClient
       Color = clBtnFace
       ColCount = 11
       Ctl3D = False
+      DefaultColWidth = 80
       DefaultRowHeight = 18
       DoubleBuffered = True
       DrawingStyle = gdsClassic
@@ -63,8 +65,8 @@ object LedgerFrm: TLedgerFrm
       RowCount = 2
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -12
-      Font.Name = 'MS Sans Serif'
+      Font.Height = -11
+      Font.Name = 'Lucida Sans Unicode'
       Font.Style = []
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
       ParentCtl3D = False
@@ -75,6 +77,21 @@ object LedgerFrm: TLedgerFrm
       StyleElements = [seFont, seBorder]
       OnDblClick = grdLedgerDblClick
       OnDrawCell = grdLedgerDrawCell
+    end
+    object pnlCaption: TPanel
+      Left = 0
+      Top = 0
+      Width = 740
+      Height = 21
+      Align = alTop
+      BevelOuter = bvNone
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 1
     end
     object chTotals: TChart
       Left = 0

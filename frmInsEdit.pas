@@ -36,7 +36,6 @@ type
     _fLastTransaction: TEdit;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure FormActivate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
     procedure _fSubCategoryExit(Sender: TObject);
@@ -107,12 +106,6 @@ uses
 procedure TInsEditFrm.btnOKClick(Sender: TObject);
 begin
   _recordSave(True);
-end;
-
-// -------------------------------------------------------------------------------------------------------------//
-procedure TInsEditFrm.FormActivate(Sender: TObject);
-begin
-
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

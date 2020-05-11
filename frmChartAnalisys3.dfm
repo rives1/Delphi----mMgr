@@ -102,7 +102,7 @@ object AnalisysFrm3: TAnalisysFrm3
     ControlCollection = <
       item
         Column = 0
-        Control = chartCategoryAvg
+        Control = chartCatSubcatMM
         Row = 0
       end
       item
@@ -128,7 +128,7 @@ object AnalisysFrm3: TAnalisysFrm3
         Value = 50.000000000000000000
       end>
     TabOrder = 2
-    object chartCategoryAvg: TChart
+    object chartCatSubcatMM: TChart
       Left = 0
       Top = 0
       Width = 432
@@ -165,11 +165,13 @@ object AnalisysFrm3: TAnalisysFrm3
         YValues.Order = loNone
       end
       object Series1: TBarSeries
-        BarBrush.Gradient.EndColor = 13395626
-        BarBrush.Gradient.Visible = True
-        Marks.Visible = False
-        Gradient.EndColor = 13395626
-        Gradient.Visible = True
+        MultiBar = mbStacked
+        XValues.Name = 'X'
+        XValues.Order = loAscending
+        YValues.Name = 'Bar'
+        YValues.Order = loNone
+      end
+      object Series2: TBarSeries
         MultiBar = mbStacked
         XValues.Name = 'X'
         XValues.Order = loAscending
@@ -271,8 +273,6 @@ object AnalisysFrm3: TAnalisysFrm3
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 3
-      ExplicitLeft = 448
-      ExplicitWidth = 400
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15

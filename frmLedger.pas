@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, JvExComCtrls, JvComCtrls, RzTreeVw, JvLookOut, JvExControls,
   JvOutlookBar, Vcl.Grids, JvgStringGrid, VclTee.TeeGDIPlus, VclTee.Series, VclTee.TeEngine, RzPanel, VclTee.TeeProcs,
   VclTee.Chart, Vcl.ExtCtrls, RzSplit, JvExGrids, JvStringGrid, RzGrids, JvListView, Vcl.Menus, JvComponentBase,
-  JvgExportComponents, Vcl.Imaging.pngimage;
+  JvgExportComponents, Vcl.Imaging.pngimage, Vcl.StdCtrls;
 
 type
   TLedgerFrm = class(TForm)
@@ -31,6 +31,7 @@ type
     N3: TMenuItem;
     CSVexport1: TMenuItem;
     oggleBookmarkB1: TMenuItem;
+    pnlCaption: TPanel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -109,8 +110,8 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.FormActivate(Sender: TObject);
 begin
-  _fillGrid;
   _ChartTotals;
+  _fillGrid;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -127,7 +128,8 @@ begin
   _pAccountName := MainFRM.treeMenu.Selected.Text;
 
   // impostazione del nome dell'account nella barra del titolo della finestra
-  Self.Caption := _pAccountName;
+  Self.Caption       := _pAccountName;
+  pnlCaption.Caption := _pAccountName;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -703,9 +705,6 @@ begin
 
   grdLedger.FixedRows := 1;
 
-  // autosize columns
-  _autoSizeGrid;
-
   // posiziorsi sull'ultimo record nel caso di inserimento e sul precedente in caso di editing
   if _recPosition > grdLedger.RowCount - 1 then
     grdLedger.Row := grdLedger.RowCount - 1
@@ -713,6 +712,10 @@ begin
     grdLedger.Row := _recPosition;
 
   MainFRM._fillBalanceChart;
+
+  // autosize columns
+  _autoSizeGrid;
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

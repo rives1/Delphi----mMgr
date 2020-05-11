@@ -90,8 +90,8 @@ implementation
 
 
 uses
-  frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmPayee, frmCategory, frmTblBalYTD, pasCommon,
-  CommCtrl, ShellApi, System.IOUtils;
+  frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmChartAnalisys3, frmPayee, frmCategory, frmTblBalYTD,
+  pasCommon, CommCtrl, ShellApi, System.IOUtils;
 
 { TForm1 }
 
@@ -155,9 +155,9 @@ begin
     MessageDlg('No database open', mtInformation, [mbOK], 0)
   else
   begin
-    _treeSelectOpen; // apro le form in base alla selezione del nodo
-    _treeMenuCreate; // ripopolo il menu
-    _fillBalanceChart; //aggiorno il chart
+    _treeSelectOpen;   // apro le form in base alla selezione del nodo
+    _treeMenuCreate;   // ripopolo il menu
+    _fillBalanceChart; // aggiorno il chart
   end;
 
 end;
@@ -535,7 +535,7 @@ begin
     _SetNodeState(vNodeGroup, TVIS_BOLD);
     sqlQry.Close;
     sqlQry.SQL.Clear;
-   _SQLString:= 'SELECT * FROM DBACCOUNT WHERE UCASE(ACCSTATUS) = ''OPEN'' ORDER BY ACCNAME';
+    _SQLString := 'SELECT * FROM DBACCOUNT WHERE UCASE(ACCSTATUS) = ''OPEN'' ORDER BY ACCNAME';
     sqlQry.SQL.Add(_SQLString);
     try
       sqlQry.Active := True;
@@ -586,6 +586,8 @@ begin
   vNode.ImageIndex := 13;
   vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Analisys Avg');
   vNode.ImageIndex := 13;
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Subcategory Analisys');
+  vNode.ImageIndex := 13;
 
   // area report
   vNodeGroup            := treeMenu.Items.Add(nil, 'Report');
@@ -616,6 +618,7 @@ var
   _AccountChildFRM: TAccountFrm;
   _Analisys1FRM:    TAnalisysFrm1;
   _Analisys2FRM:    TAnalisysFrm2;
+  _Analisys3FRM:    TAnalisysFrm3;
   _PayeeFRM:        TPayeeFRM;
   _CategoryFRM:     TCategoryFrm;
   _TblBalanceYTD:   TtblBalanceFrm;
@@ -649,6 +652,14 @@ begin
   begin
     _Analisys2FRM             := TAnalisysFrm2.Create(nil);
     _Analisys2FRM.WindowState := wsMaximized;
+  end;
+
+  // apro chart3
+  if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'CHART'))
+    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Subcategory Analisys') then
+  begin
+    _Analisys3FRM             := TAnalisysFrm3.Create(nil);
+    _Analisys3FRM.WindowState := wsMaximized;
   end;
 
   // Config
