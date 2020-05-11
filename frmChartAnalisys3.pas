@@ -27,7 +27,6 @@ type
     HorizBarSeries1: THorizBarSeries;
     BarSeries3: TBarSeries;
     Series1: TBarSeries;
-    Series2: TBarSeries;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure _fdtFromChange(Sender: TObject);

@@ -149,34 +149,37 @@ object AnalisysFrm3: TAnalisysFrm3
         24)
       ColorPaletteIndex = 19
       object BarSeries3: TBarSeries
-        BarBrush.Gradient.EndColor = 15054131
+        BarBrush.Gradient.EndColor = 13408512
         BarBrush.Gradient.Visible = True
+        ColorEachPoint = True
         Marks.Frame.Visible = False
         Marks.Visible = False
         Title = 'In'
         ValueFormat = '#,##0;(#,##0)'
         BarStyle = bsRectGradient
-        Gradient.EndColor = 15054131
+        Gradient.EndColor = 13408512
         Gradient.Visible = True
-        MultiBar = mbStacked
+        MultiBar = mbSelfStack
         XValues.Name = 'X'
         XValues.Order = loAscending
         YValues.Name = 'Bar'
         YValues.Order = loNone
+        Data = {
+          000600000000000000000069400000000000006940B7F3FDD4B83B5A40DCF97E
+          6A3CE35B40A11A2FDD84C95F401B2FDD24669B6140}
+        Detail = {0000000000}
       end
       object Series1: TBarSeries
-        MultiBar = mbStacked
+        ColorEachPoint = True
+        MultiBar = mbSelfStack
         XValues.Name = 'X'
         XValues.Order = loAscending
         YValues.Name = 'Bar'
         YValues.Order = loNone
-      end
-      object Series2: TBarSeries
-        MultiBar = mbStacked
-        XValues.Name = 'X'
-        XValues.Order = loAscending
-        YValues.Name = 'Bar'
-        YValues.Order = loNone
+        Data = {
+          000600000000000000008061406766666666164D400500000000601640CACCCC
+          CCCC9C2840CECCCCCCCC9C38400100000000F83B40}
+        Detail = {0000000000}
       end
     end
     object _lvAvgCategory: TListView
