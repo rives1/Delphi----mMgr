@@ -19,14 +19,13 @@ type
     GridPanel1: TGridPanel;
     _fAccount: TJvComboBox;
     Label7: TLabel;
-    chartCatSubcatMM: TChart;
-    _lvAvgCategory: TListView;
+    chartCatSubcat: TChart;
+    _lvCatSubcat: TListView;
     chartCategoryAvgMM: TChart;
     BarSeries1: THorizBarSeries;
     Chart1: TChart;
     HorizBarSeries1: THorizBarSeries;
-    BarSeries3: TBarSeries;
-    Series1: TBarSeries;
+    Series2: TBarSeries;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure _fdtFromChange(Sender: TObject);
@@ -176,74 +175,66 @@ end;
 procedure TAnalisysFrm3._chartCategorySubcategoryMM;
 var
   _lTotal: Double;    // calcolo totale da imputare nella serie
-  _i:      integer;   // ciclo per asse x elementi da inserire
   _Cat:    string;    // categoria da valutare per inserimento
   _lvItem: TListItem; // item per inserire i dati nelle colonne secondarie
+  _barSeries: TBarSeries; //riferimento alla serie
 begin
-  // chart torta per totale spese categoria
-  chartCatSubcatMM.Series[0].Clear(); // pulisco il grafico
+  // istogramma stacked per valore cat-subcat
+  chartCatSubcat.SeriesList.Clear; //elimino tutte le serie
 
   _SQLString := ' Select CATDES, SUBCDES, '
-    + ' Avg(TRNAMOUNT) As Avg_TRNAMOUNT, '
-    + ' Sum(TRNAMOUNT) As Sum_TRNAMOUNT, '
-    + ' Count(TRNID) As Count_TRNID '
+    + ' Abs(Sum(TRNAMOUNT)) As Sum_TRNAMOUNT '
     + ' From '
     + ' TRANSACTIONS Inner Join '
     + ' DBACCOUNT On ACCID = TRNACCOUNT Inner Join '
     + ' DBSUBCATEGORY On SUBCID = TRNSUBCATEGORY Inner Join '
     + ' DBCATEGORY On CATID = SUBCATID '
-  // + ' TRANSACTIONS Left Join '
-  // + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
-  // + ' DBACCOUNT On ACCID = TRNACCOUNT '
     + ' Where '
-    + ' CATDES <> ''_Transfer'' ';
+    + ' CATDES <> ''_Transfer'' '
+    + ' and CATTYPE = ''Expense'' ';
   if (_fAccount.Text <> 'ALL') then
     _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
   _SQLString   := _SQLString
     + ' And TRNDATE Between ''' + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
     + ''' and ''' + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
-    + ''' Group By CATDES ';
+    + ''' Group By CATDES, SUBCDES '
+    + 'order by CATDES, SUBCDES';
 
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
-  chartCatSubcatMM.Axes.Bottom.Items.Clear;
+  chartCatSubcat.Axes.Bottom.Items.Clear;
 
   // inizializzo var
-  _i   := 0;
   _Cat := '';
-  _lvAvgCategory.Items.Clear;
+  _lvCatSubcat.Items.Clear;
   // eseguo ciclo sui dati
   try
     MainFRM.sqlQry.Open;
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
     begin
-      if MainFRM.sqlQry.FieldValues['Avg_TRNAMOUNT'] <> null then
-      begin
-        // impostazione descrizione asse X
+        // impostazione serie in base a categoria
         if (_Cat <> MainFRM.sqlQry.FieldValues['CATDES']) then
         begin
-          chartCatSubcatMM.Axes.Bottom.Items.Add(_i, MainFRM.sqlQry.FieldValues['CATDES']);
-          _Cat := MainFRM.sqlQry.FieldValues['CATDES'];
-          _i   := _i + 1;
+          _barSeries:=TBarSeries.Create(self); //instance of the bar series
+          _barSeries.Title:=MainFRM.sqlQry.FieldValues['CATDES'];
+          _barSeries.MultiBar:=mbSelfStack;
+          _barSeries.ColorEachPoint:=True;
+
+          _barSeries.ParentChart := chartCatSubcat; //aggiungo la serie al chart
+//          chartCatSubcat.Axes.Bottom.Items.Add(_i, MainFRM.sqlQry.FieldValues['CATDES']); //descr asse
+
+          _Cat := MainFRM.sqlQry.FieldValues['CATDES']; //set control condition
         end;
 
-        // inserimento dati nelle due serie in base alla tipologia della categoria
-        _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Avg_TRNAMOUNT']));
-        // in base al tipo di spesa imputo su quale serie aggiungere il dato
-        // if (UpperCase(MainFRM.sqlQry.FieldValues['CATTYPE']) = 'EXPENSE') then
-        chartCatSubcatMM.SeriesList[0].Add(_lTotal);
-        // else
-        // chartInOutYY.SeriesList[1].Add(_lTotal, MainFRM.sqlQry.FieldValues['YY']);
-        // chartCategoryAvg.SeriesList[1].Add(_lTotal);
+        // inserimento dati nella serie
+        _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
+        _barSeries.Add(_lTotal, VarToStr(MainFRM.sqlQry.FieldValues['SUBCDES']));
 
-        // 25.04.20 - fill della listview con i dati della tabella x mostrare il dettaglio della
-        // tabella soprastante
-        _lvItem         := _lvAvgCategory.Items.Add;
+        // 12.05.20 - fill della listview con i dati di dettaglio
+        _lvItem         := _lvCatSubcat.Items.Add;
         _lvItem.Caption := VarToStr(MainFRM.sqlQry.FieldValues['CATDES']);
+        _lvItem.SubItems.Add(VarToStr(MainFRM.sqlQry.FieldValues['SUBCDES']));
         _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] * -1));
-        _lvItem.SubItems.Add(FormatFloat('#,##0.##', MainFRM.sqlQry.FieldValues['Count_TRNID']));
-        _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Avg_TRNAMOUNT'] * -1));
-      end;
 
       MainFRM.sqlQry.Next;
     end;
@@ -276,7 +267,7 @@ end;
 procedure TAnalisysFrm3._fillChart;
 begin
   _chartCategorySubcategoryMM;
-  _chartMMCategoryAvg;
+//  _chartMMCategoryAvg;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

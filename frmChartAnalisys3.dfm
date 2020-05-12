@@ -102,12 +102,12 @@ object AnalisysFrm3: TAnalisysFrm3
     ControlCollection = <
       item
         Column = 0
-        Control = chartCatSubcatMM
+        Control = chartCatSubcat
         Row = 0
       end
       item
         Column = 0
-        Control = _lvAvgCategory
+        Control = _lvCatSubcat
         Row = 1
       end
       item
@@ -128,7 +128,7 @@ object AnalisysFrm3: TAnalisysFrm3
         Value = 50.000000000000000000
       end>
     TabOrder = 2
-    object chartCatSubcatMM: TChart
+    object chartCatSubcat: TChart
       Left = 0
       Top = 0
       Width = 432
@@ -148,41 +148,16 @@ object AnalisysFrm3: TAnalisysFrm3
         15
         24)
       ColorPaletteIndex = 19
-      object BarSeries3: TBarSeries
-        BarBrush.Gradient.EndColor = 13408512
-        BarBrush.Gradient.Visible = True
-        ColorEachPoint = True
-        Marks.Frame.Visible = False
-        Marks.Visible = False
-        Title = 'In'
-        ValueFormat = '#,##0;(#,##0)'
-        BarStyle = bsRectGradient
-        Gradient.EndColor = 13408512
-        Gradient.Visible = True
-        MultiBar = mbSelfStack
-        XValues.Name = 'X'
-        XValues.Order = loAscending
-        YValues.Name = 'Bar'
-        YValues.Order = loNone
-        Data = {
-          000600000000000000000069400000000000006940B7F3FDD4B83B5A40DCF97E
-          6A3CE35B40A11A2FDD84C95F401B2FDD24669B6140}
-        Detail = {0000000000}
-      end
-      object Series1: TBarSeries
+      object Series2: TBarSeries
         ColorEachPoint = True
         MultiBar = mbSelfStack
         XValues.Name = 'X'
         XValues.Order = loAscending
         YValues.Name = 'Bar'
         YValues.Order = loNone
-        Data = {
-          000600000000000000008061406766666666164D400500000000601640CACCCC
-          CCCC9C2840CECCCCCCCC9C38400100000000F83B40}
-        Detail = {0000000000}
       end
     end
-    object _lvAvgCategory: TListView
+    object _lvCatSubcat: TListView
       Left = 0
       Top = 235
       Width = 432
@@ -200,19 +175,13 @@ object AnalisysFrm3: TAnalisysFrm3
           Caption = 'Category'
         end
         item
+          AutoSize = True
+          Caption = 'Subcategory'
+        end
+        item
           Alignment = taRightJustify
           AutoSize = True
           Caption = 'Amount'
-        end
-        item
-          Alignment = taRightJustify
-          AutoSize = True
-          Caption = 'Count'
-        end
-        item
-          Alignment = taRightJustify
-          AutoSize = True
-          Caption = 'Avg'
         end>
       GridLines = True
       Items.ItemData = {
