@@ -583,10 +583,10 @@ begin
   _SetNodeState(vNodeGroup, TVIS_BOLD);
 
   vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Analisys Amt');
-  vNode.ImageIndex := 13;
+  vNode.ImageIndex := 10;
   vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Analisys Avg');
-  vNode.ImageIndex := 13;
-  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Subcategory Analisys');
+  vNode.ImageIndex := 12;
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Subcat/Payee Analisys');
   vNode.ImageIndex := 13;
 
   // area report
@@ -656,7 +656,7 @@ begin
 
   // apro chart3
   if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'CHART'))
-    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Subcategory Analisys') then
+    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Subcat/Payee Analisys') then
   begin
     _Analisys3FRM             := TAnalisysFrm3.Create(nil);
     _Analisys3FRM.WindowState := wsMaximized;
