@@ -112,12 +112,12 @@ object AnalisysFrm3: TAnalisysFrm3
       end
       item
         Column = 1
-        Control = chartCategoryAvgMM
+        Control = chartPayeeSpent
         Row = 0
       end
       item
         Column = 1
-        Control = Chart1
+        Control = chartPayeeMost
         Row = 1
       end>
     RowCollection = <
@@ -156,6 +156,7 @@ object AnalisysFrm3: TAnalisysFrm3
       ColorPaletteIndex = 19
       object Series2: TBarSeries
         ColorEachPoint = True
+        Marks.Frame.Visible = False
         Marks.Arrow.Visible = False
         Marks.Callout.Arrow.Visible = False
         MarksOnBar = True
@@ -204,7 +205,7 @@ object AnalisysFrm3: TAnalisysFrm3
       ViewStyle = vsReport
       ExplicitWidth = 344
     end
-    object chartCategoryAvgMM: TChart
+    object chartPayeeSpent: TChart
       Left = 432
       Top = 0
       Width = 432
@@ -214,6 +215,7 @@ object AnalisysFrm3: TAnalisysFrm3
       Title.Text.Strings = (
         'Payee Most Contributed')
       BottomAxis.LabelsAlternate = True
+      View3D = False
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 2
@@ -224,25 +226,21 @@ object AnalisysFrm3: TAnalisysFrm3
         15
         24)
       ColorPaletteIndex = 19
-      object BarSeries1: THorizBarSeries
+      object Series1: THorizBarSeries
         BarBrush.Gradient.Direction = gdLeftRight
-        BarBrush.Gradient.EndColor = 13408512
-        BarBrush.Gradient.Visible = True
         ColorEachPoint = True
-        Marks.Frame.Visible = False
-        Title = 'In'
-        ValueFormat = '#,##0;(#,##0)'
-        BarStyle = bsRectGradient
+        Marks.Margins.Left = 17
+        Marks.Margins.Right = 13
+        Marks.Style = smsLabelPercent
+        Marks.TextAlign = taLeftJustify
         Gradient.Direction = gdLeftRight
-        Gradient.EndColor = 13408512
-        Gradient.Visible = True
         XValues.Name = 'Bar'
         XValues.Order = loNone
         YValues.Name = 'Y'
         YValues.Order = loAscending
       end
     end
-    object Chart1: TChart
+    object chartPayeeMost: TChart
       Left = 432
       Top = 235
       Width = 432
@@ -252,28 +250,29 @@ object AnalisysFrm3: TAnalisysFrm3
       Title.Text.Strings = (
         'Payee Most Used')
       BottomAxis.LabelsAlternate = True
+      Panning.InsideBounds = True
+      View3D = False
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 3
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15
-        24
+        23
         15
-        24)
+        23)
       ColorPaletteIndex = 19
-      object HorizBarSeries1: THorizBarSeries
+      object Series3: THorizBarSeries
         BarBrush.Gradient.Direction = gdLeftRight
-        BarBrush.Gradient.EndColor = 13408512
-        BarBrush.Gradient.Visible = True
         ColorEachPoint = True
-        Marks.Frame.Visible = False
-        Title = 'In'
-        ValueFormat = '#,##0;(#,##0)'
-        BarStyle = bsRectGradient
+        Marks.Emboss.Clip = True
+        Marks.Frame.Color = clDefault
+        Marks.Shadow.Clip = True
+        Marks.Style = smsLabelPercent
+        Marks.Clip = True
+        Marks.SoftClip = True
+        Marks.TextAlign = taLeftJustify
         Gradient.Direction = gdLeftRight
-        Gradient.EndColor = 13408512
-        Gradient.Visible = True
         XValues.Name = 'Bar'
         XValues.Order = loNone
         YValues.Name = 'Y'

@@ -356,7 +356,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm._stateRecord(_pState: string);
 var
-  _Rect: TGridRect;
+//  _Rect: TGridRect;
   _i:    Integer; // ciclo
 begin
   // imposto il campo trnreconcile a X per mostrare il record come verfiicato

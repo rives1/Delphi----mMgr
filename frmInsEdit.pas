@@ -484,8 +484,8 @@ end;
 procedure TInsEditFrm._writeRecord;
 var
   _lAmount:       string;  // ammontare da inserire nel db. pos o neg in base al tipo di spesa
-  _lCategoryType: string;  // tipo categoria
-  _lrecID:        integer; // id del record per inserire i riferimenti sui mov trasferimento
+//  _lCategoryType: string;  // tipo categoria
+//  _lrecID:        integer; // id del record per inserire i riferimenti sui mov trasferimento
 begin
   // il valore deve essere ngativo se la il tipo di transazione è pay
   if UpperCase(_fType.Text) = 'DEPOSIT' then

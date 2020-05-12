@@ -936,7 +936,7 @@ object MainFRM: TMainFRM
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 211
+    Width = 271
     Height = 652
     Align = alLeft
     BevelOuter = bvNone
@@ -946,16 +946,17 @@ object MainFRM: TMainFRM
     object Splitter1: TSplitter
       Left = 0
       Top = 414
-      Width = 211
+      Width = 271
       Height = 5
       Cursor = crVSplit
       Align = alBottom
       ExplicitTop = 372
+      ExplicitWidth = 211
     end
     object Panel2: TPanel
       Left = 0
       Top = 419
-      Width = 211
+      Width = 271
       Height = 233
       Align = alBottom
       BevelOuter = bvNone
@@ -963,10 +964,11 @@ object MainFRM: TMainFRM
       Ctl3D = False
       ParentCtl3D = False
       TabOrder = 0
+      ExplicitWidth = 211
       object chartBalance: TChart
         Left = 0
         Top = 0
-        Width = 211
+        Width = 271
         Height = 233
         MarginTop = 15
         Title.Text.Strings = (
@@ -986,6 +988,7 @@ object MainFRM: TMainFRM
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 211
         DefaultCanvas = 'TGDIPlusCanvas'
         PrintMargins = (
           27
@@ -998,7 +1001,7 @@ object MainFRM: TMainFRM
           ColorEachPoint = True
           Marks.Frame.Visible = False
           Marks.Visible = True
-          Marks.Angle = 90
+          Marks.Angle = 50
           Marks.AutoPosition = False
           Marks.Callout.Length = 20
           Marks.SoftClip = True
@@ -1020,7 +1023,7 @@ object MainFRM: TMainFRM
     object treeMenu: TTreeView
       Left = 0
       Top = 0
-      Width = 211
+      Width = 271
       Height = 414
       Align = alClient
       BorderStyle = bsNone
@@ -1034,6 +1037,7 @@ object MainFRM: TMainFRM
       Items.NodeData = {
         0301000000260000000500000000000000FFFFFFFFFFFFFFFF00000000000000
         0000000000010452006F006F007400}
+      ExplicitWidth = 211
     end
   end
   object StatusBar1: TStatusBar
@@ -1044,7 +1048,7 @@ object MainFRM: TMainFRM
     Panels = <>
   end
   object MainMenu1: TMainMenu
-    Left = 244
+    Left = 329
     Top = 18
     object File1: TMenuItem
       Caption = '&File'
@@ -1083,12 +1087,12 @@ object MainFRM: TMainFRM
     Params.Strings = (
       'DriverID=SQLite'
       'LockingMode=Normal')
-    Left = 229
+    Left = 314
     Top = 443
   end
   object sqlQry: TFDQuery
     Connection = sqlite_conn
-    Left = 304
+    Left = 389
     Top = 443
   end
   object VirtualImageList1: TVirtualImageList
@@ -6461,7 +6465,7 @@ object MainFRM: TMainFRM
       'begin'
       ''
       'end.')
-    Left = 375
+    Left = 460
     Top = 525
     Datasets = <
       item
@@ -8294,7 +8298,7 @@ object MainFRM: TMainFRM
       'rptTotLine=rptTotLine')
     DataSet = fdMemBalYTD
     BCDToCurrency = False
-    Left = 305
+    Left = 390
     Top = 525
   end
   object fdMemBalYTD: TFDMemTable
@@ -8394,22 +8398,22 @@ object MainFRM: TMainFRM
     UpdateOptions.CheckRequired = False
     UpdateOptions.AutoCommitUpdates = True
     StoreDefs = True
-    Left = 230
+    Left = 315
     Top = 525
   end
   object sqlQry2: TFDQuery
     Connection = sqlite_conn
-    Left = 374
+    Left = 459
     Top = 443
   end
   object dlgSave: TSaveDialog
     DefaultExt = '.sqlite'
     Filter = 'sqlite|*.sqlite'
-    Left = 245
+    Left = 330
     Top = 85
   end
   object dlgOpen: TOpenDialog
-    Left = 315
+    Left = 400
     Top = 85
   end
 end

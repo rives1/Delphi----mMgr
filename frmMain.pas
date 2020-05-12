@@ -91,7 +91,7 @@ implementation
 
 uses
   frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmChartAnalisys3, frmPayee, frmCategory, frmTblBalYTD,
-  pasCommon, CommCtrl, ShellApi, System.IOUtils;
+  pasCommon, CommCtrl, ShellApi, System.IOUtils, System.UITypes;
 
 { TForm1 }
 
