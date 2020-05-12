@@ -138,6 +138,12 @@ object AnalisysFrm3: TAnalisysFrm3
       Title.Text.Strings = (
         'Expenses x Cat/Subcategory')
       BottomAxis.LabelsAlternate = True
+      BottomAxis.LabelsMultiLine = True
+      BottomAxis.LabelsSize = 10
+      BottomAxis.LabelStyle = talValue
+      BottomAxis.RoundFirstLabel = False
+      BottomAxis.TickInnerLength = 2
+      BottomAxis.TicksInner.Color = 8404992
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
@@ -150,7 +156,11 @@ object AnalisysFrm3: TAnalisysFrm3
       ColorPaletteIndex = 19
       object Series2: TBarSeries
         ColorEachPoint = True
+        Marks.Arrow.Visible = False
+        Marks.Callout.Arrow.Visible = False
+        MarksOnBar = True
         MultiBar = mbSelfStack
+        Sides = 23
         XValues.Name = 'X'
         XValues.Order = loAscending
         YValues.Name = 'Bar'

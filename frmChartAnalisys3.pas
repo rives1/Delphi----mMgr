@@ -40,7 +40,7 @@ type
     procedure _setDefaultDate;
     procedure _loadCmbAccount;
     procedure _fillChart;
-    procedure _chartCategorySubcategoryMM;
+    procedure _chartCategorySubcategory;
     procedure _chartMMCategoryAvg;
 
   public
@@ -156,9 +156,9 @@ begin
         // tabella soprastante
 //        _lvItem         := _lvAverageMM.Items.Add;
         _lvItem.Caption := VarToStr(MainFRM.sqlQry.FieldValues['CATDES']);
-        _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] * -1));
+        _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
         _lvItem.SubItems.Add(FormatFloat('#,##0.##', _mmPeriod));
-        _lvItem.SubItems.Add(FormatFloat('#,##0.00', ((MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] * -1) / _mmPeriod)));
+        _lvItem.SubItems.Add(FormatFloat('#,##0.00', ((MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']) / _mmPeriod)));
         // MainFRM.sqlQry.FieldValues['Count_TRNID']));
       end;
 
@@ -172,12 +172,13 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TAnalisysFrm3._chartCategorySubcategoryMM;
+procedure TAnalisysFrm3._chartCategorySubcategory;
 var
   _lTotal: Double;    // calcolo totale da imputare nella serie
   _Cat:    string;    // categoria da valutare per inserimento
   _lvItem: TListItem; // item per inserire i dati nelle colonne secondarie
   _barSeries: TBarSeries; //riferimento alla serie
+  _i:integer; //conteggio inserimento serie
 begin
   // istogramma stacked per valore cat-subcat
   chartCatSubcat.SeriesList.Clear; //elimino tutte le serie
@@ -205,8 +206,10 @@ begin
   chartCatSubcat.Axes.Bottom.Items.Clear;
 
   // inizializzo var
+  _i:=0;
   _Cat := '';
   _lvCatSubcat.Items.Clear;
+
   // eseguo ciclo sui dati
   try
     MainFRM.sqlQry.Open;
@@ -221,20 +224,22 @@ begin
           _barSeries.ColorEachPoint:=True;
 
           _barSeries.ParentChart := chartCatSubcat; //aggiungo la serie al chart
-//          chartCatSubcat.Axes.Bottom.Items.Add(_i, MainFRM.sqlQry.FieldValues['CATDES']); //descr asse
+          chartCatSubcat.Axes.Bottom.Items.Add(_i, MainFRM.sqlQry.FieldValues['CATDES']); //descr asse
+          _i:=_i+1;
 
           _Cat := MainFRM.sqlQry.FieldValues['CATDES']; //set control condition
         end;
 
         // inserimento dati nella serie
         _lTotal := Abs(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
-        _barSeries.Add(_lTotal, VarToStr(MainFRM.sqlQry.FieldValues['SUBCDES']));
+        _barSeries.Add(_lTotal);
+//        _barSeries.Add(_lTotal, VarToStr(MainFRM.sqlQry.FieldValues['SUBCDES']));
 
         // 12.05.20 - fill della listview con i dati di dettaglio
         _lvItem         := _lvCatSubcat.Items.Add;
         _lvItem.Caption := VarToStr(MainFRM.sqlQry.FieldValues['CATDES']);
         _lvItem.SubItems.Add(VarToStr(MainFRM.sqlQry.FieldValues['SUBCDES']));
-        _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] * -1));
+        _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
 
       MainFRM.sqlQry.Next;
     end;
@@ -266,7 +271,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TAnalisysFrm3._fillChart;
 begin
-  _chartCategorySubcategoryMM;
+  _chartCategorySubcategory;
 //  _chartMMCategoryAvg;
 end;
 
