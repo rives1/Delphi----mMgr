@@ -91,7 +91,8 @@ implementation
 
 uses
   frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmChartAnalisys3, frmChartAnalisys4, frmPayee,
-  frmCategory, frmTblBalYTD, frmTblPayeeYTD, pasCommon, CommCtrl, ShellApi, System.IOUtils, System.UITypes;
+  frmCategory, frmTblBalYTD, frmTblPayeeYTD, frmTblSubcatYTD, pasCommon, CommCtrl, ShellApi, System.IOUtils,
+  System.UITypes;
 
 { TForm1 }
 
@@ -599,6 +600,8 @@ begin
   vNode.ImageIndex := 9;
   vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Balance Payee-YTD');
   vNode.ImageIndex := 19;
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Balance Subcategory-YTD');
+  vNode.ImageIndex := 18;
 
   // area Config
   vNodeGroup            := treeMenu.Items.Add(nil, 'Config');
@@ -628,6 +631,7 @@ var
   _CategoryFRM:     TCategoryFrm;
   _TblBalanceYTD:   TtblBalanceFrm;
   _TblPayeeYTD:     TtblPayeeFrm;
+  _TblSubcatYTD:    TtblSubcatFrm;
 
 begin
   // apro la child form del ledger. se il nodo superiore è account si tratta sicuramente di un ledger da aprire
@@ -646,12 +650,20 @@ begin
     _TblBalanceYTD.WindowState := wsMaximized;
   end;
 
-  // apro la form per tabella report balance ytd
+  // apro la form per tabella report payee ytd
   if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'REPORT'))
     and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Balance Payee-YTD') then
   begin
     _TblPayeeYTD             := TtblPayeeFrm.Create(nil);
     _TblPayeeYTD.WindowState := wsMaximized;
+  end;
+
+  // apro la form per tabella report subcategory ytd
+  if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'REPORT'))
+    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Balance Subcategory-YTD') then
+  begin
+    _TblSubcatYTD             := TtblSubcatFrm.Create(nil);
+    _TblSubcatYTD.WindowState := wsMaximized;
   end;
 
   // apro chart1

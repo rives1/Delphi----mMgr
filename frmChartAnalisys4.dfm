@@ -118,7 +118,6 @@ object AnalisysFrm4: TAnalisysFrm4
         SizeStyle = ssAuto
       end>
     TabOrder = 2
-    ExplicitTop = 36
     object chartPayeeSpent: TChart
       Left = 0
       Top = 0
@@ -173,7 +172,6 @@ object AnalisysFrm4: TAnalisysFrm4
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitWidth = 516
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15
@@ -209,7 +207,7 @@ object AnalisysFrm4: TAnalisysFrm4
         ExplodeBiggest = 15
         OtherSlice.Legend.Visible = False
         OtherSlice.Style = poBelowPercent
-        OtherSlice.Value = 5.000000000000000000
+        OtherSlice.Value = 1.000000000000000000
         PiePen.Visible = False
       end
     end

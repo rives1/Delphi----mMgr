@@ -1,7 +1,7 @@
-object tblPayeeFrm: TtblPayeeFrm
+object tblSubcatFrm: TtblSubcatFrm
   Left = 0
   Top = 0
-  Caption = 'Table Payee YTD'
+  Caption = 'Table Subcategory YTD'
   ClientHeight = 613
   ClientWidth = 627
   Color = clBtnFace
@@ -36,7 +36,7 @@ object tblPayeeFrm: TtblPayeeFrm
     Height = 19
     Panels = <>
   end
-  object _fLvPayeeYTD: TListView
+  object _fLvSubcategoryYTD: TListView
     Left = 0
     Top = 38
     Width = 627
@@ -45,7 +45,11 @@ object tblPayeeFrm: TtblPayeeFrm
     Columns = <
       item
         AutoSize = True
-        Caption = 'Payee'
+        Caption = 'Category'
+      end
+      item
+        AutoSize = True
+        Caption = 'Subcategory'
       end
       item
         Alignment = taRightJustify
@@ -65,17 +69,14 @@ object tblPayeeFrm: TtblPayeeFrm
     GridLines = True
     HotTrack = True
     Items.ItemData = {
-      05450000000100000000000000FFFFFFFFFFFFFFFF03000000FFFFFFFF000000
-      0005700061007900650065000331003200330048ACC9080235003000B8ACC908
-      01330040A9F21BFFFFFFFFFFFF}
+      05520000000100000000000000FFFFFFFFFFFFFFFF04000000FFFFFFFF000000
+      0003630061007200046600750065006C0078A5C500033100320033009098C500
+      03320030002500C8A6C500013300F8A1C500FFFFFFFFFFFFFFFF}
     ReadOnly = True
     RowSelect = True
     TabOrder = 1
     ViewStyle = vsReport
-    OnClick = _fLvPayeeYTDClick
-    ExplicitLeft = 40
-    ExplicitTop = 36
-    ExplicitHeight = 303
+    OnClick = _fLvSubcategoryYTDClick
   end
   object Panel1: TPanel
     Left = 0
@@ -133,7 +134,7 @@ object tblPayeeFrm: TtblPayeeFrm
     Align = alBottom
     Caption = 'Panel2'
     TabOrder = 3
-    object chartPayeeMM: TChart
+    object chartSubcatMM: TChart
       Left = 1
       Top = 1
       Width = 625
@@ -149,6 +150,8 @@ object tblPayeeFrm: TtblPayeeFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitLeft = 0
+      ExplicitTop = -1
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15

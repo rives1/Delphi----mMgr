@@ -16,7 +16,8 @@ uses
   Vcl.Styles,
   frmChartAnalisys3 in 'frmChartAnalisys3.pas' {AnalisysFrm3},
   frmChartAnalisys4 in 'frmChartAnalisys4.pas' {AnalisysFrm4},
-  frmTblPayeeYTD in 'frmTblPayeeYTD.pas' {tblPayeeFrm};
+  frmTblPayeeYTD in 'frmTblPayeeYTD.pas' {tblPayeeFrm},
+  frmTblSubcatYTD in 'frmTblSubcatYTD.pas' {tblSubcatFrm};
 
 {$R *.res}
 
