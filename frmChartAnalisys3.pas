@@ -21,11 +21,7 @@ type
     Label7: TLabel;
     chartCatSubcat: TChart;
     _lvCatSubcat: TListView;
-    chartPayeeSpent: TChart;
-    chartPayeeMost: TChart;
     Series2: TBarSeries;
-    Series1: THorizBarSeries;
-    Series3: THorizBarSeries;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure _fdtFromChange(Sender: TObject);
@@ -41,7 +37,6 @@ type
     procedure _loadCmbAccount;
     procedure _fillChart;
     procedure _chartCategorySubcategory;
-    procedure _chartPayee;
 
   public
     { Public declarations }
@@ -81,73 +76,6 @@ begin
   _setDefaultDate;
   _loadCmbAccount;
   _fillChart;
-end;
-
-// -------------------------------------------------------------------------------------------------------------//
-procedure TAnalisysFrm3._chartPayee;
-var
-  _i:              integer; // ciclo per asse x elementi da inserire
-  _PayeeCondition: string;  // categoria da valutare per inserimento
-
-begin
-  chartPayeeSpent.Series[0].Clear(); // pulisco il grafico
-  chartPayeeMost.Series[0].Clear();  // pulisco il grafico
-
-  _SQLString := ' Select PAYNAME, '
-    + ' Abs(Sum(LedgerView.TRNAMOUNT)) As Sum_TRNAMOUNT, '
-    + ' Count(Distinct LedgerView.TRNAMOUNT) As Count_TRNAMOUNT '
-    + ' From LedgerView '
-    + ' Where '
-    + ' CATDES <> ''_Transfer'' '
-    + ' And UCASE(CATTYPE) = ''EXPENSE'' ';
-
-  if (_fAccount.Text <> 'ALL') then
-    _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
-
-  _SQLString   := _SQLString
-    + ' And TRNDATE Between ''' + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
-    + ''' and ''' + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
-    + ''' Group By PAYNAME '
-    + 'Order By Sum_TRNAMOUNT';
-
-  MainFRM.sqlQry.SQL.Clear;
-  MainFRM.sqlQry.SQL.Add(_SQLString);
-
-  chartPayeeSpent.Axes.Left.Items.Clear;
-  chartPayeeMost.Axes.Left.Items.Clear;
-
-  // inizializzo var
-  _i              := 0;
-  _PayeeCondition := '';
-
-  // eseguo ciclo sui dati
-  try
-    MainFRM.sqlQry.Open;
-    while not MainFRM.sqlQry.EOF do // ciclo recupero dati
-    begin
-      if MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] <> null then
-      begin
-        // impostazione descrizione asse X
-        if (_PayeeCondition <> MainFRM.sqlQry.FieldValues['PAYNAME']) then
-        begin
-          chartPayeeSpent.Axes.Left.Items.Add(_i, MainFRM.sqlQry.FieldValues['PAYNAME']);
-          chartPayeeMost.Axes.Left.Items.Add(_i, MainFRM.sqlQry.FieldValues['PAYNAME']);
-          _PayeeCondition := MainFRM.sqlQry.FieldValues['PAYNAME'];
-          _i              := _i + 1;
-        end;
-
-        // inserimento dati nelle due serie in base alla tipologia della categoria
-        chartPayeeSpent.SeriesList[0].Add(StrToFloat(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
-        chartPayeeMost.SeriesList[0].Add(StrToFloat(MainFRM.sqlQry.FieldValues['Count_TRNAMOUNT']));
-      end;
-
-      MainFRM.sqlQry.Next;
-    end; //ciclo qry
-  finally
-    MainFRM.sqlQry.Close;
-    MainFRM.sqlQry.SQL.Clear;
-  end; //try
-
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -254,7 +182,6 @@ end;
 procedure TAnalisysFrm3._fillChart;
 begin
   _chartCategorySubcategory;
-  _chartPayee;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

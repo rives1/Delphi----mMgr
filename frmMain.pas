@@ -90,8 +90,8 @@ implementation
 
 
 uses
-  frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmChartAnalisys3, frmPayee, frmCategory, frmTblBalYTD,
-  pasCommon, CommCtrl, ShellApi, System.IOUtils, System.UITypes;
+  frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmChartAnalisys3, frmChartAnalisys4, frmPayee,
+  frmCategory, frmTblBalYTD, pasCommon, CommCtrl, ShellApi, System.IOUtils, System.UITypes;
 
 { TForm1 }
 
@@ -586,8 +586,10 @@ begin
   vNode.ImageIndex := 10;
   vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Analisys Avg');
   vNode.ImageIndex := 12;
-  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Subcat/Payee Analisys');
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Subcategory Analisys');
   vNode.ImageIndex := 13;
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Payee Analisys');
+  vNode.ImageIndex := 18;
 
   // area report
   vNodeGroup            := treeMenu.Items.Add(nil, 'Report');
@@ -619,6 +621,7 @@ var
   _Analisys1FRM:    TAnalisysFrm1;
   _Analisys2FRM:    TAnalisysFrm2;
   _Analisys3FRM:    TAnalisysFrm3;
+  _Analisys4FRM:    TAnalisysFrm4;
   _PayeeFRM:        TPayeeFRM;
   _CategoryFRM:     TCategoryFrm;
   _TblBalanceYTD:   TtblBalanceFrm;
@@ -656,10 +659,18 @@ begin
 
   // apro chart3
   if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'CHART'))
-    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Subcat/Payee Analisys') then
+    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Subcategory Analisys') then
   begin
     _Analisys3FRM             := TAnalisysFrm3.Create(nil);
     _Analisys3FRM.WindowState := wsMaximized;
+  end;
+
+  // apro chart4
+  if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'CHART'))
+    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Payee Analisys') then
+  begin
+    _Analisys4FRM             := TAnalisysFrm4.Create(nil);
+    _Analisys4FRM.WindowState := wsMaximized;
   end;
 
   // Config

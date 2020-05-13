@@ -94,10 +94,7 @@ object AnalisysFrm3: TAnalisysFrm3
     BevelOuter = bvNone
     ColumnCollection = <
       item
-        Value = 50.000000000000000000
-      end
-      item
-        Value = 50.000000000000000000
+        Value = 100.000000000000000000
       end>
     ControlCollection = <
       item
@@ -108,16 +105,6 @@ object AnalisysFrm3: TAnalisysFrm3
       item
         Column = 0
         Control = _lvCatSubcat
-        Row = 1
-      end
-      item
-        Column = 1
-        Control = chartPayeeSpent
-        Row = 0
-      end
-      item
-        Column = 1
-        Control = chartPayeeMost
         Row = 1
       end>
     RowCollection = <
@@ -131,7 +118,7 @@ object AnalisysFrm3: TAnalisysFrm3
     object chartCatSubcat: TChart
       Left = 0
       Top = 0
-      Width = 432
+      Width = 864
       Height = 235
       Legend.Alignment = laTop
       Legend.Visible = False
@@ -147,6 +134,7 @@ object AnalisysFrm3: TAnalisysFrm3
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitWidth = 432
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15
@@ -171,7 +159,7 @@ object AnalisysFrm3: TAnalisysFrm3
     object _lvCatSubcat: TListView
       Left = 0
       Top = 235
-      Width = 432
+      Width = 864
       Height = 235
       Margins.Left = 5
       Margins.Top = 5
@@ -204,80 +192,6 @@ object AnalisysFrm3: TAnalisysFrm3
       TabOrder = 1
       ViewStyle = vsReport
       ExplicitWidth = 344
-    end
-    object chartPayeeSpent: TChart
-      Left = 432
-      Top = 0
-      Width = 432
-      Height = 235
-      Legend.Alignment = laTop
-      Legend.Visible = False
-      Title.Text.Strings = (
-        'Payee Most Contributed')
-      BottomAxis.LabelsAlternate = True
-      View3D = False
-      Align = alClient
-      BevelOuter = bvNone
-      TabOrder = 2
-      DefaultCanvas = 'TGDIPlusCanvas'
-      PrintMargins = (
-        15
-        24
-        15
-        24)
-      ColorPaletteIndex = 19
-      object Series1: THorizBarSeries
-        BarBrush.Gradient.Direction = gdLeftRight
-        ColorEachPoint = True
-        Marks.Margins.Left = 17
-        Marks.Margins.Right = 13
-        Marks.Style = smsLabelPercent
-        Marks.TextAlign = taLeftJustify
-        Gradient.Direction = gdLeftRight
-        XValues.Name = 'Bar'
-        XValues.Order = loNone
-        YValues.Name = 'Y'
-        YValues.Order = loAscending
-      end
-    end
-    object chartPayeeMost: TChart
-      Left = 432
-      Top = 235
-      Width = 432
-      Height = 235
-      Legend.Alignment = laTop
-      Legend.Visible = False
-      Title.Text.Strings = (
-        'Payee Most Used')
-      BottomAxis.LabelsAlternate = True
-      Panning.InsideBounds = True
-      View3D = False
-      Align = alClient
-      BevelOuter = bvNone
-      TabOrder = 3
-      DefaultCanvas = 'TGDIPlusCanvas'
-      PrintMargins = (
-        15
-        23
-        15
-        23)
-      ColorPaletteIndex = 19
-      object Series3: THorizBarSeries
-        BarBrush.Gradient.Direction = gdLeftRight
-        ColorEachPoint = True
-        Marks.Emboss.Clip = True
-        Marks.Frame.Color = clDefault
-        Marks.Shadow.Clip = True
-        Marks.Style = smsLabelPercent
-        Marks.Clip = True
-        Marks.SoftClip = True
-        Marks.TextAlign = taLeftJustify
-        Gradient.Direction = gdLeftRight
-        XValues.Name = 'Bar'
-        XValues.Order = loNone
-        YValues.Name = 'Y'
-        YValues.Order = loAscending
-      end
     end
   end
 end
