@@ -81,9 +81,11 @@ const
   _nomeMese: array [0 .. 11] of string = ('Jan', 'Feb', 'Mar', 'Apr', 'Mag', 'Jun', 'Jul',
     'Aug', 'Sep', 'Oct', 'Nov', 'Dic'); // nome dei mesi
 var
-  _i: integer; // x ciclo for
+  _i:         integer;    // x ciclo for
+  _barSeries: TBarSeries; // riferimento alla serie
+
 begin
-  chartSubcatMM.Series[0].Clear(); // pulisco il grafico
+  chartSubcatMM.SeriesList.Clear(); // pulisco il grafico
 
   _SQLString := 'Select '
     + ' CATDES, SUBCDES, '
@@ -108,16 +110,24 @@ begin
     MainFRM.sqlQry.Open;
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
     begin
+      _barSeries                := TBarSeries.Create(Self); // instance of the bar series
+      _barSeries.Title          := MainFRM.sqlQry.FieldValues['CATDES'];
+      _barSeries.MultiBar       := mbSelfStack;
+      _barSeries.ColorEachPoint := True;
+      _barSeries.ParentChart    := chartSubcatMM; // aggiungo la serie al chart
+      chartSubcatMM.View3D      := False;
+
+      // inserimento dati
       for _i := 0 to 11 do // ciclo sui campi dei mesi della memtable che ha 16 campi
-      begin
+      begin { TODO : qs ciclo non crea un istogramma con tutti i mesi ma solo 1 }
         // inserisco il valore di default di 00
         if (_i + 1 = MainFRM.sqlQry.FieldValues['MM']) then
         begin
-          chartSubcatMM.Series[0].Add(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']);
+          _barSeries.Add(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']);
           MainFRM.sqlQry.Next;
         end
         else
-          chartSubcatMM.Series[0].AddNull(0);
+          _barSeries.AddNull(0);
 
       end; // for
 

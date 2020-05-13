@@ -110,11 +110,10 @@ begin
     begin
       for _i := 0 to 11 do // ciclo sui campi dei mesi della memtable che ha 16 campi
       begin
-        // inserisco il valore di default di 00
         if (_i + 1 = MainFRM.sqlQry.FieldValues['MM']) then
         begin
           chartPayeeMM.Series[0].Add(MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']);
-          MainFRM.sqlQry.Next;
+          MainFRM.sqlQry.Next;{ TODO : qs next rischia di far saltare l'ultimo record della qry }
         end
         else
           chartPayeeMM.Series[0].AddNull(0);
