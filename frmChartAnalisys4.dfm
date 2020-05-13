@@ -118,6 +118,7 @@ object AnalisysFrm4: TAnalisysFrm4
         SizeStyle = ssAuto
       end>
     TabOrder = 2
+    ExplicitTop = 36
     object chartPayeeSpent: TChart
       Left = 0
       Top = 0
@@ -156,7 +157,7 @@ object AnalisysFrm4: TAnalisysFrm4
     object chartPayeeMost: TChart
       Left = 0
       Top = 235
-      Width = 516
+      Width = 864
       Height = 235
       Legend.Alignment = laTop
       Legend.Visible = False
@@ -169,8 +170,10 @@ object AnalisysFrm4: TAnalisysFrm4
       View3DOptions.Orthogonal = False
       View3DOptions.Perspective = 0
       View3DOptions.Rotation = 360
+      Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
+      ExplicitWidth = 516
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15

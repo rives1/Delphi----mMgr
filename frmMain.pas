@@ -91,7 +91,7 @@ implementation
 
 uses
   frmLedger, frmAccount, frmChartAnalisys1, frmChartAnalisys2, frmChartAnalisys3, frmChartAnalisys4, frmPayee,
-  frmCategory, frmTblBalYTD, pasCommon, CommCtrl, ShellApi, System.IOUtils, System.UITypes;
+  frmCategory, frmTblBalYTD, frmTblPayeeYTD, pasCommon, CommCtrl, ShellApi, System.IOUtils, System.UITypes;
 
 { TForm1 }
 
@@ -597,6 +597,8 @@ begin
   _SetNodeState(vNodeGroup, TVIS_BOLD);
   vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Balance YTD-Monthly');
   vNode.ImageIndex := 9;
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Balance Payee-YTD');
+  vNode.ImageIndex := 19;
 
   // area Config
   vNodeGroup            := treeMenu.Items.Add(nil, 'Config');
@@ -625,6 +627,8 @@ var
   _PayeeFRM:        TPayeeFRM;
   _CategoryFRM:     TCategoryFrm;
   _TblBalanceYTD:   TtblBalanceFrm;
+  _TblPayeeYTD:     TtblPayeeFrm;
+
 begin
   // apro la child form del ledger. se il nodo superiore è account si tratta sicuramente di un ledger da aprire
   if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
@@ -640,6 +644,14 @@ begin
   begin
     _TblBalanceYTD             := TtblBalanceFrm.Create(nil);
     _TblBalanceYTD.WindowState := wsMaximized;
+  end;
+
+  // apro la form per tabella report balance ytd
+  if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'REPORT'))
+    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Balance Payee-YTD') then
+  begin
+    _TblPayeeYTD             := TtblPayeeFrm.Create(nil);
+    _TblPayeeYTD.WindowState := wsMaximized;
   end;
 
   // apro chart1
