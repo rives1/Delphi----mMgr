@@ -150,8 +150,6 @@ object tblSubcatFrm: TtblSubcatFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitLeft = 0
-      ExplicitTop = -1
       DefaultCanvas = 'TGDIPlusCanvas'
       PrintMargins = (
         15

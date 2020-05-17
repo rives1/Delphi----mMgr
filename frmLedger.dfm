@@ -37,6 +37,7 @@ object LedgerFrm: TLedgerFrm
     Align = alClient
     TabOrder = 0
     VisualStyle = vsClassic
+    ExplicitHeight = 541
     BarSize = (
       2
       432
@@ -77,6 +78,7 @@ object LedgerFrm: TLedgerFrm
       StyleElements = [seFont, seBorder]
       OnDblClick = grdLedgerDblClick
       OnDrawCell = grdLedgerDrawCell
+      ExplicitTop = 25
     end
     object pnlCaption: TPanel
       Left = 0
@@ -92,6 +94,7 @@ object LedgerFrm: TLedgerFrm
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 1
+      ExplicitTop = -2
     end
     object chTotals: TChart
       Left = 0
@@ -158,12 +161,14 @@ object LedgerFrm: TLedgerFrm
       BottomAxis.Axis.Width = 0
       BottomAxis.StartPosition = 1.000000000000000000
       Chart3DPercent = 1
-      Pages.MaxPointsPerPage = 25
+      Pages.MaxPointsPerPage = 26
       View3D = False
       View3DOptions.Orthogonal = False
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
+      ExplicitLeft = 157
+      ExplicitTop = -15
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 13
       object Series2: TAreaSeries
@@ -190,16 +195,19 @@ object LedgerFrm: TLedgerFrm
       end
     end
   end
-  object RzStatusBar1: TRzStatusBar
+  object sBar: TStatusBar
     Left = 0
     Top = 606
     Width = 744
     Height = 19
-    BorderInner = fsNone
-    BorderOuter = fsNone
-    BorderSides = [sdLeft, sdTop, sdRight, sdBottom]
-    BorderWidth = 0
-    TabOrder = 1
+    Panels = <
+      item
+        Text = 'Lines NR'
+        Width = 50
+      end>
+    ExplicitLeft = 210
+    ExplicitTop = 575
+    ExplicitWidth = 0
   end
   object PopupMenu1: TPopupMenu
     Left = 35

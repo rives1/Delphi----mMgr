@@ -94,6 +94,7 @@ begin
     + ' From LedgerView '
     + ' Where CATDES <> ''_Transfer'' '
     + ' and CATDES = ''' + _fLvSubcategoryYTD.Selected.Caption + ''' '
+    + ' and SUBCDES = ''' + _fLvSubcategoryYTD.Selected.SubItems[0] + ''' '
     + ' and StrfTime(''%Y'', TRNDATE) = '''
     + FormatDateTime('yyyy', _fYear.Date) + ''' ';
 
@@ -112,14 +113,14 @@ begin
     begin
       _barSeries                := TBarSeries.Create(Self); // instance of the bar series
       _barSeries.Title          := MainFRM.sqlQry.FieldValues['CATDES'];
-      _barSeries.MultiBar       := mbSelfStack;
+//      _barSeries.MultiBar       := mbSelfStack;
       _barSeries.ColorEachPoint := True;
       _barSeries.ParentChart    := chartSubcatMM; // aggiungo la serie al chart
       chartSubcatMM.View3D      := False;
 
       // inserimento dati
       for _i := 0 to 11 do // ciclo sui campi dei mesi della memtable che ha 16 campi
-      begin { TODO : qs ciclo non crea un istogramma con tutti i mesi ma solo 1 }
+      begin
         // inserisco il valore di default di 00
         if (_i + 1 = MainFRM.sqlQry.FieldValues['MM']) then
         begin

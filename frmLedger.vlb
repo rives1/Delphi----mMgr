@@ -1,14 +1,11 @@
-﻿[RzStatusBar1]
-Coordinates=10,78,94,58
-
-[RzSplitter1]
+﻿[RzSplitter1]
 Coordinates=277,10,78,58
 
 [Series1]
 Coordinates=158,174,58,36
 
 []
-Coordinates=73,10,73,58
+Coordinates=10,78,94,58
 Visible=True
 
 [chTotals]

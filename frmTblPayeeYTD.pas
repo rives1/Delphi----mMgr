@@ -108,7 +108,7 @@ begin
     MainFRM.sqlQry.Open;
     while not MainFRM.sqlQry.EOF do // ciclo recupero dati
     begin
-      for _i := 0 to 11 do // ciclo sui campi dei mesi della memtable che ha 16 campi
+      for _i := 0 to 11 do // ciclo sui campi dei mesi
       begin
         if (_i + 1 = MainFRM.sqlQry.FieldValues['MM']) then
         begin

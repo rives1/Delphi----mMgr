@@ -14,7 +14,6 @@ type
     RzSplitter1: TRzSplitter;
     chTotals: TChart;
     chHistory: TChart;
-    RzStatusBar1: TRzStatusBar;
     Series1: TPieSeries;
     Series2: TAreaSeries;
     PopupMenu1: TPopupMenu;
@@ -32,6 +31,7 @@ type
     CSVexport1: TMenuItem;
     oggleBookmarkB1: TMenuItem;
     pnlCaption: TPanel;
+    sBar: TStatusBar;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -356,8 +356,8 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm._stateRecord(_pState: string);
 var
-//  _Rect: TGridRect;
-  _i:    Integer; // ciclo
+  // _Rect: TGridRect;
+  _i: Integer; // ciclo
 begin
   // imposto il campo trnreconcile a X per mostrare il record come verfiicato
   for _i := grdLedger.Selection.Top to grdLedger.Selection.Bottom do
@@ -597,7 +597,7 @@ end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm._fillGrid;
-// riempiemnto della grid
+// riempimento della grid
 var
   _i:            Integer;
   _runSum:       Double;
@@ -632,8 +632,8 @@ begin
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
     MainFRM.sqlQry.Open;
-    _i      := 1;
-    _runSum := 0;
+    _i                  := 1;
+    _runSum             := 0;
     if (MainFRM.sqlQry.RecordCount <> 0) then
       while not MainFRM.sqlQry.EOF do // ciclo recupero dati
       begin
@@ -711,10 +711,10 @@ begin
   else
     grdLedger.Row := _recPosition;
 
-  MainFRM._fillBalanceChart;
+  sBar.Panels[0].Text := 'Records: ' + IntToStr(grdLedger.RowCount-1);//indicazione del totale record
 
-  // autosize columns
-  _autoSizeGrid;
+  MainFRM._fillBalanceChart; // riempiento del chart in basso
+  _autoSizeGrid; // autosize columns
 
 end;
 

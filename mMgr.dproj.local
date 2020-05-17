@@ -38,9 +38,9 @@
     <Transaction>2020/05/05 23:08:53.000.089,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmChartAnalisys3.pas</Transaction>
     <Transaction>2020/05/05 23:10:01.000.844,C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmChartAnalisys3.pas=</Transaction>
     <Transaction>2020/05/05 23:10:08.000.312,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmChartAnalisys3.pas</Transaction>
-    <Transaction>2020/05/13 18:21:48.196,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmChartAnalisys4.pas</Transaction>
-    <Transaction>2020/05/13 18:53:49.120,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmTblPayeeYTD.pas</Transaction>
-    <Transaction>2020/05/13 22:11:39.873,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmTblSubcatYTD.pas</Transaction>
+    <Transaction>2020/05/13 18:21:48.000.196,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmChartAnalisys4.pas</Transaction>
+    <Transaction>2020/05/13 18:53:49.000.120,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmTblPayeeYTD.pas</Transaction>
+    <Transaction>2020/05/13 22:11:39.000.873,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmTblSubcatYTD.pas</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
     <File Path="frmAccount.pas"/>
