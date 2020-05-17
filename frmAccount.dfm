@@ -4,7 +4,7 @@ object AccountFrm: TAccountFrm
   BorderStyle = bsSingle
   Caption = 'Account'
   ClientHeight = 536
-  ClientWidth = 485
+  ClientWidth = 522
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -22,16 +22,17 @@ object AccountFrm: TAccountFrm
   PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter
-    Left = 211
+    Left = 228
     Top = 0
     Width = 5
     Height = 517
+    ExplicitLeft = 211
     ExplicitHeight = 493
   end
   object _fLvAccount: TListView
     Left = 0
     Top = 0
-    Width = 211
+    Width = 228
     Height = 517
     Align = alLeft
     BorderStyle = bsNone
@@ -39,6 +40,11 @@ object AccountFrm: TAccountFrm
       item
         AutoSize = True
         Caption = 'Account Name'
+      end
+      item
+        Alignment = taRightJustify
+        AutoSize = True
+        Caption = 'Balance'
       end>
     Ctl3D = False
     FlatScrollBars = True
@@ -96,28 +102,29 @@ object AccountFrm: TAccountFrm
     TabOrder = 0
     ViewStyle = vsReport
     OnDblClick = _fLvAccountDblClick
-    ExplicitLeft = -1
-    ExplicitHeight = 266
   end
   object StatusBar1: TStatusBar
     Left = 0
     Top = 517
-    Width = 485
+    Width = 522
     Height = 19
     Panels = <
       item
         Text = 'Double click to edit Account'
         Width = 50
       end>
+    ExplicitWidth = 485
   end
   object Panel3: TPanel
-    Left = 216
+    Left = 233
     Top = 0
-    Width = 269
+    Width = 289
     Height = 517
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitLeft = 216
+    ExplicitWidth = 269
     object Name: TLabel
       Left = 10
       Top = 48

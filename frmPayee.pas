@@ -177,7 +177,17 @@ var
 begin
   // carico i dati nella compo dei conti
   _flvPayee.Items.Clear;
-  _SQLString := 'SELECT * FROM DBPAYEE WHERE UCASE(PAYNAME) <> ''_TRANSFER'' ';
+  _SQLString := ' Select  '
+    + ' DBPAYEE.PAYNAME, '
+    + ' Sum(Abs(TRANSACTIONS.TRNAMOUNT)) As Sum_TRNAMOUNT '
+    + ' From DBPAYEE Left Join '
+    + ' TRANSACTIONS On DBPAYEE.PAYID = TRANSACTIONS.TRNPAYEE '
+    + ' Where '
+    + ' DBPAYEE.PAYNAME <> ''_TRANSFER'' '
+    + ' Group By '
+    + ' DBPAYEE.PAYNAME';
+
+  // 'SELECT * FROM DBPAYEE WHERE UCASE(PAYNAME) <> ''_TRANSFER'' ';
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
@@ -186,6 +196,10 @@ begin
     begin
       _lvItem         := _flvPayee.Items.Add;
       _lvItem.Caption := VarToStr(MainFRM.sqlQry.FieldValues['PAYNAME']);
+      if (MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] = null) then
+        _lvItem.SubItems.Add(FormatFloat('#,##0.00', 0))
+      else
+        _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
 
       MainFRM.sqlQry.Next;
     end;

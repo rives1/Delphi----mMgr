@@ -41,9 +41,9 @@ type
     N2: TMenuItem;
     Version1: TMenuItem;
     Splitter1: TSplitter;
-    Series1: TPointSeries;
     imgReconcile: TImage;
     imgHighligth: TImage;
+    Series1: THorizBarSeries;
     procedure FormCreate(Sender: TObject);
     procedure treeMenuDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -353,7 +353,7 @@ begin
       sqlQry.Open;
       i := 0;
       chartBalance.SeriesList[0].Clear;
-      chartBalance.Axes.Bottom.Items.Clear;
+      chartBalance.Axes.Left.Items.Clear;
 
       if (MainFRM.sqlQry.RecordCount <> 0) then
         while (not MainFRM.sqlQry.EOF) do // ciclo recupero dati
@@ -362,7 +362,7 @@ begin
           begin
             _lTotal := Round(strtofloat(sqlQry.FieldValues['Sum_TRNAMOUNT']));
             chartBalance.SeriesList[0].Add(_lTotal);
-            chartBalance.Axes.Bottom.Items.Add(i, sqlQry.FieldValues['ACCNAME']);
+            chartBalance.Axes.Left.Items.Add(i, sqlQry.FieldValues['ACCNAME']);
             i := i + 1;
           end;
           sqlQry.Next;

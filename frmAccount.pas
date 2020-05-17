@@ -195,7 +195,20 @@ var
 begin
   // carico i dati nella compo dei conti
   _fLvAccount.Items.Clear;
-  _SQLString := 'SELECT * FROM DBACCOUNT';
+  _SQLString := ' Select '
+    + ' DBACCOUNT.ACCNAME, '
+    + ' DBACCOUNT.ACCTYPE, '
+    + ' DBACCOUNT.ACCSTATUS, '
+    + ' Sum(Abs(TRANSACTIONS.TRNAMOUNT)) As Sum_TRNAMOUNT '
+    + ' From DBACCOUNT '
+    + ' Left Join TRANSACTIONS On DBACCOUNT.ACCID = TRANSACTIONS.TRNACCOUNT '
+    + ' Group By DBACCOUNT.ACCNAME, '
+    + ' DBACCOUNT.ACCTYPE, '
+    + ' DBACCOUNT.ACCSTATUS ';
+
+
+  // 'SELECT * FROM DBACCOUNT';
+
   MainFRM.sqlQry.SQL.Clear;
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
@@ -204,6 +217,10 @@ begin
     begin
       _lvItem         := _fLvAccount.Items.Add;
       _lvItem.Caption := VarToStr(MainFRM.sqlQry.FieldValues['ACCNAME']);
+      if (MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] = null) then
+        _lvItem.SubItems.Add(FormatFloat('#,##0.00', 0))
+      else
+        _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
 
       // imposto il gruppo nella listview
       if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Checking') then

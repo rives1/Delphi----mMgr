@@ -977,7 +977,6 @@ object MainFRM: TMainFRM
         BottomAxis.LabelsMultiLine = True
         Chart3DPercent = 1
         LeftAxis.AxisValuesFormat = '#,##0'
-        LeftAxis.Visible = False
         Panning.MouseWheel = pmwNone
         View3D = False
         Zoom.Animated = True
@@ -994,24 +993,17 @@ object MainFRM: TMainFRM
           27
           15)
         ColorPaletteIndex = 18
-        object Series1: TPointSeries
+        object Series1: THorizBarSeries
           Legend.Visible = False
+          BarBrush.BackColor = clDefault
           ColorEachPoint = True
           Marks.Frame.Visible = False
-          Marks.Visible = True
-          Marks.Angle = 50
-          Marks.AutoPosition = False
-          Marks.Callout.Length = 20
-          Marks.SoftClip = True
           ShowInLegend = False
           ValueFormat = '#,##0;(#,##0)'
-          ClickableLine = False
-          Pointer.InflateMargins = True
-          Pointer.Style = psRectangle
-          XValues.Name = 'X'
-          XValues.Order = loAscending
+          XValues.Name = 'Bar'
+          XValues.Order = loNone
           YValues.Name = 'Y'
-          YValues.Order = loNone
+          YValues.Order = loAscending
           Data = {
             00060000000000000000207C400000000000607D400000000000E48140000000
             0000B87F4000000000001880400000000000607840}

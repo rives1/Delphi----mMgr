@@ -404,6 +404,7 @@ begin
           // aggiungo nodo sub se esiste
           if (MainFRM.sqlQry.FieldValues['SUBCDES'] <> null) then
             _vNodeSub := _treeCategory.Items.AddChild(_vNodeCat, MainFRM.sqlQry.FieldValues['SUBCDES']);
+            //{ TODO : inserire calcolo totale globale per subcategoria }
 
           _chkCatNode := MainFRM.sqlQry.FieldValues['CATDES'];
           MainFRM.sqlQry.Next;

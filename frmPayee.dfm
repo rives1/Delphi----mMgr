@@ -4,7 +4,7 @@ object PayeeFRM: TPayeeFRM
   BorderStyle = bsSingle
   Caption = 'Payee'
   ClientHeight = 477
-  ClientWidth = 553
+  ClientWidth = 557
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -22,7 +22,7 @@ object PayeeFRM: TPayeeFRM
   PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter
-    Left = 290
+    Left = 291
     Top = 0
     Height = 458
     ExplicitLeft = 286
@@ -30,22 +30,25 @@ object PayeeFRM: TPayeeFRM
   object StatusBar1: TStatusBar
     Left = 0
     Top = 458
-    Width = 553
+    Width = 557
     Height = 19
     Panels = <
       item
         Text = 'Double click to edit Payee'
         Width = 50
       end>
+    ExplicitWidth = 553
   end
   object Panel3: TPanel
-    Left = 293
+    Left = 294
     Top = 0
-    Width = 260
+    Width = 263
     Height = 458
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitLeft = 293
+    ExplicitWidth = 260
     object Name: TLabel
       Left = 7
       Top = 48
@@ -87,7 +90,7 @@ object PayeeFRM: TPayeeFRM
   object _flvPayee: TListView
     Left = 0
     Top = 0
-    Width = 290
+    Width = 291
     Height = 458
     Align = alLeft
     BorderStyle = bsNone
@@ -95,6 +98,11 @@ object PayeeFRM: TPayeeFRM
       item
         AutoSize = True
         Caption = 'Payee Name'
+      end
+      item
+        Alignment = taRightJustify
+        AutoSize = True
+        Caption = 'Balance'
       end>
     GridLines = True
     HotTrack = True
