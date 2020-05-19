@@ -1,7 +1,7 @@
 object tblSubcatFrm: TtblSubcatFrm
   Left = 0
   Top = 0
-  Caption = 'Table Subcategory YTD'
+  Caption = 'Balance Subcategory-YTD'
   ClientHeight = 613
   ClientWidth = 627
   Color = clBtnFace

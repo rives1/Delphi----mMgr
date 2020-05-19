@@ -1,7 +1,7 @@
 object tblPayeeFrm: TtblPayeeFrm
   Left = 0
   Top = 0
-  Caption = 'Table Payee YTD'
+  Caption = 'Balance Payee-YTD'
   ClientHeight = 613
   ClientWidth = 627
   Color = clBtnFace

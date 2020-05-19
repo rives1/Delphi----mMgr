@@ -1,7 +1,7 @@
 object tblBalanceFrm: TtblBalanceFrm
   Left = 0
   Top = 0
-  Caption = 'Table Balance YTD'
+  Caption = 'Balance YTD-Monthly'
   ClientHeight = 578
   ClientWidth = 831
   Color = clBtnFace
@@ -144,10 +144,12 @@ object tblBalanceFrm: TtblBalanceFrm
       end>
     HotTrack = True
     GroupView = True
+    ReadOnly = True
     RowSelect = True
     SortType = stText
     TabOrder = 1
     ViewStyle = vsReport
+    OnCustomDrawSubItem = _fLvBalanceYTDCustomDrawSubItem
   end
   object Panel1: TPanel
     Left = 0

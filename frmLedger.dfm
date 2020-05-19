@@ -37,7 +37,6 @@ object LedgerFrm: TLedgerFrm
     Align = alClient
     TabOrder = 0
     VisualStyle = vsClassic
-    ExplicitHeight = 541
     BarSize = (
       2
       432
@@ -67,7 +66,7 @@ object LedgerFrm: TLedgerFrm
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
-      Font.Name = 'Lucida Sans Unicode'
+      Font.Name = 'Segoe UI'
       Font.Style = []
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
       ParentCtl3D = False
@@ -78,7 +77,6 @@ object LedgerFrm: TLedgerFrm
       StyleElements = [seFont, seBorder]
       OnDblClick = grdLedgerDblClick
       OnDrawCell = grdLedgerDrawCell
-      ExplicitTop = 25
     end
     object pnlCaption: TPanel
       Left = 0
@@ -94,7 +92,6 @@ object LedgerFrm: TLedgerFrm
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 1
-      ExplicitTop = -2
     end
     object chTotals: TChart
       Left = 0
@@ -167,8 +164,6 @@ object LedgerFrm: TLedgerFrm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitLeft = 157
-      ExplicitTop = -15
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 13
       object Series2: TAreaSeries
@@ -205,9 +200,6 @@ object LedgerFrm: TLedgerFrm
         Text = 'Lines NR'
         Width = 50
       end>
-    ExplicitLeft = 210
-    ExplicitTop = 575
-    ExplicitWidth = 0
   end
   object PopupMenu1: TPopupMenu
     Left = 35

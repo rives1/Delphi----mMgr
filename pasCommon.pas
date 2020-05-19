@@ -9,6 +9,7 @@ uses
 function _UpCase(_pString: string): string;
 function _getDBField(_pTBL: string; _pIDfld: string; _pDESfld: string; _pParam: string): string;
 function _iniRW(_pFName: string; _pOperation: char; _pSection: string; _Pkey: string; _pValue: string): string;
+function _isNumeric(aValue: string): boolean;
 
 procedure _SetNodeState(node: TTreeNode; Flags: Integer);
 
@@ -79,4 +80,23 @@ begin
 end;
 
 /// -------------------------------------------------------------------------------------------------------------//
+function _isNumeric(aValue: string): boolean;
+var
+  i: Integer;
+begin
+  Result := false;
+  if Length(aValue) > 0 then
+  begin
+    for i := 1 to Length(aValue) do
+      if (NOT(aValue[i] in ['0' .. '9', '.', '-', '+', 'E', 'e'])) then
+        exit;
+    try
+      StrToFloat(aValue);
+      Result := true;
+    except
+    end;
+  end;
+end;
+/// -------------------------------------------------------------------------------------------------------------//
+
 end.

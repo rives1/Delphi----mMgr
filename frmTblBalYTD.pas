@@ -29,6 +29,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure _fAccountSelect(Sender: TObject);
     procedure _fYearChange(Sender: TObject);
+    procedure _fLvBalanceYTDCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer;
+      State: TCustomDrawState; var DefaultDraw: Boolean);
   private
     // variable
     _SQLString: string;
@@ -50,7 +52,7 @@ implementation
 {$R *.dfm}
 
 
-uses frmMain;
+uses frmMain, pasCommon;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TtblBalanceFrm.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -89,7 +91,7 @@ const
     'Aug', 'Sep', 'Oct', 'Nov', 'Dic', 'Total'); // nome dei mesi
 var
   _totSubcat:   Double;                    // totale calcolo subcat anno
-  _i:           integer;                   // x ciclo for
+  _i:           Integer;                   // x ciclo for
   _totChartIN:  array [0 .. 16] of Double; // totali entrate x mese
   _totChartOUT: array [0 .. 16] of Double; // totali uscite x mese
 
@@ -111,11 +113,11 @@ begin
       if (MainFRM.fdMemBalYTD.Fields[_i].Value <> null) then
       begin
 
-        //nella memtable i vaolri sono già correttamente pos o neg quindi devolo solo sommarli
+        // nella memtable i vaolri sono già correttamente pos o neg quindi devolo solo sommarli
         _totSubcat := _totSubcat + MainFRM.fdMemBalYTD.Fields[_i].Value;
 
-        //nella memtable il primo campo con i mesi è il quatro dell'elenco campi
-        //a seconda del tipo di cat se spesa o deposito aggiungo il totale all'array per la serie in/out
+        // nella memtable il primo campo con i mesi è il quatro dell'elenco campi
+        // a seconda del tipo di cat se spesa o deposito aggiungo il totale all'array per la serie in/out
         // che si inserirà nel grafico
         if (UpperCase(MainFRM.fdMemBalYTD.FieldByName('rptInOut').Value) = 'EXPENSE') then
           _totChartOUT[_i] := _totChartOUT[_i] + MainFRM.fdMemBalYTD.Fields[_i].Value
@@ -125,10 +127,10 @@ begin
       end;
     end;
     // totale finale
-//    if (UpperCase(MainFRM.fdMemBalYTD.FieldByName('rptInOut').Value) = 'EXPENSE') then
-//      _totChartOUT[16] := _totChartOUT[16] + _totSubcat
-//    else
-//      _totChartIN[16] := _totChartIN[16] + _totSubcat;
+    // if (UpperCase(MainFRM.fdMemBalYTD.FieldByName('rptInOut').Value) = 'EXPENSE') then
+    // _totChartOUT[16] := _totChartOUT[16] + _totSubcat
+    // else
+    // _totChartIN[16] := _totChartIN[16] + _totSubcat;
 
     MainFRM.fdMemBalYTD.Next;
 
@@ -138,7 +140,7 @@ begin
   for _i := 4 to 16 do
   begin
 
-    chartInOutMM.Axes.Bottom.Items.Add(_i-4, _nomeMese[_i-4]); // aggiungo il numero del mese sull'asse del chart
+    chartInOutMM.Axes.Bottom.Items.Add(_i - 4, _nomeMese[_i - 4]); // aggiungo il numero del mese sull'asse del chart
 
     // serie entrate
     if (_totChartIN[_i] = 0) then
@@ -159,6 +161,21 @@ end;
 procedure TtblBalanceFrm._fAccountSelect(Sender: TObject);
 begin
   _GenBalanceYTD('table');
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TtblBalanceFrm._fLvBalanceYTDCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer;
+  State: TCustomDrawState; var DefaultDraw: Boolean);
+begin
+  //red color for negative values
+  if _isNumeric(Item.SubItems.Strings[SubItem - 1]) then
+    if (Item.SubItems.Strings[SubItem - 1].ToSingle < 0) then
+      Sender.Canvas.Font.Color := clRed;
+
+  if odd(Item.Index) then //alternate row color
+  begin
+    Sender.Canvas.Brush.Color := clBtnFace;
+  end;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -199,7 +216,7 @@ var
   _totCat:      Double;  // totale da calcolare per i 12 mesi della cat-subcat
   _mmField:     string;  // campo per l'assegnazione del valore
   _subcatCiclo: string;  // condizione per ciclo
-  _i:           integer; // x ciclo for
+  _i:           Integer; // x ciclo for
 
   _lvItem:    TListItem;                 // item per inserire i dati nelle colonne secondarie
   _totSubcat: Double;                    // totale calcolo subcat anno
@@ -325,6 +342,8 @@ begin
   if (UpperCase(_pAction) = 'TABLE') then
   begin
     _fLvBalanceYTD.Items.Clear; // pulisco la listview
+    _fLvBalanceYTD.AllocBy := 5000;
+    _fLvBalanceYTD.Items.BeginUpdate;
 
     MainFRM.fdMemBalYTD.First;
     while not MainFRM.fdMemBalYTD.EOF do
@@ -375,6 +394,7 @@ begin
         _lvItem.SubItems.Add('');
     end;
 
+    _fLvBalanceYTD.Items.EndUpdate;
     _chartInOutMM;
 
   end; // se azione = tabella

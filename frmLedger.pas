@@ -648,7 +648,7 @@ begin
           grdLedger.cells[1, _i] := '';
 
         grdLedger.cells[2, _i] := MainFRM.sqlQry.FieldValues['TRNTYPE']; // Tipo operazione
-        grdLedger.cells[3, _i] := FormatDateTime('dd.mmm.yy', MainFRM.sqlQry.FieldValues['TRNDATE']); // Data
+        grdLedger.cells[3, _i] := FormatDateTime('dd.mm.yy', MainFRM.sqlQry.FieldValues['TRNDATE']); // Data
         grdLedger.cells[4, _i] := MainFRM.sqlQry.FieldValues['WW']; // Week
         grdLedger.cells[5, _i] := MainFRM.sqlQry.FieldValues['PAYNAME'];
         grdLedger.cells[6, _i] := MainFRM.sqlQry.FieldValues['CATDES'] + ' : ' + MainFRM.sqlQry.FieldValues

@@ -945,7 +945,7 @@ object MainFRM: TMainFRM
     TabOrder = 0
     object Splitter1: TSplitter
       Left = 0
-      Top = 414
+      Top = 390
       Width = 271
       Height = 5
       Cursor = crVSplit
@@ -955,9 +955,9 @@ object MainFRM: TMainFRM
     end
     object Panel2: TPanel
       Left = 0
-      Top = 419
+      Top = 395
       Width = 271
-      Height = 233
+      Height = 257
       Align = alBottom
       BevelOuter = bvNone
       Caption = 'Panel2'
@@ -968,7 +968,7 @@ object MainFRM: TMainFRM
         Left = 0
         Top = 0
         Width = 271
-        Height = 233
+        Height = 257
         MarginTop = 15
         Title.Text.Strings = (
           'TChart')
@@ -996,17 +996,16 @@ object MainFRM: TMainFRM
         object Series1: THorizBarSeries
           Legend.Visible = False
           BarBrush.BackColor = clDefault
+          BarBrush.Gradient.Direction = gdLeftRight
           ColorEachPoint = True
           Marks.Frame.Visible = False
           ShowInLegend = False
           ValueFormat = '#,##0;(#,##0)'
+          Gradient.Direction = gdLeftRight
           XValues.Name = 'Bar'
           XValues.Order = loNone
           YValues.Name = 'Y'
           YValues.Order = loAscending
-          Data = {
-            00060000000000000000207C400000000000607D400000000000E48140000000
-            0000B87F4000000000001880400000000000607840}
         end
       end
     end
@@ -1014,7 +1013,7 @@ object MainFRM: TMainFRM
       Left = 0
       Top = 0
       Width = 271
-      Height = 414
+      Height = 390
       Align = alClient
       BorderStyle = bsNone
       Color = clBtnFace
@@ -1075,7 +1074,8 @@ object MainFRM: TMainFRM
   object sqlite_conn: TFDConnection
     Params.Strings = (
       'DriverID=SQLite'
-      'LockingMode=Normal')
+      'LockingMode=Normal'
+      'SharedCache=False')
     Left = 314
     Top = 443
   end

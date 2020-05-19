@@ -655,7 +655,7 @@ begin
     and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Balance Payee-YTD') then
   begin
     _TblPayeeYTD             := TtblPayeeFrm.Create(nil);
-    _TblPayeeYTD.WindowState := wsMaximized;
+//    _TblPayeeYTD.WindowState := wsMaximized;
   end;
 
   // apro la form per tabella report subcategory ytd
@@ -663,7 +663,7 @@ begin
     and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Balance Subcategory-YTD') then
   begin
     _TblSubcatYTD             := TtblSubcatFrm.Create(nil);
-    _TblSubcatYTD.WindowState := wsMaximized;
+//    _TblSubcatYTD.WindowState := wsMaximized;
   end;
 
   // apro chart1
