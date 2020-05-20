@@ -167,13 +167,13 @@ end;
 procedure TtblBalanceFrm._fLvBalanceYTDCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer;
   State: TCustomDrawState; var DefaultDraw: Boolean);
 begin
-  // red color for negative values
-  if _isNumeric(Item.SubItems.Strings[SubItem - 1]) then
-    if Item.SubItems.Strings[SubItem - 1].Contains('-') then
-      // if (Item.SubItems.Strings[SubItem - 1].ToSingle < 0) then
-      Sender.Canvas.Font.Color := clRed
-    else
-      Sender.Canvas.Font.Color := clBlack;
+  // if _isNumeric(Item.SubItems.Strings[SubItem - 1]) then
+  // if (Item.SubItems.Strings[SubItem - 1].ToSingle < 0) then
+
+  if Item.SubItems.Strings[SubItem - 1].Contains('-') then // red color for negative values
+    Sender.Canvas.Font.Color := clRed
+  else
+    Sender.Canvas.Font.Color := clBlack;
 
   if odd(Item.Index) then // alternate row color
   begin

@@ -84,6 +84,17 @@ object AnalisysFrm2: TAnalisysFrm2
       Text = ''
       OnSelect = _fAccountSelect
     end
+    object _chkIncoming: TCheckBox
+      Left = 650
+      Top = 11
+      Width = 97
+      Height = 17
+      Caption = 'Only Expenses'
+      Checked = True
+      State = cbChecked
+      TabOrder = 3
+      OnClick = _chkIncomingClick
+    end
   end
   object GridPanel1: TGridPanel
     Left = 0

@@ -25,12 +25,14 @@ type
     chartCategoryAvgMM: TChart;
     BarSeries1: TBarSeries;
     _lvAverageMM: TListView;
+    _chkIncoming: TCheckBox;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure _fdtFromChange(Sender: TObject);
     procedure _fdtToChange(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure _fAccountSelect(Sender: TObject);
+    procedure _chkIncomingClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -103,13 +105,14 @@ begin
     + ' DBACCOUNT On ACCID = TRNACCOUNT Inner Join '
     + ' DBSUBCATEGORY On SUBCID = TRNSUBCATEGORY Inner Join '
     + ' DBCATEGORY On CATID = SUBCATID '
-  // + ' TRANSACTIONS Left Join '
-  // + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
-  // + ' DBACCOUNT On ACCID = TRNACCOUNT '
     + ' Where '
     + ' CATDES <> ''_Transfer'' ';
+
   if (_fAccount.Text <> 'ALL') then
     _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
+
+  if (_chkIncoming.Checked) then
+    _SQLString := _SQLString + ' And UCASE(CATTYPE) = ''EXPENSE'' ';
 
   _SQLString := _SQLString
     + ' And TRNDATE Between ''' + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
@@ -171,6 +174,12 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
+procedure TAnalisysFrm2._chkIncomingClick(Sender: TObject);
+begin
+  _fillChart;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TAnalisysFrm2._chartCategoryAvg;
 var
   _lTotal: Double;    // calcolo totale da imputare nella serie
@@ -190,13 +199,16 @@ begin
     + ' DBACCOUNT On ACCID = TRNACCOUNT Inner Join '
     + ' DBSUBCATEGORY On SUBCID = TRNSUBCATEGORY Inner Join '
     + ' DBCATEGORY On CATID = SUBCATID '
-  // + ' TRANSACTIONS Left Join '
-  // + ' DBCATEGORY On CATID = TRNCATEGORY Inner Join '
-  // + ' DBACCOUNT On ACCID = TRNACCOUNT '
     + ' Where '
     + ' CATDES <> ''_Transfer'' ';
+
   if (_fAccount.Text <> 'ALL') then
     _SQLString := _SQLString + ' and ACCNAME = ''' + Trim(_fAccount.Text) + ''' ';
+
+  if (_chkIncoming.Checked) then
+    _SQLString := _SQLString + ' And UCASE(CATTYPE) = ''EXPENSE'' ';
+
+
   _SQLString   := _SQLString
     + ' And TRNDATE Between ''' + FormatDateTime('yyyy-mm-dd', _fdtFrom.Date)
     + ''' and ''' + FormatDateTime('yyyy-mm-dd', _fdtTo.Date)
