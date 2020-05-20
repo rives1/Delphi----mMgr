@@ -77,6 +77,7 @@ object LedgerFrm: TLedgerFrm
       StyleElements = [seFont, seBorder]
       OnDblClick = grdLedgerDblClick
       OnDrawCell = grdLedgerDrawCell
+      ExplicitTop = 25
     end
     object pnlCaption: TPanel
       Left = 0
