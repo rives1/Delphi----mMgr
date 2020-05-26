@@ -44,78 +44,81 @@ object tblBalanceFrm: TtblBalanceFrm
     Align = alClient
     Columns = <
       item
-        AutoSize = True
         Caption = 'Category'
+        Width = 90
       end
       item
-        AutoSize = True
         Caption = 'Subcategory'
+        Width = 100
       end
       item
         Alignment = taRightJustify
-        AutoSize = True
         Caption = 'Jan'
+        Width = 70
       end
       item
         Alignment = taRightJustify
-        AutoSize = True
         Caption = 'Feb'
+        Width = 70
       end
       item
         Alignment = taRightJustify
-        AutoSize = True
         Caption = 'Mar'
+        Width = 70
       end
       item
         Alignment = taRightJustify
-        AutoSize = True
         Caption = 'Apr'
+        Width = 70
       end
       item
         Alignment = taRightJustify
-        AutoSize = True
         Caption = 'May'
+        Width = 70
       end
       item
         Alignment = taRightJustify
-        AutoSize = True
         Caption = 'Jun'
+        Width = 70
       end
       item
         Alignment = taRightJustify
-        AutoSize = True
         Caption = 'Jul'
+        Width = 70
       end
       item
         Alignment = taRightJustify
-        AutoSize = True
         Caption = 'Aug'
+        Width = 70
       end
       item
         Alignment = taRightJustify
-        AutoSize = True
         Caption = 'Sep'
+        Width = 70
       end
       item
         Alignment = taRightJustify
-        AutoSize = True
         Caption = 'Oct'
+        Width = 70
       end
       item
         Alignment = taRightJustify
-        AutoSize = True
         Caption = 'Nov'
+        Width = 70
       end
       item
         Alignment = taRightJustify
-        AutoSize = True
         Caption = 'Dec'
+        Width = 70
       end
       item
         Alignment = taRightJustify
         AutoSize = True
         Caption = 'Total'
+        WidthType = (
+          -203)
       end>
+    DoubleBuffered = True
     GridLines = True
     Groups = <
       item
@@ -146,10 +149,11 @@ object tblBalanceFrm: TtblBalanceFrm
     GroupView = True
     ReadOnly = True
     RowSelect = True
+    ParentDoubleBuffered = False
     SortType = stText
     TabOrder = 1
     ViewStyle = vsReport
-    OnCustomDrawSubItem = _fLvBalanceYTDCustomDrawSubItem
+    OnCustomDrawSubItem = _fLvBalanceYTDxCustomDrawSubItem
   end
   object Panel1: TPanel
     Left = 0

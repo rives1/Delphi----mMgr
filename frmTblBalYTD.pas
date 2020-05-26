@@ -3,10 +3,9 @@ unit frmTblBalYTD;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls, JvExStdCtrls, JvCombobox, Vcl.ExtCtrls, Vcl.Mask,
-  JvExMask, JvToolEdit, Vcl.WinXPickers, Vcl.WinXCalendars, VclTee.TeeGDIPlus, VclTee.TeEngine, VclTee.Series,
-  VclTee.TeeProcs, VclTee.Chart;
+  Winapi.Windows, VclTee.TeeGDIPlus, VCLTee.TeEngine, VCLTee.Series, VCLTee.TeeProcs, VCLTee.Chart, Vcl.WinXPickers,
+  Winapi.Messages, System.SysUtils, System.Variants, System.Classes,Vcl.Forms, Vcl.Dialogs, Vcl.Graphics,
+  Vcl.StdCtrls, JvExStdCtrls, JvCombobox, Vcl.Controls, Vcl.ExtCtrls, Vcl.ComCtrls;
 
 type
   TtblBalanceFrm = class(TForm)
@@ -29,14 +28,14 @@ type
     procedure FormShow(Sender: TObject);
     procedure _fAccountSelect(Sender: TObject);
     procedure _fYearChange(Sender: TObject);
-    procedure _fLvBalanceYTDCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer;
+    procedure _fLvBalanceYTDxCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer;
       State: TCustomDrawState; var DefaultDraw: Boolean);
   private
     // variable
     _SQLString: string;
     // procedures
     procedure _loadCmbAccount;
-    procedure _GenBalanceYTD(_pAction: string);
+    procedure _fillBalanceYTD(_pAction: string);
     procedure _chartInOutMM;
 
   public
@@ -75,13 +74,13 @@ end;
 procedure TtblBalanceFrm.FormShow(Sender: TObject);
 begin
   _loadCmbAccount;
-  _GenBalanceYTD('table');
+  _fillBalanceYTD('table');
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
 procedure TtblBalanceFrm._btnPrintClick(Sender: TObject);
 begin
-  _GenBalanceYTD('print');
+  _fillBalanceYTD('print');
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -160,11 +159,11 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TtblBalanceFrm._fAccountSelect(Sender: TObject);
 begin
-  _GenBalanceYTD('table');
+  _fillBalanceYTD('table');
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TtblBalanceFrm._fLvBalanceYTDCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer;
+procedure TtblBalanceFrm._fLvBalanceYTDxCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer;
   State: TCustomDrawState; var DefaultDraw: Boolean);
 begin
   // if _isNumeric(Item.SubItems.Strings[SubItem - 1]) then
@@ -184,7 +183,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TtblBalanceFrm._fYearChange(Sender: TObject);
 begin
-  _GenBalanceYTD('table');
+  _fillBalanceYTD('table');
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -214,7 +213,7 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TtblBalanceFrm._GenBalanceYTD(_pAction: string);
+procedure TtblBalanceFrm._fillBalanceYTD(_pAction: string);
 var
   _totCat:      Double;  // totale da calcolare per i 12 mesi della cat-subcat
   _mmField:     string;  // campo per l'assegnazione del valore
