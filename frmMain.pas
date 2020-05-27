@@ -119,10 +119,17 @@ begin
   _iniFName := ExtractFilePath(Application.ExeName) + 'mMgr.ini';
   _DbName   := _iniRW(_iniFName, 'R', 'LASTDB', 'DBNAME', 'x');
   // apro il db -- se non apro il db non ha senso aprire il menu
-  if (_openDB(_DbName)) then
+  if (Uppercase(_DbName) <> 'NEGATIVE') then
   begin
-    _treeMenuCreate;   // riempio il menu
-    _fillBalanceChart; // riempimento chart saldi
+    if (_openDB(_DbName)) then
+    begin
+      _treeMenuCreate;   // riempio il menu
+      _fillBalanceChart; // riempimento chart saldi
+    end;
+  end
+  else
+  begin
+    MessageDlg('Please Create or open a database to continue', mtInformation, [mbOK], 0)
   end;
 end;
 
@@ -276,7 +283,9 @@ begin
       _SQLString := ' CREATE TABLE IF NOT EXISTS ''DBACCOUNT'' ( '
         + '''ACCID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
         + '''ACCNAME''	STRING(50) NOT NULL UNIQUE, '
-        + '''ACCTYPE''	STRING(15 , 0) NOT NULL); ';
+        + '''ACCTYPE''	STRING(15 , 0) NOT NULL, '
+        + '''ACCSTATUS''	STRING(10) NOT NULL ); ';
+
       sqlQry.ExecSQL(_SQLString);
 
       _SQLString := ' CREATE UNIQUE INDEX IF NOT EXISTS ''DBSUBCATEGORY_Index01'' ON ''DBSUBCATEGORY'' (''SUBCDES''); ';
@@ -380,7 +389,8 @@ function TMainFRM._openDB(_pDBFname: string): boolean;
 begin
   Result := True;
   // apro la connesione al db oppure ne creo uno nuovo se il nome passato non è un file esistente
-  if FileExists(_pDBFname) then  // verifica esistenza file
+  if FileExists(_pDBFname) then // verifica esistenza file
+  begin
     if _backupDB(_pDBFname) then // creazione backup file db
     begin
       // creo una copia del db prima di aprirlo come backup pre-sessione
@@ -396,14 +406,12 @@ begin
       end;
     end
     else
-      if (MessageDlg('Database -> ' + _pDBFname + ' not found. Create a new one?', mtConfirmation,
-      [mbYes, mbNo], 0) = mrYes) then
-      _createNewDB
-    else
-    begin
-      MessageDlg('Operation aborted', mtInformation, [mbOK], 0);
-      Result := False;
-    end;
+      if (MessageDlg('Database -> ' + _pDBFname + ' not found. Create a new one?', mtConfirmation, [mbYes, mbNo], 0)
+      = mrYes) then
+      _createNewDB;
+  end
+  else
+    Result := False;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -654,16 +662,16 @@ begin
   if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'REPORT'))
     and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Balance Payee-YTD') then
   begin
-    _TblPayeeYTD             := TtblPayeeFrm.Create(nil);
-//    _TblPayeeYTD.WindowState := wsMaximized;
+    _TblPayeeYTD := TtblPayeeFrm.Create(nil);
+    // _TblPayeeYTD.WindowState := wsMaximized;
   end;
 
   // apro la form per tabella report subcategory ytd
   if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'REPORT'))
     and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Balance Subcategory-YTD') then
   begin
-    _TblSubcatYTD             := TtblSubcatFrm.Create(nil);
-//    _TblSubcatYTD.WindowState := wsMaximized;
+    _TblSubcatYTD := TtblSubcatFrm.Create(nil);
+    // _TblSubcatYTD.WindowState := wsMaximized;
   end;
 
   // apro chart1
