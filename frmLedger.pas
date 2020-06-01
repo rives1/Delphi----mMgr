@@ -245,8 +245,7 @@ begin
       if (ACol = 9) then
       begin
         _Text := grdLedger.cells[9, ARow];
-        TryStrToFloat(_Text.Replace('''', ''), _Float);
-        if (_Float < 0) then
+        if (Copy(_Text,1,1) = '-') then
           Canvas.Font.Color := clRed
         else
           Canvas.Font.Color := clBlack;
