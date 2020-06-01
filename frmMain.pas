@@ -16,7 +16,7 @@ uses
 type
   TMainFRM = class(TForm)
     Panel1: TPanel;
-    StatusBar1: TStatusBar;
+    sbar: TStatusBar;
     Panel2: TPanel;
     chartBalance: TChart;
     treeMenu: TTreeView;
@@ -345,7 +345,8 @@ end;
 procedure TMainFRM._fillBalanceChart;
 var
   _lTotal: Double;  // totale x serie nel grafico
-  i:       integer; // counter x colonne grafioo
+  _lGlobal: Double;  // totale x serie nel grafico
+  _i:       integer; // counter x colonne grafioo
 begin
   // riempimento chart con i totale x account
   if (sqlite_conn.Connected) then
@@ -358,10 +359,11 @@ begin
       ' WHERE UCASE(ACCSTATUS) = ''OPEN'' ' +
       ' GROUP BY ACCNAME ' +
       ' ORDER BY ACCNAME ';
+
     sqlQry.SQL.Add(_SQLString);
     try
       sqlQry.Open;
-      i := 0;
+      _i := 0;
       chartBalance.SeriesList[0].Clear;
       chartBalance.Axes.Left.Items.Clear;
 
@@ -372,9 +374,10 @@ begin
           begin
             _lTotal := Round(strtofloat(sqlQry.FieldValues['Sum_TRNAMOUNT']));
             chartBalance.SeriesList[0].Add(_lTotal);
-            chartBalance.Axes.Left.Items.Add(i, sqlQry.FieldValues['ACCNAME']);
-            i := i + 1;
+            chartBalance.Axes.Left.Items.Add(_i, sqlQry.FieldValues['ACCNAME']);
+            _i := _i + 1;
           end;
+          _lGlobal := _lGlobal + _lTotal;
           sqlQry.Next;
         end;
 
@@ -383,6 +386,10 @@ begin
       sqlQry.SQL.Clear;
     end;
   end;
+
+  //inserisco nella statusbar il totale globale di tutti gli account
+  sbar.Panels[0].Text := 'Global Asset: ' + FormatFloat('#,##0.00', _lGlobal);
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

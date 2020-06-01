@@ -1368,9 +1368,9 @@ object MainFRM: TMainFRM
       TabOrder = 0
       object chartBalance: TChart
         Left = 0
-        Top = 55
+        Top = 0
         Width = 271
-        Height = 202
+        Height = 257
         MarginTop = 15
         Title.Text.Strings = (
           'TChart')
@@ -1385,8 +1385,11 @@ object MainFRM: TMainFRM
         Zoom.KeepAspectRatio = True
         Zoom.UpLeftZooms = True
         ZoomWheel = pmwNormal
+        Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitTop = 55
+        ExplicitHeight = 202
         DefaultCanvas = 'TGDIPlusCanvas'
         PrintMargins = (
           27
@@ -1428,12 +1431,15 @@ object MainFRM: TMainFRM
         0000000000010452006F006F007400}
     end
   end
-  object StatusBar1: TStatusBar
+  object sbar: TStatusBar
     Left = 0
     Top = 652
     Width = 1105
     Height = 24
-    Panels = <>
+    Panels = <
+      item
+        Width = 50
+      end>
   end
   object MainMenu1: TMainMenu
     Left = 329
