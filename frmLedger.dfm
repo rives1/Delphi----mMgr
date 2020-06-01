@@ -77,7 +77,6 @@ object LedgerFrm: TLedgerFrm
       StyleElements = [seFont, seBorder]
       OnDblClick = grdLedgerDblClick
       OnDrawCell = grdLedgerDrawCell
-      ExplicitTop = 25
     end
     object pnlCaption: TPanel
       Left = 0
@@ -235,6 +234,10 @@ object LedgerFrm: TLedgerFrm
     object oggleBookmarkB1: TMenuItem
       Caption = 'Toggle Bookmark (B)'
       OnClick = oggleBookmarkB1Click
+    end
+    object oggleVoidV1: TMenuItem
+      Caption = 'Toggle Void (V)'
+      OnClick = oggleVoidV1Click
     end
     object N2: TMenuItem
       Caption = '-'

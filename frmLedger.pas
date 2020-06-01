@@ -32,6 +32,7 @@ type
     oggleBookmarkB1: TMenuItem;
     pnlCaption: TPanel;
     sBar: TStatusBar;
+    oggleVoidV1: TMenuItem;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -48,6 +49,7 @@ type
     procedure ReconcileR1Click(Sender: TObject);
     procedure CSVexport1Click(Sender: TObject);
     procedure oggleBookmarkB1Click(Sender: TObject);
+    procedure oggleVoidV1Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -68,7 +70,7 @@ type
 
   public
     { Public declarations }
-    procedure _fillGrid;
+    procedure _fillGrid(_pOperation: string);
 
   end;
 
@@ -111,7 +113,7 @@ end;
 procedure TLedgerFrm.FormActivate(Sender: TObject);
 begin
   _ChartTotals;
-  _fillGrid;
+  _fillGrid('ins');
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -154,6 +156,8 @@ begin
       _stateRecord('B');   // per bookmark su riga
     82:                    // 'R'
       _stateRecord('R');   // per riconciliare la riga
+    86:                    // 'V'
+      _stateRecord('V');   // per il void della transazion
     106:                   // *
       _action := 'newTrx'; // trasferimento fra conti
     107:                   // +
@@ -230,6 +234,8 @@ begin
           _aCanvas.StretchDraw(Rect, MainFRM.imgReconcile.Picture.Bitmap);
         if (UpperCase(_s) = 'B') then
           _aCanvas.StretchDraw(Rect, MainFRM.imgHighligth.Picture.Bitmap);
+        if (UpperCase(_s) = 'V') then
+          _aCanvas.StretchDraw(Rect, MainFRM.imgVoid.Picture.Bitmap);
 
       end;
 
@@ -309,6 +315,11 @@ begin
   _stateRecord('B');
 end;
 
+procedure TLedgerFrm.oggleVoidV1Click(Sender: TObject);
+begin
+  _stateRecord('V');
+end;
+
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm.ReconcileR1Click(Sender: TObject);
 begin
@@ -356,7 +367,6 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TLedgerFrm._stateRecord(_pState: string);
 var
-  // _Rect: TGridRect;
   _i: Integer; // ciclo
 begin
   // imposto il campo trnreconcile a X per mostrare il record come verfiicato
@@ -389,7 +399,7 @@ begin
 
   end;
 
-  _fillGrid;
+  _fillGrid('edit');
 
 end;
 
@@ -596,7 +606,7 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
-procedure TLedgerFrm._fillGrid;
+procedure TLedgerFrm._fillGrid(_pOperation: string);
 // riempimento della grid
 var
   _i:            Integer;
@@ -632,8 +642,8 @@ begin
   MainFRM.sqlQry.SQL.Add(_SQLString);
   try
     MainFRM.sqlQry.Open;
-    _i                  := 1;
-    _runSum             := 0;
+    _i      := 1;
+    _runSum := 0;
     if (MainFRM.sqlQry.RecordCount <> 0) then
       while not MainFRM.sqlQry.EOF do // ciclo recupero dati
       begin
@@ -650,11 +660,11 @@ begin
         grdLedger.cells[2, _i] := MainFRM.sqlQry.FieldValues['TRNTYPE']; // Tipo operazione
         grdLedger.cells[3, _i] := FormatDateTime('dd.mm.yy', MainFRM.sqlQry.FieldValues['TRNDATE']); // Data
         grdLedger.cells[4, _i] := MainFRM.sqlQry.FieldValues['WW']; // Week
-        grdLedger.cells[5, _i] := MainFRM.sqlQry.FieldValues['PAYNAME'];
+        grdLedger.cells[5, _i] := MainFRM.sqlQry.FieldValues['PAYNAME']; // nome beneficiario
         grdLedger.cells[6, _i] := MainFRM.sqlQry.FieldValues['CATDES'] + ' : ' + MainFRM.sqlQry.FieldValues
-          ['SUBCDES'];
+          ['SUBCDES']; // categoria
 
-        if (MainFRM.sqlQry.FieldValues['TRNAMOUNT'] > 0) then
+        if (MainFRM.sqlQry.FieldValues['TRNAMOUNT'] > 0) then // verso del trasferimento
         begin
           grdLedger.cells[7, _i] := FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['TRNAMOUNT']);
           _trxIndicator          := '->';
@@ -665,9 +675,16 @@ begin
           _trxIndicator          := '<-';
         end;
 
-        _runSum                 := _runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];
-        grdLedger.cells[9, _i]  := FormatFloat('#,##0.00', _runSum);
-        grdLedger.cells[10, _i] := MainFRM.sqlQry.FieldValues['TRNDESCRIPTION'];
+        // se la transazione è VOID non si calcola nel totale
+        if (MainFRM.sqlQry.FieldValues['TRNRECONCILE'] <> 'V') then
+        begin
+          _runSum                := _runSum + MainFRM.sqlQry.FieldValues['TRNAMOUNT'];
+          grdLedger.cells[9, _i] := FormatFloat('#,##0.00', _runSum); // campo totale running
+        end
+        else
+          grdLedger.cells[9, _i] := '******'; // non mostro nessun totale
+
+        grdLedger.cells[10, _i] := MainFRM.sqlQry.FieldValues['TRNDESCRIPTION']; // descrizione
 
         if (MainFRM.sqlQry.FieldValues['TRNTYPE'] = 'Transfer') then // se si tratta si trasferimento
         begin
@@ -706,15 +723,15 @@ begin
   grdLedger.FixedRows := 1;
 
   // posizione su ultimo record nel caso di inserimento e sul precedente in caso di editing
-  if _recPosition < grdLedger.RowCount - 1 then
+  if (UpperCase(_pOperation)='INS') then
     grdLedger.Row := grdLedger.RowCount - 1
   else
-    grdLedger.Row := _recPosition;
+  grdLedger.Row := _recPosition;
 
-  sBar.Panels[0].Text := 'Records: ' + IntToStr(grdLedger.RowCount-1);//indicazione del totale record
+  sBar.Panels[0].Text := 'Records: ' + IntToStr(grdLedger.RowCount - 1); // indicazione del totale record
 
   MainFRM._fillBalanceChart; // riempiento del chart in basso
-  _autoSizeGrid; // autosize columns
+  _autoSizeGrid;             // autosize columns
 
 end;
 
@@ -758,7 +775,7 @@ begin
   grdLedger.Row := _pRecRow;
 
   // refresh della grid
-  _fillGrid;
+  _fillGrid('edit');
   _ChartTotals();
 end;
 
