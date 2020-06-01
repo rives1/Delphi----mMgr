@@ -3,9 +3,10 @@ object MainFRM: TMainFRM
   Top = 0
   ActiveControl = chartBalance
   Caption = 'mMgr'
-  ClientHeight = 676
+  ClientHeight = 730
   ClientWidth = 1105
   Color = clBtnFace
+  DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -1339,38 +1340,40 @@ object MainFRM: TMainFRM
     Left = 0
     Top = 0
     Width = 271
-    Height = 652
+    Height = 706
     Align = alLeft
     BevelOuter = bvNone
     Ctl3D = False
     ParentCtl3D = False
     TabOrder = 0
+    ExplicitHeight = 652
     object Splitter1: TSplitter
       Left = 0
-      Top = 390
+      Top = 468
       Width = 271
-      Height = 5
+      Height = 6
       Cursor = crVSplit
       Align = alBottom
-      ExplicitTop = 372
-      ExplicitWidth = 211
+      ExplicitTop = 413
     end
     object Panel2: TPanel
       Left = 0
-      Top = 395
+      Top = 474
       Width = 271
-      Height = 257
+      Height = 232
       Align = alBottom
       BevelOuter = bvNone
       Caption = 'Panel2'
       Ctl3D = False
       ParentCtl3D = False
       TabOrder = 0
+      ExplicitLeft = 10
+      ExplicitTop = 375
       object chartBalance: TChart
         Left = 0
         Top = 0
         Width = 271
-        Height = 257
+        Height = 232
         MarginTop = 15
         Title.Text.Strings = (
           'TChart')
@@ -1417,7 +1420,8 @@ object MainFRM: TMainFRM
       Left = 0
       Top = 0
       Width = 271
-      Height = 390
+      Height = 468
+      Align = alClient
       BorderStyle = bsNone
       Color = clBtnFace
       Images = VirtualImageList1
@@ -1429,17 +1433,19 @@ object MainFRM: TMainFRM
       Items.NodeData = {
         0301000000260000000500000000000000FFFFFFFFFFFFFFFF00000000000000
         0000000000010452006F006F007400}
+      ExplicitHeight = 390
     end
   end
   object sbar: TStatusBar
     Left = 0
-    Top = 652
+    Top = 706
     Width = 1105
     Height = 24
     Panels = <
       item
         Width = 50
       end>
+    ExplicitTop = 652
   end
   object MainMenu1: TMainMenu
     Left = 329
