@@ -127,7 +127,7 @@ end;
 procedure TLedgerFrm.FormCreate(Sender: TObject);
 begin
   // imposto la var privata con il nome dell'account da cui reperire i dati
-  _pAccountName := MainFRM.treeMenu.Selected.Text;
+  _pAccountName := MainFRM._edtSelectedLedger.Text;
 
   // impostazione del nome dell'account nella barra del titolo della finestra
   Self.Caption       := _pAccountName;

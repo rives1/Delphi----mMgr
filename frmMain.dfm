@@ -1346,7 +1346,8 @@ object MainFRM: TMainFRM
     Ctl3D = False
     ParentCtl3D = False
     TabOrder = 0
-    ExplicitHeight = 652
+    ExplicitLeft = 40
+    ExplicitTop = 8
     object Splitter1: TSplitter
       Left = 0
       Top = 468
@@ -1355,6 +1356,15 @@ object MainFRM: TMainFRM
       Cursor = crVSplit
       Align = alBottom
       ExplicitTop = 413
+    end
+    object Splitter2: TSplitter
+      Left = 0
+      Top = 208
+      Width = 271
+      Height = 6
+      Cursor = crVSplit
+      Align = alTop
+      ExplicitTop = 265
     end
     object Panel2: TPanel
       Left = 0
@@ -1367,8 +1377,6 @@ object MainFRM: TMainFRM
       Ctl3D = False
       ParentCtl3D = False
       TabOrder = 0
-      ExplicitLeft = 10
-      ExplicitTop = 375
       object chartBalance: TChart
         Left = 0
         Top = 0
@@ -1391,8 +1399,6 @@ object MainFRM: TMainFRM
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitTop = 55
-        ExplicitHeight = 202
         DefaultCanvas = 'TGDIPlusCanvas'
         PrintMargins = (
           27
@@ -1420,8 +1426,8 @@ object MainFRM: TMainFRM
       Left = 0
       Top = 0
       Width = 271
-      Height = 468
-      Align = alClient
+      Height = 208
+      Align = alTop
       BorderStyle = bsNone
       Color = clBtnFace
       Images = VirtualImageList1
@@ -1433,7 +1439,89 @@ object MainFRM: TMainFRM
       Items.NodeData = {
         0301000000260000000500000000000000FFFFFFFFFFFFFFFF00000000000000
         0000000000010452006F006F007400}
-      ExplicitHeight = 390
+      ExplicitTop = 12
+    end
+    object Panel3: TPanel
+      Left = 0
+      Top = 214
+      Width = 271
+      Height = 254
+      Align = alClient
+      BevelOuter = bvNone
+      Caption = 'Panel3'
+      TabOrder = 2
+      ExplicitTop = 300
+      ExplicitHeight = 151
+      object lvAccountmnu: TListView
+        Left = 0
+        Top = 0
+        Width = 271
+        Height = 254
+        Align = alClient
+        BorderStyle = bsNone
+        Color = clBtnFace
+        Columns = <
+          item
+            Caption = 'Account'
+            Width = 160
+          end
+          item
+            Alignment = taRightJustify
+            AutoSize = True
+            Caption = 'Balance'
+          end>
+        ColumnClick = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        GridLines = True
+        Groups = <
+          item
+            Header = 'Checking'
+            GroupID = 0
+            State = [lgsNormal]
+            HeaderAlign = taLeftJustify
+            FooterAlign = taLeftJustify
+            TitleImage = -1
+          end
+          item
+            Header = 'Cash'
+            GroupID = 1
+            State = [lgsNormal]
+            HeaderAlign = taLeftJustify
+            FooterAlign = taLeftJustify
+            TitleImage = -1
+          end
+          item
+            Header = 'CreditCard'
+            GroupID = 2
+            State = [lgsNormal]
+            HeaderAlign = taLeftJustify
+            FooterAlign = taLeftJustify
+            TitleImage = -1
+          end
+          item
+            Header = 'Online'
+            GroupID = 3
+            State = [lgsNormal]
+            HeaderAlign = taLeftJustify
+            FooterAlign = taLeftJustify
+            TitleImage = -1
+          end>
+        GroupView = True
+        ReadOnly = True
+        RowSelect = True
+        ParentFont = False
+        ShowWorkAreas = True
+        TabOrder = 0
+        ViewStyle = vsReport
+        OnCustomDrawSubItem = lvAccountmnuCustomDrawSubItem
+        OnDblClick = lvAccountmnuDblClick
+        ExplicitWidth = 231
+        ExplicitHeight = 226
+      end
     end
   end
   object sbar: TStatusBar
@@ -1445,7 +1533,15 @@ object MainFRM: TMainFRM
       item
         Width = 50
       end>
-    ExplicitTop = 652
+  end
+  object _edtSelectedLedger: TEdit
+    Left = 285
+    Top = 200
+    Width = 141
+    Height = 21
+    TabOrder = 2
+    Text = '_edtSelectedLedger'
+    Visible = False
   end
   object MainMenu1: TMainMenu
     Left = 329
@@ -1623,8 +1719,8 @@ object MainFRM: TMainFRM
     ImageCollection = ImageCollection1
     Width = 24
     Height = 24
-    Left = 75
-    Top = 142
+    Left = 60
+    Top = 337
   end
   object ImageCollection1: TImageCollection
     Images = <
@@ -7180,8 +7276,8 @@ object MainFRM: TMainFRM
               D5CA20656769FD6C72E33F96F567D0CC6368E30000000049454E44AE426082}
           end>
       end>
-    Left = 74
-    Top = 202
+    Left = 59
+    Top = 397
   end
   object rptStandard: TfrxReport
     Version = '6.2.1'

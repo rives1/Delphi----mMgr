@@ -10,7 +10,9 @@ function _UpCase(_pString: string): string;
 function _getDBField(_pTBL: string; _pIDfld: string; _pDESfld: string; _pParam: string): string;
 function _iniRW(_pFName: string; _pOperation: char; _pSection: string; _Pkey: string; _pValue: string): string;
 function _isNumeric(aValue: string): boolean;
+function _accountGroup(_pName: string): Integer;
 
+//procedures
 procedure _SetNodeState(node: TTreeNode; Flags: Integer);
 
 implementation
@@ -98,5 +100,19 @@ begin
   end;
 end;
 /// -------------------------------------------------------------------------------------------------------------//
+function _accountGroup(_pName: string): Integer;
+begin
+  // ritorno il valore numerico del tipo di conto
+  Result := 0;
+  if Uppercase(_pName) = 'CHECKING' then
+    Result := 0;
+  if Uppercase(_pName) = 'CASH' then
+    Result := 1;
+  if Uppercase(_pName) = 'CREDITCARD' then
+    Result := 2;
+  if Uppercase(_pName) = 'ONLINE' then
+    Result := 3;
 
+end;
+/// -------------------------------------------------------------------------------------------------------------//
 end.

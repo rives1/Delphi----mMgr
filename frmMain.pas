@@ -4,12 +4,11 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls,
-//  VclTee.TeeGDIPlus, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf,
   FireDAC.Stan.ExprFuncs, FireDAC.VCLUI.Wait, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
   VclTee.TeeProcs, VclTee.Chart, Vcl.ExtCtrls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Data.SqlExpr,
   Data.DbxSqlite, Data.FMTBcd, frxExportBaseDialog, frxExportPDF, frxPreview, FireDAC.Comp.Client, frxClass, frxDBSet,
   Vcl.BaseImageCollection, Vcl.ImageCollection, System.ImageList, Vcl.ImgList, Vcl.VirtualImageList, Data.DB,
-  FireDAC.Comp.DataSet, Vcl.Menus, Vcl.ComCtrls, VCLTee.TeEngine, VCLTee.Series, FireDAC.Stan.Def, FireDAC.Stan.Pool,
+  FireDAC.Comp.DataSet, Vcl.Menus, Vcl.ComCtrls, VclTee.TeEngine, VclTee.Series, FireDAC.Stan.Def, FireDAC.Stan.Pool,
   FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef, VclTee.TeeGDIPlus, FireDAC.Stan.Intf,
   FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf;
 
@@ -45,6 +44,10 @@ type
     imgHighligth: TImage;
     Series1: THorizBarSeries;
     imgVoid: TImage;
+    Panel3: TPanel;
+    lvAccountmnu: TListView;
+    Splitter2: TSplitter;
+    _edtSelectedLedger: TEdit;
     procedure FormCreate(Sender: TObject);
     procedure treeMenuDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -53,6 +56,9 @@ type
     procedure Open1Click(Sender: TObject);
     procedure Version1Click(Sender: TObject);
     procedure Documentation1Click(Sender: TObject);
+    procedure lvAccountmnuDblClick(Sender: TObject);
+    procedure lvAccountmnuCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer;
+      State: TCustomDrawState; var DefaultDraw: Boolean);
 
   private
     { Private declarations }
@@ -74,6 +80,7 @@ type
     procedure _closeDB;
     procedure _treeSelectOpen;
     procedure _createNewDB;
+    procedure _lvSelectOpen;
     // procedure _reportBalanceYTD;
 
   public
@@ -132,6 +139,27 @@ begin
   begin
     MessageDlg('Please Create or open a database to continue', mtInformation, [mbOK], 0)
   end;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TMainFRM.lvAccountmnuCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer;
+  State: TCustomDrawState; var DefaultDraw: Boolean);
+begin
+ if Item.SubItems.Strings[SubItem - 1].Contains('-') then // red color for negative values
+    Sender.Canvas.Font.Color := clRed
+  else
+    Sender.Canvas.Font.Color := clBlack;
+
+  if odd(Item.Index) then // alternate row color
+  begin
+    Sender.Canvas.Brush.Color := clBtnFace;
+  end;
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TMainFRM.lvAccountmnuDblClick(Sender: TObject);
+begin
+  _lvSelectOpen;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -208,7 +236,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 function TMainFRM._chkOpenForm(_frmCaption: string): boolean;
 var
-  i: integer;
+  i: Integer;
 begin
   // verifico che non ci sia già una forma aperta
   Result := False;
@@ -344,9 +372,9 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM._fillBalanceChart;
 var
-  _lTotal: Double;  // totale x serie nel grafico
+  _lTotal:  Double;  // totale x serie nel grafico
   _lGlobal: Double;  // totale x serie nel grafico
-  _i:       integer; // counter x colonne grafioo
+  _i:       Integer; // counter x colonne grafioo
 begin
   // riempimento chart con i totale x account
   if (sqlite_conn.Connected) then
@@ -387,9 +415,27 @@ begin
     end;
   end;
 
-  //inserisco nella statusbar il totale globale di tutti gli account
+  // inserisco nella statusbar il totale globale di tutti gli account
   sbar.Panels[0].Text := 'Global Asset: ' + FormatFloat('#,##0.00', _lGlobal);
 
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
+procedure TMainFRM._lvSelectOpen;
+var
+  _LedgerChildFRM: TLedgerFrm;
+begin
+  // apro la child form del ledger
+  try
+    if not _chkOpenForm(lvAccountmnu.Selected.caption) then
+    begin
+      _edtSelectedLedger.Text     := lvAccountmnu.Selected.caption;
+      _LedgerChildFRM             := TLedgerFrm.Create(nil);
+      _LedgerChildFRM.WindowState := wsMaximized;
+    end;
+  except
+
+  end;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -538,12 +584,87 @@ procedure TMainFRM._treeMenuCreate;
 var
   vNode, vNodeGroup: TTreeNode; // nodo riferimento
   vNodeText:         String;    // testo da inserire nel nodo
+  _lvItem:           TListItem; // item per inserire i dati nelle colonne secondarie
+
 begin
   // inizializzazione var
   vNode      := nil;
   vNodeGroup := nil;
 
+  // inserimento accounts nella listview
+  lvAccountmnu.Items.Clear;
+  if (sqlite_conn.Connected) then
+  begin
+    // area accounts
+    sqlQry.Close;
+    sqlQry.SQL.Clear;
+    _SQLString := 'SELECT ACCNAME, ACCTYPE, Sum(TRNAMOUNT) AS Sum_TRNAMOUNT '
+      + ' FROM DBACCOUNT Left Join '
+      + ' TRANSACTIONS On DBACCOUNT.ACCID = TRANSACTIONS.TRNACCOUNT '
+      + ' WHERE UCASE(ACCSTATUS) = ''OPEN'' '
+      + ' GROUP BY ACCNAME, ACCTYPE '
+      + ' ORDER BY ACCTYPE, ACCNAME ';
+
+    sqlQry.SQL.Add(_SQLString);
+    try
+      sqlQry.Active := True;
+      if (sqlQry.RecordCount <> 0) then
+        while not sqlQry.EOF do // ciclo recupero dati
+        begin
+          _lvItem         := lvAccountmnu.Items.Add; // inserisco i dati nella listview
+          _lvItem.caption := sqlQry.FieldValues['ACCNAME'];
+          _lvItem.GroupID := _accountGroup(sqlQry.FieldValues['ACCTYPE']);
+          if (MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT'] = NULL) then
+            _lvItem.SubItems.Add(FormatFloat('#,##0.00', 0))
+          else
+            _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
+          sqlQry.Next;
+        end;
+    except
+      MessageDlg('Error adding account to menu', mtError, [mbOK], 0);
+    end; // try
+    sqlQry.Close;
+
+  end; // if
+
   treeMenu.Items.Clear();
+  // area chart
+  vNodeGroup            := treeMenu.Items.Add(nil, 'Chart');
+  vNodeGroup.ImageIndex := 3;
+  _SetNodeState(vNodeGroup, TVIS_BOLD);
+
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Analisys Amt');
+  vNode.ImageIndex := 10;
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Analisys Avg');
+  vNode.ImageIndex := 12;
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Subcategory Analisys');
+  vNode.ImageIndex := 13;
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Payee Analisys');
+  vNode.ImageIndex := 18;
+
+  // area report
+  vNodeGroup            := treeMenu.Items.Add(nil, 'Report');
+  vNodeGroup.ImageIndex := 2;
+  _SetNodeState(vNodeGroup, TVIS_BOLD);
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Balance YTD-Monthly');
+  vNode.ImageIndex := 9;
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Balance Payee-YTD');
+  vNode.ImageIndex := 19;
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Balance Subcategory-YTD');
+  vNode.ImageIndex := 18;
+
+  // area Config
+  vNodeGroup            := treeMenu.Items.Add(nil, 'Config');
+  vNodeGroup.ImageIndex := 4;
+  _SetNodeState(vNodeGroup, TVIS_BOLD);
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Account');
+  vNode.ImageIndex := 14;
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Payee');
+  vNode.ImageIndex := 15;
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Category');
+  vNode.ImageIndex := 17;
+
+  // Area Account
   if (sqlite_conn.Connected) then
   begin
     // area accounts
@@ -594,43 +715,7 @@ begin
     end; // try
   end;   // if
 
-  // area chart
-  vNodeGroup            := treeMenu.Items.Add(nil, 'Chart');
-  vNodeGroup.ImageIndex := 3;
-  _SetNodeState(vNodeGroup, TVIS_BOLD);
-
-  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Analisys Amt');
-  vNode.ImageIndex := 10;
-  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Analisys Avg');
-  vNode.ImageIndex := 12;
-  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Subcategory Analisys');
-  vNode.ImageIndex := 13;
-  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Payee Analisys');
-  vNode.ImageIndex := 18;
-
-  // area report
-  vNodeGroup            := treeMenu.Items.Add(nil, 'Report');
-  vNodeGroup.ImageIndex := 2;
-  _SetNodeState(vNodeGroup, TVIS_BOLD);
-  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Balance YTD-Monthly');
-  vNode.ImageIndex := 9;
-  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Balance Payee-YTD');
-  vNode.ImageIndex := 19;
-  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Balance Subcategory-YTD');
-  vNode.ImageIndex := 18;
-
-  // area Config
-  vNodeGroup            := treeMenu.Items.Add(nil, 'Config');
-  vNodeGroup.ImageIndex := 4;
-  _SetNodeState(vNodeGroup, TVIS_BOLD);
-  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Account');
-  vNode.ImageIndex := 14;
-  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Payee');
-  vNode.ImageIndex := 15;
-  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Category');
-  vNode.ImageIndex := 17;
-
-  treeMenu.FullExpand;
+  treeMenu.FullCollapse;
   treeMenu.Items[0].Selected := True;
 end;
 
@@ -654,6 +739,7 @@ begin
   if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'ACCOUNT'))
     and not _chkOpenForm(treeMenu.Selected.Text) then
   begin
+    _edtSelectedLedger.Text     := treeMenu.Selected.Text;
     _LedgerChildFRM             := TLedgerFrm.Create(nil);
     _LedgerChildFRM.WindowState := wsMaximized;
   end;

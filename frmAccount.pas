@@ -223,15 +223,17 @@ begin
         _lvItem.SubItems.Add(FormatFloat('#,##0.00', MainFRM.sqlQry.FieldValues['Sum_TRNAMOUNT']));
 
       // imposto il gruppo nella listview
-      if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Checking') then
+      _lvItem.GroupID := _accountGroup(MainFRM.sqlQry.FieldValues['ACCTYPE']);
+      { 2020.06.15 - spostata funzione in pasaccount
+        if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Checking') then
         _lvItem.GroupID := 0;
-      if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Cash') then
+        if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Cash') then
         _lvItem.GroupID := 1;
-      if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'CreditCard') then
+        if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'CreditCard') then
         _lvItem.GroupID := 2;
-      if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Online') then
+        if (MainFRM.sqlQry.FieldValues['ACCTYPE'] = 'Online') then
         _lvItem.GroupID := 3;
-
+      }
       // visualizzazione logica - evidenzio e raggruppo iconti chiusi senza modificare i dati del db
       if (Uppercase(MainFRM.sqlQry.FieldValues['ACCSTATUS']) = 'CLOSED') then
         _lvItem.GroupID := 4;
