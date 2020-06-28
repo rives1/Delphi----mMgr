@@ -17,7 +17,8 @@ uses
   frmChartAnalisys3 in 'frmChartAnalisys3.pas' {AnalisysFrm3},
   frmChartAnalisys4 in 'frmChartAnalisys4.pas' {AnalisysFrm4},
   frmTblPayeeYTD in 'frmTblPayeeYTD.pas' {tblPayeeFrm},
-  frmTblSubcatYTD in 'frmTblSubcatYTD.pas' {tblSubcatFrm};
+  frmTblSubcatYTD in 'frmTblSubcatYTD.pas' {tblSubcatFrm},
+  frmImport in 'frmImport.pas' {ImportFrm};
 
 {$R *.res}
 
@@ -25,5 +26,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TMainFRM, MainFRM);
+  Application.CreateForm(TImportFrm, ImportFrm);
   Application.Run;
 end.

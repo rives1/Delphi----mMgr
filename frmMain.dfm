@@ -1346,8 +1346,6 @@ object MainFRM: TMainFRM
     Ctl3D = False
     ParentCtl3D = False
     TabOrder = 0
-    ExplicitLeft = 40
-    ExplicitTop = 8
     object Splitter1: TSplitter
       Left = 0
       Top = 468
@@ -1359,7 +1357,7 @@ object MainFRM: TMainFRM
     end
     object Splitter2: TSplitter
       Left = 0
-      Top = 208
+      Top = 136
       Width = 271
       Height = 6
       Cursor = crVSplit
@@ -1377,6 +1375,7 @@ object MainFRM: TMainFRM
       Ctl3D = False
       ParentCtl3D = False
       TabOrder = 0
+      ExplicitWidth = 291
       object chartBalance: TChart
         Left = 0
         Top = 0
@@ -1399,6 +1398,7 @@ object MainFRM: TMainFRM
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 291
         DefaultCanvas = 'TGDIPlusCanvas'
         PrintMargins = (
           27
@@ -1426,7 +1426,7 @@ object MainFRM: TMainFRM
       Left = 0
       Top = 0
       Width = 271
-      Height = 208
+      Height = 136
       Align = alTop
       BorderStyle = bsNone
       Color = clBtnFace
@@ -1439,31 +1439,33 @@ object MainFRM: TMainFRM
       Items.NodeData = {
         0301000000260000000500000000000000FFFFFFFFFFFFFFFF00000000000000
         0000000000010452006F006F007400}
-      ExplicitTop = 12
+      ExplicitWidth = 291
     end
     object Panel3: TPanel
       Left = 0
-      Top = 214
+      Top = 142
       Width = 271
-      Height = 254
+      Height = 326
       Align = alClient
       BevelOuter = bvNone
       Caption = 'Panel3'
       TabOrder = 2
-      ExplicitTop = 300
-      ExplicitHeight = 151
+      ExplicitTop = 214
+      ExplicitWidth = 291
+      ExplicitHeight = 254
       object lvAccountmnu: TListView
-        Left = 0
-        Top = 0
-        Width = 271
-        Height = 254
+        AlignWithMargins = True
+        Left = 3
+        Top = 3
+        Width = 265
+        Height = 320
         Align = alClient
         BorderStyle = bsNone
         Color = clBtnFace
         Columns = <
           item
             Caption = 'Account'
-            Width = 160
+            Width = 150
           end
           item
             Alignment = taRightJustify
@@ -1517,10 +1519,12 @@ object MainFRM: TMainFRM
         ShowWorkAreas = True
         TabOrder = 0
         ViewStyle = vsReport
+        OnClick = lvAccountmnuClick
         OnCustomDrawSubItem = lvAccountmnuCustomDrawSubItem
-        OnDblClick = lvAccountmnuDblClick
-        ExplicitWidth = 231
-        ExplicitHeight = 226
+        ExplicitLeft = 6
+        ExplicitTop = 6
+        ExplicitWidth = 285
+        ExplicitHeight = 248
       end
     end
   end
@@ -1535,7 +1539,7 @@ object MainFRM: TMainFRM
       end>
   end
   object _edtSelectedLedger: TEdit
-    Left = 285
+    Left = 310
     Top = 200
     Width = 141
     Height = 21

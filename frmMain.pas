@@ -56,9 +56,9 @@ type
     procedure Open1Click(Sender: TObject);
     procedure Version1Click(Sender: TObject);
     procedure Documentation1Click(Sender: TObject);
-    procedure lvAccountmnuDblClick(Sender: TObject);
     procedure lvAccountmnuCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer;
       State: TCustomDrawState; var DefaultDraw: Boolean);
+    procedure lvAccountmnuClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -142,6 +142,14 @@ begin
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
+procedure TMainFRM.lvAccountmnuClick(Sender: TObject);
+begin
+  _lvSelectOpen;     // apro le form in base alla selezione
+  _treeMenuCreate;   // ripopolo il menu
+//  _fillBalanceChart; // aggiorno il chart
+end;
+
+// -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM.lvAccountmnuCustomDrawSubItem(Sender: TCustomListView; Item: TListItem; SubItem: Integer;
   State: TCustomDrawState; var DefaultDraw: Boolean);
 begin
@@ -154,12 +162,6 @@ begin
   begin
     Sender.Canvas.Brush.Color := clBtnFace;
   end;
-end;
-
-// -------------------------------------------------------------------------------------------------------------//
-procedure TMainFRM.lvAccountmnuDblClick(Sender: TObject);
-begin
-  _lvSelectOpen;
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -194,7 +196,7 @@ begin
   begin
     _treeSelectOpen;   // apro le form in base alla selezione del nodo
     _treeMenuCreate;   // ripopolo il menu
-    _fillBalanceChart; // aggiorno il chart
+//    _fillBalanceChart; // aggiorno il chart
   end;
 
 end;
@@ -434,7 +436,6 @@ begin
       _LedgerChildFRM.WindowState := wsMaximized;
     end;
   except
-
   end;
 end;
 

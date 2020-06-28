@@ -730,6 +730,7 @@ begin
   sBar.Panels[0].Text := 'Records: ' + IntToStr(grdLedger.RowCount - 1); // indicazione del totale record
 
   MainFRM._fillBalanceChart; // riempiento del chart in basso
+  MainFRM._treeMenuCreate;   // aggiorno il treemenù
   _autoSizeGrid;             // autosize columns
 
 end;

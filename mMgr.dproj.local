@@ -27,12 +27,12 @@
     <Transaction>2020/04/14 21:41:49.000.331,C:\Users\ammin\Documents\Delphi\Delphi----mMgr\Unit1.dfm=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmChartAnalisys.dfm</Transaction>
     <Transaction>2020/04/14 21:41:49.000.331,C:\Users\ammin\Documents\Delphi\Delphi----mMgr\Unit1.pas=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmChartAnalisys.pas</Transaction>
     <Transaction>2020/04/15 19:35:58.000.164,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\Unit1.pas</Transaction>
-    <Transaction>2020/04/15 19:36:08.000.154,C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmPayee.pas=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\Unit1.pas</Transaction>
     <Transaction>2020/04/15 19:36:08.000.154,C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmPayee.dfm=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\Unit1.dfm</Transaction>
+    <Transaction>2020/04/15 19:36:08.000.154,C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmPayee.pas=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\Unit1.pas</Transaction>
     <Transaction>2020/04/19 02:17:34.000.565,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmCategory.pas</Transaction>
     <Transaction>2020/04/28 21:57:55.000.145,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\Unit1.pas</Transaction>
-    <Transaction>2020/04/28 22:06:40.000.118,C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmTblBalYTD.pas=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\Unit1.pas</Transaction>
     <Transaction>2020/04/28 22:06:40.000.118,C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmTblBalYTD.dfm=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\Unit1.dfm</Transaction>
+    <Transaction>2020/04/28 22:06:40.000.118,C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmTblBalYTD.pas=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\Unit1.pas</Transaction>
     <Transaction>2020/05/01 18:35:23.000.943,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmTblTransactions.pas</Transaction>
     <Transaction>2020/05/01 18:54:38.000.910,C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmTblTransactions.pas=</Transaction>
     <Transaction>2020/05/05 23:08:53.000.089,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmChartAnalisys3.pas</Transaction>
@@ -41,6 +41,9 @@
     <Transaction>2020/05/13 18:21:48.000.196,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmChartAnalisys4.pas</Transaction>
     <Transaction>2020/05/13 18:53:49.000.120,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmTblPayeeYTD.pas</Transaction>
     <Transaction>2020/05/13 22:11:39.000.873,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmTblSubcatYTD.pas</Transaction>
+    <Transaction>2020/06/27 18:50:28.000.665,=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\Unit1.pas</Transaction>
+    <Transaction>2020/06/27 18:50:58.000.978,C:\Users\ammin\Documents\Delphi\Delphi----mMgr\Unit1.dfm=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmImport.dfm</Transaction>
+    <Transaction>2020/06/27 18:50:58.000.978,C:\Users\ammin\Documents\Delphi\Delphi----mMgr\Unit1.pas=C:\Users\ammin\Documents\Delphi\Delphi----mMgr\frmImport.pas</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
     <File Path="frmAccount.pas"/>
@@ -70,5 +73,7 @@
     <File Path="frmTblSubcatYTD.pas"/>
     <File Path="frmTblSubcatYTD.dfm"/>
     <File Path="pasCommon.pas"/>
+    <File Path="frmImport.pas"/>
+    <File Path="frmImport.dfm"/>
   </ProjectSortOrder>
 </BorlandProject>
