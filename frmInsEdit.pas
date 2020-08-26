@@ -483,16 +483,24 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TInsEditFrm._writeRecord;
 var
-  _lAmount: string; // ammontare da inserire nel db. pos o neg in base al tipo di spesa
+//  _lAmount: string; // ammontare da inserire nel db. pos o neg in base al tipo di spesa
+   _lAmount: double;
   // _lCategoryType: string;  // tipo categoria
   // _lrecID:        integer; // id del record per inserire i riferimenti sui mov trasferimento
 begin
+FormatSettings.DecimalSeparator := '.';
   // il valore deve essere ngativo se la il tipo di transazione è pay
-  if UpperCase(_fType.Text) = 'DEPOSIT' then
+
+//  if UpperCase(_fType.Text) = 'DEPOSIT' then
+  if UpperCase(_fType.Text) <> 'DEPOSIT' then
+
     // _lAmount := VarToStr((_fAmount.Value))
-    _lAmount := StringReplace(VarToStr((_fAmount.Value)), ',', '.', [rfReplaceAll])
-  else
-    _lAmount := StringReplace(VarToStr((_fAmount.Value) * -1), ',', '.', [rfReplaceAll]);
+//    _lAmount := StringReplace(VarToStr((_fAmount.Value)), ',', '.', [rfReplaceAll])
+//  else
+    _lAmount := _fAmount.Value * -1;
+
+
+//    _lAmount := StringReplace(VarToStr((_fAmount.Value) * -1), ',', '.', [rfReplaceAll]);
   // _lAmount := VarToStr((_fAmount.Value) * -1);
 
   // salvataggio del record in base alla tipologia di editing
@@ -509,7 +517,7 @@ begin
         + ', ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
       // + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
         + ', ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
-        + ', ''' + _lAmount + ''' '
+        + ', ''' + floattostr(_lAmount) + ''' '
         + ', ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _plLedgerName) + ''' '
         + ', ''' + _fDescription.Text + ''') '
     else
@@ -518,7 +526,7 @@ begin
         + ', TRNPAYEE = ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
       // + ', TRNCATEGORY =  ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
         + ', TRNSUBCATEGORY = ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
-        + ', TRNAMOUNT = ''' + _lAmount + ''' '
+        + ', TRNAMOUNT = ''' + floattostr(_lAmount) + ''' '
         + ', TRNACCOUNT = ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _plLedgerName) + ''' '
         + ', TRNDESCRIPTION = ''' + _fDescription.Text + ''' '
         + ' WHERE TRNID = ''' + IntToStr(_pEditID) + ''' ';
@@ -542,7 +550,7 @@ begin
           + ', ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
         // + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
           + ', ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
-          + ', ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
+          + ', ''' + FloatToStr(_lAmount * -1) + ''' ' // inverto il segno del movimento
           + ', ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' '
         // conto di destinazione
           + ', ''' + _fDescription.Text + ''') ';
@@ -578,7 +586,7 @@ begin
           + ', TRNPAYEE = ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
         // + ', TRNCATEGORY =  ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
           + ', TRNSUBCATEGORY = ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
-          + ', TRNAMOUNT = ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' '
+          + ', TRNAMOUNT = ''' + FloatToStr(_lAmount * -1) + ''' '
         // inverto il segno del movimento
           + ', TRNACCOUNT = ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' '
           + ', TRNDESCRIPTION = ''' + _fDescription.Text + ''' '
