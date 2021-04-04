@@ -77,8 +77,10 @@ type
 
   public
     { Public declarations }
+    _sysDecSeparator: string;
     procedure _treeMenuCreate;
     procedure _fillBalanceChart;
+
   end;
 
 var
@@ -115,6 +117,8 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM.FormCreate(Sender: TObject);
 begin
+  // impostro il separatore decimale
+  //_sysDecSeparator := ;
   // leggeimpostazioni da file INI
   _iniFName := ExtractFilePath(Application.ExeName) + 'mMgr.ini';
   _DbName   := _iniRW(_iniFName, 'R', 'LASTDB', 'DBNAME', 'x');

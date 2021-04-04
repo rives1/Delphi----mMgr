@@ -484,16 +484,25 @@ end;
 procedure TInsEditFrm._writeRecord;
 var
   _lAmount: string; // ammontare da inserire nel db. pos o neg in base al tipo di spesa
+  _lAmountTransfer: string;// ammontare negativo da inserie nel DB . solo in caso di trasferimento
   // _lCategoryType: string;  // tipo categoria
   // _lrecID:        integer; // id del record per inserire i riferimenti sui mov trasferimento
 begin
+
   // il valore deve essere ngativo se la il tipo di transazione è pay
   if UpperCase(_fType.Text) = 'DEPOSIT' then
-    // _lAmount := VarToStr((_fAmount.Value))
-    _lAmount := StringReplace(VarToStr((_fAmount.Value)), ',', '.', [rfReplaceAll])
+    begin
+    _lAmount := StringReplace(VarToStr((_fAmount.Value)), ',', '.', [rfReplaceAll]);
+    _lAmountTransfer := StringReplace(VarToStr((_fAmount.Value) * -1), ',', '.', [rfReplaceAll]);
+    end
   else
+    begin
     _lAmount := StringReplace(VarToStr((_fAmount.Value) * -1), ',', '.', [rfReplaceAll]);
-  // _lAmount := VarToStr((_fAmount.Value) * -1);
+    _lAmountTransfer := StringReplace(VarToStr((_fAmount.Value)), ',', '.', [rfReplaceAll]);
+    end;
+
+
+  //   messagedlg(FloatToStr(StrToFloat(_lAmount) * -1), mtInformation, [mbOk], 0);
 
   // salvataggio del record in base alla tipologia di editing
   try
@@ -542,7 +551,8 @@ begin
           + ', ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
         // + ', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
           + ', ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
-          + ', ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
+//          + ', ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
+          + ', ''' + _lAmountTransfer + ''' '
           + ', ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' '
         // conto di destinazione
           + ', ''' + _fDescription.Text + ''') ';
@@ -560,26 +570,14 @@ begin
       end
       else
       begin
-        { //salvo il record che sto editando
-          _SQLString := 'UPDATE TRANSACTIONS SET ' + '  TRNTYPE = ''' + _fType.Text + ''' '
-          + ', TRNDATE = datetime(''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''') '
-          + ', TRNPAYEE = ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
-          + ', TRNCATEGORY =  ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
-          + ', TRNSUBCATEGORY = ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
-          + ', TRNAMOUNT = ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' ' // inverto il segno del movimento
-          + ', TRNACCOUNT = ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountFrom.Text) + ''' '
-          + ', TRNDESCRIPTION = ''' + _fDescription.Text + ''' '
-          + ' WHERE TRNID = ''' + IntToStr(_pEditID) + ''' ';
-        }
-
         // aggiorno trasferimento -- aggiorno il movimento correlato
         _SQLString := 'UPDATE TRANSACTIONS SET ' + '  TRNTYPE = ''' + _fType.Text + ''' '
           + ', TRNDATE = datetime(''' + FormatDateTime('yyyy-mm-dd', _fDate.Date) + ''') '
           + ', TRNPAYEE = ''' + _getDBField('DBPAYEE', 'PAYID', 'PAYNAME', _fPayee.Text) + ''' '
         // + ', TRNCATEGORY =  ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', _fCategory.Text) + ''' '
           + ', TRNSUBCATEGORY = ''' + _getDBField('DBSUBCATEGORY', 'SUBCID', 'SUBCDES', _fSubCategory.Text) + ''' '
-          + ', TRNAMOUNT = ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' '
-        // inverto il segno del movimento
+//          + ', TRNAMOUNT = ''' + FloatToStr(StrToFloat(_lAmount) * -1) + ''' '  // inverto il segno del movimento
+          + ', TRNAMOUNT = ''' + _lAmountTransfer + ''' '  // inverto il segno del movimento
           + ', TRNACCOUNT = ''' + _getDBField('DBACCOUNT', 'ACCID', 'ACCNAME', _fAccountTo.Text) + ''' '
           + ', TRNDESCRIPTION = ''' + _fDescription.Text + ''' '
           + ' WHERE TRNID = ''' + _getDBField('TRANSACTIONS', 'TRNTRANSFERID', 'TRNID',

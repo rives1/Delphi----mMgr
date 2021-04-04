@@ -2,7 +2,7 @@ object MainFRM: TMainFRM
   Left = 0
   Top = 0
   ActiveControl = chartBalance
-  Caption = 'mMgr'
+  Caption = 'mMgr 0.89'
   ClientHeight = 676
   ClientWidth = 1105
   Color = clBtnFace
