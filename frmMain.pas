@@ -177,7 +177,7 @@ end;
 // -------------------------------------------------------------------------------------------------------------//
 procedure TMainFRM.Version1Click(Sender: TObject);
 begin
-  MessageDlg('mMgr 0.1 Beta', mtInformation, [mbOK], 0);
+  MessageDlg('mMgr 0.68', mtInformation, [mbOK], 0);
 end;
 
 // -------------------------------------------------------------------------------------------------------------//
@@ -250,6 +250,7 @@ begin
       sqlite_conn.Connected       := True;
       sqlite_conn.StartTransaction;
 
+      //transactions
       _SQLString := ' CREATE TABLE IF NOT EXISTS ''TRANSACTIONS'' ( '
         + ' ''TRNID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
         + ' ''TRNTYPE''	STRING(10) NOT NULL, '
@@ -266,6 +267,20 @@ begin
         + ' FOREIGN KEY(''TRNACCOUNT'') REFERENCES ''DBACCOUNT''(''ACCID''));';
       sqlQry.ExecSQL(_SQLString);
 
+      //payee
+      _SQLString := ' CREATE TABLE IF NOT EXISTS ''DBPAYEE'' ( '
+        + '''PAYID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
+        + '''PAYNAME''	STRING(50) NOT NULL UNIQUE);';
+      sqlQry.ExecSQL(_SQLString);
+
+      //category
+      _SQLString := ' CREATE TABLE IF NOT EXISTS ''DBCATEGORY'' ( '
+        + '''CATID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
+        + '''CATDES''	STRING(50) NOT NULL UNIQUE, '
+        + '''CATTYPE''	STRING NOT NULL ); ';
+      sqlQry.ExecSQL(_SQLString);
+
+      //subcategory
       _SQLString := 'CREATE TABLE IF NOT EXISTS ''DBSUBCATEGORY'' ( '
         + '''SUBCID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
         + '''SUBCATID''	INTEGER NOT NULL, '
@@ -273,17 +288,8 @@ begin
         + 'FOREIGN KEY(''SUBCATID'') REFERENCES ''DBCATEGORY''(''CATID'') ON DELETE CASCADE);';
       sqlQry.ExecSQL(_SQLString);
 
-      _SQLString := ' CREATE TABLE IF NOT EXISTS ''DBPAYEE'' ( '
-        + '''PAYID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
-        + '''PAYNAME''	STRING(50) NOT NULL UNIQUE);';
-      sqlQry.ExecSQL(_SQLString);
 
-      _SQLString := ' CREATE TABLE IF NOT EXISTS ''DBCATEGORY'' ( '
-        + '''CATID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
-        + '''CATDES''	STRING(50) NOT NULL UNIQUE, '
-        + '''CATTYPE''	STRING NOT NULL ); ';
-      sqlQry.ExecSQL(_SQLString);
-
+      //account
       _SQLString := ' CREATE TABLE IF NOT EXISTS ''DBACCOUNT'' ( '
         + '''ACCID''	INTEGER PRIMARY KEY AUTOINCREMENT, '
         + '''ACCNAME''	STRING(50) NOT NULL UNIQUE, '
@@ -292,6 +298,7 @@ begin
 
       sqlQry.ExecSQL(_SQLString);
 
+      //indexes
       _SQLString := ' CREATE UNIQUE INDEX IF NOT EXISTS ''DBSUBCATEGORY_Index01'' ON ''DBSUBCATEGORY'' (''SUBCDES''); ';
       sqlQry.ExecSQL(_SQLString);
 
@@ -333,6 +340,21 @@ begin
       sqlQry.ExecSQL(_SQLString);
 
       sqlite_conn.Commit;
+
+
+      //inserimento valori default
+      //categoria _transfer
+      _SQLString := ' INSERT INTO DBCATEGORY (CATTYPE, CATDES) VALUES (''Transfer'', ''_Transfer'')';
+      sqlQry.ExecSQL(_SQLString);
+
+      //sottocategoria _transfer
+      _SQLString := ' INSERT INTO DBSUBCATEGORY (SUBCDES, SUBCATID) '
+        + ' VALUES ( ''_Transfer'', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', '_Transfer') + ''') ';
+      sqlQry.ExecSQL(_SQLString);
+
+      //msg conferma creazione
+      MessageDlg('DB Created!!', mtInformation, [mbOK], 0);
+
       MainFRM.caption := 'mMgr -> ' + ExtractFileName(_DbName);
     except
       MessageDlg('Impossible to create the database' + _DbName, mtError, [mbOK], 0);

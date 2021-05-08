@@ -3,7 +3,7 @@ unit pasCommon;
 interface
 
 uses
-  System.AnsiStrings, Classes, INIFiles, Forms, frmMain, SysUtils, CommCtrl, Vcl.ComCtrls;
+  System.AnsiStrings, Classes, INIFiles, Forms, frmMain, SysUtils, CommCtrl, Vcl.ComCtrls, Vcl.Dialogs;
 
 // functions
 function _UpCase(_pString: string): string;
@@ -44,6 +44,9 @@ begin
     MainFRM.sqlQry.Close;
     MainFRM.sqlQry.SQL.Clear;
   end;
+  if Result = '0' then
+    MessageDlg('FieldValue not found in table: ' +  _pTBL, mtConfirmation, [mbok],0);
+
 end;
 
 /// -------------------------------------------------------------------------------------------------------------//
