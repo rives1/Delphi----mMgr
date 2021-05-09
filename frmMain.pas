@@ -352,6 +352,14 @@ begin
         + ' VALUES ( ''_Transfer'', ''' + _getDBField('DBCATEGORY', 'CATID', 'CATDES', '_Transfer') + ''') ';
       sqlQry.ExecSQL(_SQLString);
 
+      //payee
+      _SQLString := ' INSERT INTO DBPAYEE (PAYNAME) '
+      + ' VALUES ( ''_Transfer'') ';
+
+      sqlQry.ExecSQL(_SQLString);
+
+
+
       //msg conferma creazione
       MessageDlg('DB Created!!', mtInformation, [mbOK], 0);
 
