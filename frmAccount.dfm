@@ -113,7 +113,6 @@ object AccountFrm: TAccountFrm
         Text = 'Double click to edit Account'
         Width = 50
       end>
-    ExplicitWidth = 485
   end
   object Panel3: TPanel
     Left = 233
@@ -123,8 +122,6 @@ object AccountFrm: TAccountFrm
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitLeft = 216
-    ExplicitWidth = 269
     object Name: TLabel
       Left = 10
       Top = 48
