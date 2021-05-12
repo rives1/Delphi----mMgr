@@ -74,6 +74,7 @@ end;
 procedure TtblBalanceFrm.FormShow(Sender: TObject);
 begin
   _loadCmbAccount;
+  _fYear.Date := Now();
   _fillBalanceYTD('table');
 end;
 
@@ -210,6 +211,7 @@ begin
     MainFRM.sqlQry.SQL.Clear;
   end;
   _fAccount.Text := 'ALL';
+
 end;
 
 // -------------------------------------------------------------------------------------------------------------//

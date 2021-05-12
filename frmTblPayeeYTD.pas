@@ -72,6 +72,7 @@ procedure TtblPayeeFrm.FormShow(Sender: TObject);
 begin
   _loadCmbAccount;
   _genPayeeYTD;
+  _fYear.Date := Now();
   chartPayeeMM.Series[0].Clear;
 end;
 

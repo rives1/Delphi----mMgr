@@ -72,6 +72,7 @@ procedure TtblSubcatFrm.FormShow(Sender: TObject);
 begin
   _loadCmbAccount;
   _genSubcatYTD;
+  _fYear.Date := Now();
   chartSubcatMM.Series[0].Clear;
 end;
 
