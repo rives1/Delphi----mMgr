@@ -704,9 +704,8 @@ begin
   end;
 
   grdLedger.FixedRows := 1;
-
   // posizione su ultimo record nel caso di inserimento e sul precedente in caso di editing
-  if _recPosition < grdLedger.RowCount - 1 then
+  if _recPosition > grdLedger.RowCount - 1 then
     grdLedger.Row := grdLedger.RowCount - 1
   else
     grdLedger.Row := _recPosition;
