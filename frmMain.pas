@@ -638,11 +638,11 @@ begin
   vNodeGroup            := treeMenu.Items.Add(nil, 'Report');
   vNodeGroup.ImageIndex := 2;
   _SetNodeState(vNodeGroup, TVIS_BOLD);
-  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Balance YTD-Monthly');
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'YTD-Monthly');
   vNode.ImageIndex := 9;
-  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Balance Payee-YTD');
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Payee-YTD');
   vNode.ImageIndex := 19;
-  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Balance Subcategory-YTD');
+  vNode            := treeMenu.Items.AddChild(vNodeGroup, 'Subcategory-YTD');
   vNode.ImageIndex := 18;
 
   // area Config
@@ -686,7 +686,7 @@ begin
 
   // apro la form per tabella report balance ytd
   if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'REPORT'))
-    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Balance YTD-Monthly') then
+    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'YTD-Monthly') then
   begin
     _TblBalanceYTD             := TtblBalanceFrm.Create(nil);
     _TblBalanceYTD.WindowState := wsMaximized;
@@ -694,7 +694,7 @@ begin
 
   // apro la form per tabella report payee ytd
   if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'REPORT'))
-    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Balance Payee-YTD') then
+    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Payee-YTD') then
   begin
     _TblPayeeYTD := TtblPayeeFrm.Create(nil);
     // _TblPayeeYTD.WindowState := wsMaximized;
@@ -702,7 +702,7 @@ begin
 
   // apro la form per tabella report subcategory ytd
   if ((treeMenu.Selected.Level <> 0) and (Uppercase(treeMenu.Selected.Parent.Text) = 'REPORT'))
-    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Balance Subcategory-YTD') then
+    and not _chkOpenForm(treeMenu.Selected.Text) and (treeMenu.Selected.Text = 'Subcategory-YTD') then
   begin
     _TblSubcatYTD := TtblSubcatFrm.Create(nil);
     // _TblSubcatYTD.WindowState := wsMaximized;

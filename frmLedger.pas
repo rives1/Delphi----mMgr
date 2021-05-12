@@ -736,7 +736,7 @@ begin
       // se trasferimento elimino prima il correlato
       for _i := grdLedger.Selection.Top to grdLedger.Selection.Bottom do
       begin
-        if (UpperCase(grdLedger.cells[1, _i]) = 'TRANSFER') then
+        if (UpperCase(grdLedger.cells[2, _i]) = 'TRANSFER') then
         begin
           // se mov di trasferimento elimino prima il correlato
           _SQLString := 'DELETE FROM TRANSACTIONS WHERE TRNID = (SELECT TRNTRANSFERID FROM TRANSACTIONS WHERE TRNID = '
